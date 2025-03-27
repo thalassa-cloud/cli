@@ -1,8 +1,8 @@
 
-project_name: "tcloud"
+project_name: tcloud
 
 builds:
-  - id: "tcloud"
+  - id: tcloud
     env:
       - CGO_ENABLED=0
     mod_timestamp: '{{ .CommitTimestamp }}'
@@ -22,6 +22,8 @@ before:
 archives:
   - format: tar.gz
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    files:
+      - completions/*
 
 release:
   draft: false
