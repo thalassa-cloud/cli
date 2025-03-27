@@ -1,3 +1,6 @@
+
+project_name: "tcloud"
+
 builds:
   - id: "tcloud"
     env:
