@@ -1,0 +1,31 @@
+builds:
+  - id: "tcloud"
+    env:
+      - CGO_ENABLED=0
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+before:
+  hooks:
+    - go mod tidy
+    - ./scripts/shell-completions.sh
+
+archives:
+  - format: tar.gz
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+
+release:
+  draft: false
+
+# Documentation: https://goreleaser.com/customization/changelog/
+changelog:
+  use: github
+
+checksum:
+  name_template: 'checksums.txt'
