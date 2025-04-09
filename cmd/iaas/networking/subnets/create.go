@@ -17,7 +17,6 @@ const (
 	CreateFlagDescription = "description"
 	CreateFlagVpc         = "vpc"
 	CreateFlagCIDR        = "cidr"
-	CreateFlagZone        = "zone"
 
 	CreateFlagLabels      = "labels"
 	CreateFlagAnnotations = "annotations"
@@ -51,9 +50,6 @@ var createCmd = &cobra.Command{
 		if createSubnetValues.Cidr == "" {
 			return fmt.Errorf("cidr is required")
 		}
-		if createSubnetValues.CloudZone == "" {
-			return fmt.Errorf("zone is required")
-		}
 
 		vpc, err := tcclient.IaaS().GetVpc(cmd.Context(), createSubnetValues.VpcIdentity)
 		if err != nil {
@@ -77,27 +73,6 @@ var createCmd = &cobra.Command{
 			}
 		}
 		createSubnetValues.VpcIdentity = vpc.Identity
-
-		// validate the zone
-		if len(vpc.CloudRegion.Zones) == 0 {
-			return fmt.Errorf("no zones found in the region")
-		}
-		found := false
-		for _, z := range vpc.CloudRegion.Zones {
-			if z.Slug == createSubnetValues.CloudZone {
-				found = true
-				createSubnetValues.CloudZone = z.Slug
-				break
-			} else if z.Identity == createSubnetValues.CloudZone {
-				found = true
-				createSubnetValues.CloudZone = z.Slug
-				break
-			}
-		}
-		if !found {
-			return fmt.Errorf("zone not found")
-		}
-		fmt.Printf("zone: %s\n", createSubnetValues.CloudZone)
 
 		subnet, err := tcclient.IaaS().CreateSubnet(cmd.Context(), createSubnetValues)
 		if err != nil {
@@ -127,5 +102,4 @@ func init() {
 	createCmd.Flags().StringVar(&createSubnetValues.Description, CreateFlagDescription, "", "Description of the subnet")
 	createCmd.Flags().StringVar(&createSubnetValues.VpcIdentity, CreateFlagVpc, "", "VPC of the subnet")
 	createCmd.Flags().StringVar(&createSubnetValues.Cidr, CreateFlagCIDR, "", "CIDR of the subnet")
-	createCmd.Flags().StringVar(&createSubnetValues.CloudZone, CreateFlagZone, "", "Zone of the subnet")
 }

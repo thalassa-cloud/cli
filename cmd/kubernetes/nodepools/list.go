@@ -89,7 +89,7 @@ var listCmd = &cobra.Command{
 					c.Name,
 					replicas,
 					np.MachineType.Name,
-					np.Status,
+					string(np.Status),
 					formattime.FormatTime(np.CreatedAt.Local(), showExactTime),
 				})
 			}
