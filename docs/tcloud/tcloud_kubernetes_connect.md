@@ -1,5 +1,5 @@
 ---
-date: 2025-03-27T22:27:48+01:00
+date: 2025-05-14T17:58:13+02:00
 linkTitle: "tcloud kubernetes connect"
 title: "kubernetes connect"
 slug: tcloud_kubernetes_connect
@@ -25,10 +25,12 @@ tcloud kubernetes connect [flags]
 ### Options inherited from parent commands
 
 ```
-      --api string            API endpoint
-  -c, --context string        Context name
-  -O, --organisation string   Organisation slug or identity
-      --token string          Personal access token
+      --api string             API endpoint (overrides context)
+      --client-id string       OIDC client ID for OIDC authentication (overrides context)
+      --client-secret string   OIDC client secret for OIDC authentication (overrides context)
+  -c, --context string         Context name
+  -O, --organisation string    Organisation slug or identity (overrides context)
+      --token string           Personal access token (overrides context)
 ```
 
 ### SEE ALSO
