@@ -12,8 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
 var (
@@ -42,11 +41,8 @@ var KubernetesConnectCmd = &cobra.Command{
 	Args: cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := cmd.Context()
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
 			fmt.Println(err)
 			return

@@ -31,14 +31,27 @@ var createCmd = &cobra.Command{
 		}
 
 		token := contextstate.Token()
-		if token == "" {
-			return errors.New("no token set")
-		}
-		err := contextstate.LoginWithAPIEndpoint(ctx, token, contextstate.Server())
-		if err != nil {
-			return err
+		apiURL := contextstate.Server()
+		if apiURL == "" {
+			return errors.New("api endpoint is required")
 		}
 
+		oidcClientID := contextstate.ClientIdOrFlag()
+		oidcClientSecret := contextstate.ClientSecretOrFlag()
+		if token == "" && oidcClientID == "" && oidcClientSecret == "" {
+			return errors.New("no token or oidc client id and secret set")
+		}
+
+		if oidcClientID != "" && oidcClientSecret != "" {
+			if err := contextstate.LoginWithAPIEndpointOidc(ctx, oidcClientID, oidcClientSecret, apiURL); err != nil {
+				return err
+			}
+		} else {
+			if err := contextstate.LoginWithAPIEndpoint(ctx, token, apiURL); err != nil {
+				return err
+			}
+		}
+		var err error
 		organisation := contextstate.Organisation()
 		if organisation == "" {
 			organisation, err = getSelectedOrganisation([]string{})

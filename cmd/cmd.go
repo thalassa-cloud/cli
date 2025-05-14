@@ -37,10 +37,12 @@ func handleExecutionError(err error) {
 }
 
 func init() {
-	RootCmd.PersistentFlags().StringVarP(&contextstate.OrganisationFlag, "organisation", "O", "", "Organisation slug or identity")
+	RootCmd.PersistentFlags().StringVarP(&contextstate.OrganisationFlag, "organisation", "O", "", "Organisation slug or identity (overrides context)")
 	RootCmd.PersistentFlags().StringVarP(&contextstate.ContextFlag, "context", "c", "", "Context name")
-	RootCmd.PersistentFlags().StringVar(&contextstate.EndpointFlag, "api", "", "API endpoint")
-	RootCmd.PersistentFlags().StringVar(&contextstate.PersonalAccessTokenFlag, "token", "", "Personal access token")
+	RootCmd.PersistentFlags().StringVar(&contextstate.EndpointFlag, "api", "", "API endpoint (overrides context)")
+	RootCmd.PersistentFlags().StringVar(&contextstate.PersonalAccessTokenFlag, "token", "", "Personal access token (overrides context)")
+	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientIDFlag, "client-id", "", "OIDC client ID for OIDC authentication (overrides context)")
+	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientSecretFlag, "client-secret", "", "OIDC client secret for OIDC authentication (overrides context)")
 
 	RootCmd.AddCommand(context.ContextCmd)
 	RootCmd.AddCommand(version.VersionCmd)

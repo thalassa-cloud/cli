@@ -5,11 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
-
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/table"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
 const (
@@ -27,16 +24,10 @@ var organisationsCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 
-		// Initialize client
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-
 		organisations, err := client.Me().ListMyOrganisations(ctx)
 		if err != nil {
 			return fmt.Errorf("failed to get organisations: %w", err)

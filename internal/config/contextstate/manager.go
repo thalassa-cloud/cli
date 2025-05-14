@@ -18,7 +18,11 @@ var (
 	OrganisationFlag        string
 	EndpointFlag            string
 	PersonalAccessTokenFlag string
-	ContextFlag             string
+
+	OidcClientIDFlag     string
+	OidcClientSecretFlag string
+
+	ContextFlag string
 )
 
 // ConfigManager defines an interface for managing contexts within the application.
@@ -140,4 +144,40 @@ func Token() string {
 	}
 
 	return currentcontext.Users.User.Token
+}
+
+func ClientIdOrFlag() string {
+	if OidcClientIDFlag != "" {
+		return OidcClientIDFlag
+	}
+	return ClientId()
+}
+
+func ClientId() string {
+	currentcontext, err := globalConfigManager.Get()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	return currentcontext.Users.User.ClientID
+}
+
+func ClientSecretOrFlag() string {
+	if OidcClientSecretFlag != "" {
+		return OidcClientSecretFlag
+	}
+	return ClientSecret()
+}
+
+func ClientSecret() string {
+	currentcontext, err := globalConfigManager.Get()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	return currentcontext.Users.User.ClientSecret
+}
+
+func GetContext() (Context, error) {
+	return globalConfigManager.Get()
 }

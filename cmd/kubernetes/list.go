@@ -5,12 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
-
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
 const NoHeaderKey = "no-header"
@@ -29,13 +26,9 @@ var listCmd = &cobra.Command{
 	Aliases: []string{"g", "get", "ls", "clusters", "cluster"},
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create client: %w", err)
 		}
 		clusters, err := client.Kubernetes().ListKubernetesClusters(cmd.Context())
 		if err != nil {

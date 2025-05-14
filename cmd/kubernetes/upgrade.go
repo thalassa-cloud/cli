@@ -10,9 +10,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetesclient"
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
 
 	"k8s.io/utils/ptr"
 
@@ -181,16 +180,11 @@ var KubernetesUpgradeCmd = &cobra.Command{
 	Aliases: []string{"u"},
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			fmt.Println("Error creating client:", err)
+			fmt.Println("Error getting client:", err)
 			return
 		}
-
 		versions, err := client.Kubernetes().ListKubernetesVersions(cmd.Context())
 		if err != nil {
 			fmt.Println("Error getting versions:", err)

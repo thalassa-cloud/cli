@@ -6,13 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/table"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 
 	"k8s.io/apimachinery/pkg/api/resource"
-
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
 const NoHeaderKey = "no-header"
@@ -33,13 +30,10 @@ var getMachineTypesCmd = &cobra.Command{
 	Example: `thalassa compute machine-types`,
 	Aliases: []string{"machine-types", "machine-type", "machinetypes", "machinetype", "instancetypes", "instancetype", "types", "type"},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create client: %w", err)
 		}
 		machinetypeCategories, err := client.IaaS().ListMachineTypeCategories(cmd.Context())
 		if err != nil {

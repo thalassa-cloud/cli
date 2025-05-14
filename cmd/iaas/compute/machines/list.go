@@ -7,14 +7,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 
 	"k8s.io/apimachinery/pkg/api/resource"
-
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
 const NoHeaderKey = "no-header"
@@ -34,13 +31,10 @@ var getCmd = &cobra.Command{
 	Aliases: []string{"g", "get", "ls"},
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create client: %w", err)
 		}
 		machines, err := client.IaaS().ListMachines(cmd.Context())
 		if err != nil {

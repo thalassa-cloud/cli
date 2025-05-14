@@ -4,10 +4,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
 var deleteCmd = &cobra.Command{
@@ -15,13 +13,10 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a subnet",
 	Args:  cobra.MinimumNArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create client: %w", err)
 		}
 
 		// get the subnets

@@ -5,11 +5,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetesclient"
-	"github.com/thalassa-cloud/client-go/pkg/client"
 	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
@@ -37,11 +36,7 @@ var listCmd = &cobra.Command{
 		ctx := cmd.Context()
 
 		// Initialize client
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}

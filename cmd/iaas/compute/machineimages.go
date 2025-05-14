@@ -1,11 +1,11 @@
 package compute
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/table"
-	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
 var getMachineImagesCmd = &cobra.Command{
@@ -15,13 +15,10 @@ var getMachineImagesCmd = &cobra.Command{
 	Long:    `Get a list of machine images available in the current organisation`,
 	Example: `thalassa compute machine-images`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(contextstate.Server()),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(contextstate.Token()),
-		)
+
+		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create client: %w", err)
 		}
 		images, err := client.IaaS().ListMachineImages(cmd.Context())
 		if err != nil {

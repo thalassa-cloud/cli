@@ -21,25 +21,39 @@ var loginCmd = &cobra.Command{
 		token := contextstate.Token()
 		apiURL := contextstate.Server()
 
-		if token == "" {
-			return errors.New("token is required")
-		}
 		if apiURL == "" {
 			return errors.New("api endpoint is required")
 		}
 
+		oidcClientID := contextstate.ClientIdOrFlag()
+		oidcClientSecret := contextstate.ClientSecretOrFlag()
+
+		tokenURL := fmt.Sprintf("%s/oidc/token", apiURL)
+
+		opts := []client.Option{}
+		if oidcClientID != "" && oidcClientSecret != "" {
+			opts = append(opts, client.WithAuthOIDC(oidcClientID, oidcClientSecret, tokenURL))
+		} else {
+			opts = append(opts, client.WithAuthPersonalToken(token))
+		}
+		if len(opts) == 0 {
+			return errors.New("no authentication method provided")
+		}
+		opts = append(opts, client.WithBaseURL(apiURL))
+		opts = append(opts, client.WithOrganisation(contextstate.Organisation()))
+		client, err := thalassa.NewClient(opts...)
+
 		// Test the token and api endpoint
-		client, err := thalassa.NewClient(
-			client.WithBaseURL(apiURL),
-			client.WithOrganisation(contextstate.Organisation()),
-			client.WithAuthPersonalToken(token),
-		)
 		if err != nil {
 			return err
 		}
 		_, err = client.Me().ListMyOrganisations(cmd.Context())
 		if err != nil {
 			return fmt.Errorf("failed to test token and api endpoint: %w", err)
+		}
+
+		if oidcClientID != "" && oidcClientSecret != "" {
+			return contextstate.LoginWithAPIEndpointOidc(cmd.Context(), oidcClientID, oidcClientSecret, apiURL)
 		}
 		return contextstate.LoginWithAPIEndpoint(cmd.Context(), token, apiURL)
 	},
