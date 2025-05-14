@@ -13,7 +13,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
 	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/pkg/thalassa"
+	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
 var (
