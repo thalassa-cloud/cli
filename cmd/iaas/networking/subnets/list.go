@@ -8,6 +8,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/iaas"
 )
 
 const NoHeaderKey = "no-header"
@@ -30,7 +31,7 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		subnets, err := client.IaaS().ListSubnets(cmd.Context())
+		subnets, err := client.IaaS().ListSubnets(cmd.Context(), &iaas.ListSubnetsRequest{})
 		if err != nil {
 			return err
 		}

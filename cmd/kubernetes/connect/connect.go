@@ -13,6 +13,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/kubernetes"
 )
 
 var (
@@ -58,7 +59,7 @@ var KubernetesConnectCmd = &cobra.Command{
 		cluster, err := client.Kubernetes().GetKubernetesCluster(ctx, clusterIdentity)
 		if err != nil {
 			// try and find the cluster by name or slug
-			clusters, err := client.Kubernetes().ListKubernetesClusters(ctx)
+			clusters, err := client.Kubernetes().ListKubernetesClusters(ctx, &kubernetes.ListKubernetesClustersRequest{})
 			if err != nil {
 				fmt.Println(err)
 				return

@@ -49,7 +49,7 @@ var createCmd = &cobra.Command{
 		vpc, err := tcclient.IaaS().GetVpc(cmd.Context(), createSubnetValues.VpcIdentity)
 		if err != nil {
 			if client.IsNotFound(err) {
-				vpcs, err := tcclient.IaaS().ListVpcs(cmd.Context())
+				vpcs, err := tcclient.IaaS().ListVpcs(cmd.Context(), &iaas.ListVpcsRequest{})
 				if err != nil {
 					return err
 				}

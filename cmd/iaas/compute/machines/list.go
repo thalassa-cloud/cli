@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/iaas"
 
 	"k8s.io/apimachinery/pkg/api/resource"
 )
@@ -36,7 +37,7 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		machines, err := client.IaaS().ListMachines(cmd.Context())
+		machines, err := client.IaaS().ListMachines(cmd.Context(), &iaas.ListMachinesRequest{})
 		if err != nil {
 			return err
 		}

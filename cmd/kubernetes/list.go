@@ -8,6 +8,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/kubernetes"
 )
 
 const NoHeaderKey = "no-header"
@@ -30,7 +31,7 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		clusters, err := client.Kubernetes().ListKubernetesClusters(cmd.Context())
+		clusters, err := client.Kubernetes().ListKubernetesClusters(cmd.Context(), &kubernetes.ListKubernetesClustersRequest{})
 		if err != nil {
 			return err
 		}

@@ -11,7 +11,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
-	"github.com/thalassa-cloud/client-go/kubernetesclient"
+	"github.com/thalassa-cloud/client-go/kubernetes"
 
 	"k8s.io/utils/ptr"
 
@@ -27,12 +27,12 @@ var (
 // Group candidates by major.minor to identify patch versions
 type VersionGroup struct {
 	MajorMinor string
-	Versions   []kubernetesclient.KubernetesVersion
+	Versions   []kubernetes.KubernetesVersion
 }
 
 // selectUpgradeVersion selects the appropriate upgrade version based on the current version
 // following Kubernetes versioning policy (max 1 minor version upgrade at a time)
-func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetesclient.KubernetesVersion, requestedVersion string) (*kubernetesclient.KubernetesVersion, error) {
+func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetes.KubernetesVersion, requestedVersion string) (*kubernetes.KubernetesVersion, error) {
 	// If specific version requested, find and validate it
 	if requestedVersion != "" {
 		for _, version := range versions {
@@ -55,7 +55,7 @@ func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetescl
 	}
 
 	// Check if there are any newer versions at all
-	var newerVersions []kubernetesclient.KubernetesVersion
+	var newerVersions []kubernetes.KubernetesVersion
 	for _, version := range versions {
 		versionSemver, err := semver.Parse(version.KubernetesVersion)
 		if err != nil {
@@ -71,7 +71,7 @@ func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetescl
 	}
 
 	// Convert versions to semver for proper comparison
-	var upgradeCandidates []kubernetesclient.KubernetesVersion
+	var upgradeCandidates []kubernetes.KubernetesVersion
 	for _, version := range versions {
 		versionSemver, err := semver.Parse(version.KubernetesVersion)
 		if err != nil {
@@ -93,7 +93,7 @@ func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetescl
 	if len(upgradeCandidates) == 0 {
 		// We have newer versions but none that meet our policy
 		var latestAvailable semver.Version
-		var highestVersion *kubernetesclient.KubernetesVersion
+		var highestVersion *kubernetes.KubernetesVersion
 
 		for _, version := range newerVersions {
 			versionSemver, _ := semver.Parse(version.KubernetesVersion)
@@ -119,7 +119,7 @@ func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetescl
 	}
 
 	// Group candidates by major.minor to identify patch versions
-	versionGroups := make(map[string][]kubernetesclient.KubernetesVersion)
+	versionGroups := make(map[string][]kubernetes.KubernetesVersion)
 
 	for _, candidate := range upgradeCandidates {
 		candidateSemver, err := semver.Parse(candidate.KubernetesVersion)
@@ -191,11 +191,11 @@ var KubernetesUpgradeCmd = &cobra.Command{
 			return
 		}
 
-		clusters := []kubernetesclient.KubernetesCluster{}
+		clusters := []kubernetes.KubernetesCluster{}
 
 		if upgradeAllClusters {
 			fmt.Println("Upgrading all clusters")
-			clusters, err = client.Kubernetes().ListKubernetesClusters(cmd.Context())
+			clusters, err = client.Kubernetes().ListKubernetesClusters(cmd.Context(), &kubernetes.ListKubernetesClustersRequest{})
 			if err != nil {
 				fmt.Println("Error getting clusters:", err)
 				return
@@ -256,7 +256,7 @@ var KubernetesUpgradeCmd = &cobra.Command{
 			fmt.Println("Upgrading cluster", cluster.Name, "to version", upgradeToVersion.KubernetesVersion)
 
 			// Create update request with the version slug
-			updateRequest := kubernetesclient.UpdateKubernetesCluster{
+			updateRequest := kubernetes.UpdateKubernetesCluster{
 				KubernetesVersionIdentity: ptr.To(upgradeToVersion.Identity),
 			}
 			// Call the API to upgrade the cluster

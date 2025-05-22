@@ -20,7 +20,7 @@ var deleteCmd = &cobra.Command{
 		}
 
 		// get the subnets
-		subnets, err := client.IaaS().ListSubnets(cmd.Context())
+		subnets, err := client.IaaS().ListSubnets(cmd.Context(), &iaas.ListSubnetsRequest{})
 		if err != nil {
 			return err
 		}

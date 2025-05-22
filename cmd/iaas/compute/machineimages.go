@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/iaas"
 )
 
 var getMachineImagesCmd = &cobra.Command{
@@ -20,7 +21,7 @@ var getMachineImagesCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		images, err := client.IaaS().ListMachineImages(cmd.Context())
+		images, err := client.IaaS().ListMachineImages(cmd.Context(), &iaas.ListMachineImagesRequest{})
 		if err != nil {
 			return err
 		}

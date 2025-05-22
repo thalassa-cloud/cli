@@ -8,7 +8,8 @@ import (
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
-	"github.com/thalassa-cloud/client-go/kubernetesclient"
+	"github.com/thalassa-cloud/client-go/iaas"
+	"github.com/thalassa-cloud/client-go/kubernetes"
 	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
@@ -51,7 +52,7 @@ var listCmd = &cobra.Command{
 		}
 
 		// Get clusters
-		clusters, err := client.Kubernetes().ListKubernetesClusters(ctx)
+		clusters, err := client.Kubernetes().ListKubernetesClusters(ctx, &kubernetes.ListKubernetesClustersRequest{})
 		if err != nil {
 			return fmt.Errorf("failed to list clusters: %w", err)
 		}
@@ -70,7 +71,7 @@ var listCmd = &cobra.Command{
 			}
 
 			// Get node pools for the cluster
-			nodePools, err := client.Kubernetes().ListKubernetesNodePools(ctx, c.Identity)
+			nodePools, err := client.Kubernetes().ListKubernetesNodePools(ctx, c.Identity, &kubernetes.ListKubernetesNodePoolsRequest{})
 			if err != nil {
 				return fmt.Errorf("failed to list node pools for cluster %s: %w", c.Name, err)
 			}
@@ -108,7 +109,7 @@ var listCmd = &cobra.Command{
 
 // getVpcIdentity retrieves the VPC identity by name, identity, or slug
 func getVpcIdentity(ctx context.Context, client thalassa.Client, vpcIdentifier string) (string, error) {
-	vpcs, err := client.IaaS().ListVpcs(ctx)
+	vpcs, err := client.IaaS().ListVpcs(ctx, &iaas.ListVpcsRequest{})
 	if err != nil {
 		return "", err
 	}
@@ -122,7 +123,7 @@ func getVpcIdentity(ctx context.Context, client thalassa.Client, vpcIdentifier s
 }
 
 // formatReplicas formats the replicas string based on autoscaling settings
-func formatReplicas(np *kubernetesclient.KubernetesNodePool) string {
+func formatReplicas(np *kubernetes.KubernetesNodePool) string {
 	if np.EnableAutoscaling {
 		return fmt.Sprintf("%d-%d", np.MinReplicas, np.MaxReplicas)
 	}
