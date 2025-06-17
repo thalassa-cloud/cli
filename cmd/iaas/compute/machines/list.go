@@ -84,7 +84,7 @@ var getCmd = &cobra.Command{
 					if attachment.PersistentVolume != nil {
 						volumeAttachments = append(volumeAttachments, attachment.PersistentVolume.Name)
 					} else {
-						volumeAttachments = append(volumeAttachments, attachment.DeviceName)
+						volumeAttachments = append(volumeAttachments, attachment.Serial)
 					}
 				}
 				sort.Strings(volumeAttachments)

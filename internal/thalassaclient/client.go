@@ -19,12 +19,22 @@ func GetThalassaClient() (thalassa.Client, error) {
 		client.WithOrganisation(context.Organisation),
 	}
 
-	if context.Users.User.Token != "" {
-		opts = append(opts, client.WithAuthPersonalToken(context.Users.User.Token))
+	if contextstate.Debug() {
+		fmt.Println("Debug mode enabled")
+		fmt.Println("Context:", context)
+		fmt.Println("Options:", opts)
 	}
 
-	if context.Users.User.ClientID != "" && context.Users.User.ClientSecret != "" {
-		opts = append(opts, client.WithAuthOIDC(context.Users.User.ClientID, context.Users.User.ClientSecret, fmt.Sprintf("%s/oidc/token", context.Servers.API.Server)))
+	token := contextstate.Token()
+	clientID := contextstate.ClientIdOrFlag()
+	clientSecret := contextstate.ClientSecretOrFlag()
+
+	if token != "" {
+		opts = append(opts, client.WithAuthPersonalToken(token))
+	}
+
+	if clientID != "" && clientSecret != "" {
+		opts = append(opts, client.WithAuthOIDC(clientID, clientSecret, fmt.Sprintf("%s/oidc/token", context.Servers.API.Server)))
 	}
 
 	client, err := thalassa.NewClient(opts...)

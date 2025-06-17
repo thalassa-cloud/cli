@@ -109,7 +109,7 @@ func newDefaultContext(contextName, organisation, apiName string) contextstate.C
 			},
 		},
 		Users: contextstate.Users{
-			Name: "token", // TODO: username from token
+			Name: contextName,
 			User: contextstate.User{
 				Token: contextstate.Token(),
 			},
