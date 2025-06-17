@@ -149,7 +149,7 @@ func (c *configFileContextManager) replaceContext(contextRef ContextReference) {
 func (c *configFileContextManager) removeContext(name string) {
 	for i, ctx := range c.config.Contexts {
 		if ctx.Name == name {
-			c.config.Contexts = removeElement(c.config.Contexts, i)
+			c.config.Contexts = removeItemFromSlice(c.config.Contexts, i)
 			break
 		}
 	}
@@ -163,7 +163,7 @@ func (c *configFileContextManager) replaceAPI(api Servers) {
 func (c *configFileContextManager) removeAPI(name string) {
 	for i, a := range c.config.Servers {
 		if a.Name == name {
-			c.config.Servers = removeElement(c.config.Servers, i)
+			c.config.Servers = removeItemFromSlice(c.config.Servers, i)
 			break
 		}
 	}
@@ -177,12 +177,12 @@ func (c *configFileContextManager) setUser(user Users) {
 func (c *configFileContextManager) deleteUser(name string) {
 	for i, u := range c.config.Users {
 		if u.Name == name {
-			c.config.Users = removeElement(c.config.Users, i)
+			c.config.Users = removeItemFromSlice(c.config.Users, i)
 			break
 		}
 	}
 }
 
-func removeElement[T any](slice []T, s int) []T {
+func removeItemFromSlice[T any](slice []T, s int) []T {
 	return append(slice[:s], slice[s+1:]...)
 }

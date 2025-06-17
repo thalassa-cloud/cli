@@ -22,6 +22,7 @@ var (
 	OidcClientIDFlag     string
 	OidcClientSecretFlag string
 
+	DebugFlag   bool
 	ContextFlag string
 )
 
@@ -180,4 +181,8 @@ func ClientSecret() string {
 
 func GetContext() (Context, error) {
 	return globalConfigManager.Get()
+}
+
+func Debug() bool {
+	return DebugFlag
 }

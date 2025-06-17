@@ -43,6 +43,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&contextstate.PersonalAccessTokenFlag, "token", "", "Personal access token (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientIDFlag, "client-id", "", "OIDC client ID for OIDC authentication (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientSecretFlag, "client-secret", "", "OIDC client secret for OIDC authentication (overrides context)")
+	RootCmd.PersistentFlags().BoolVar(&contextstate.DebugFlag, "debug", false, "Debug mode")
 
 	RootCmd.AddCommand(context.ContextCmd)
 	RootCmd.AddCommand(version.VersionCmd)
