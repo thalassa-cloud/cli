@@ -68,3 +68,7 @@ func BuiltBy() string {
 func (v *VersionInfo) String() string {
 	return fmt.Sprintf("Version information\nVersion: %s, Commit: %s\nBuild date: %s, Built by: %s\n", v.Version, v.Commit, v.Date, v.BuiltBy)
 }
+
+func UserAgent() string {
+	return fmt.Sprintf("thalassa-cloud-cli/%s", Version())
+}

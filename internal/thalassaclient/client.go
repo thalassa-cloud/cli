@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/version"
 	"github.com/thalassa-cloud/client-go/pkg/client"
 	"github.com/thalassa-cloud/client-go/thalassa"
 )
@@ -17,6 +18,7 @@ func GetThalassaClient() (thalassa.Client, error) {
 	opts := []client.Option{
 		client.WithBaseURL(context.Servers.API.Server),
 		client.WithOrganisation(context.Organisation),
+		client.WithUserAgent(version.UserAgent()),
 	}
 
 	if contextstate.Debug() {
