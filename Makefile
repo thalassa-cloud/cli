@@ -3,9 +3,11 @@ GOARCH = arm64
 
 COMMIT=$(shell git rev-parse HEAD)
 BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
+DATE=$(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 
 VERSION=0.0.0
 IMAGE=thalassa-cloud/tcloud
+BUILT_BY=make
 
 ifneq (${BRANCH}, release)
 	BRANCH := -${BRANCH}
@@ -14,7 +16,7 @@ else
 endif
 
 PKG_LIST := $(shell go list ./...)
-LDFLAGS = -ldflags "-X main.Version=${VERSION} -X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
+LDFLAGS = -ldflags "-X main.version=${VERSION} -X main.commit=${COMMIT} -X main.branch=${BRANCH} -X main.date=${DATE} -X main.builtBy=${BUILT_BY}"
 
 all: link clean linux darwin
 
@@ -26,6 +28,9 @@ darwin:
 
 windows:
 	CGO_ENABLED=0 GOOS=windows GOARCH=${GOARCH} go build ${LDFLAGS} -o bin/${BINARY}-windows-${GOARCH}.exe . ;
+
+snapshot:
+	goreleaser release --snapshot --clean
 
 build:
 	CGO_ENABLED=0 go build ${LDFLAGS} -o bin/${BINARY} . ;
