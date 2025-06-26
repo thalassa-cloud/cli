@@ -49,10 +49,14 @@ func getSelectedOrganisation(args []string) (string, error) {
 	} else if len(args) == 1 {
 		return args[0], nil
 	} else {
-		return "", errors.New("invalid organisation")
+		return "", ErrInvalidOrganisation
 	}
 }
 
 func init() {
 	ContextCmd.AddCommand(organisationCmd)
 }
+
+var (
+	ErrInvalidOrganisation = errors.New("invalid organisation")
+)

@@ -3,11 +3,13 @@ package context
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/url"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
 var (
@@ -56,7 +58,23 @@ var createCmd = &cobra.Command{
 		if organisation == "" {
 			organisation, err = getSelectedOrganisation([]string{})
 			if err != nil {
-				return err
+				if !errors.Is(err, ErrInvalidOrganisation) {
+					return fmt.Errorf("failed to get selected organisation: %w", err)
+				}
+
+				client, err := thalassaclient.GetThalassaClient()
+				if err != nil {
+					return fmt.Errorf("failed to get thalassa client: %w", err)
+				}
+
+				// lets see if we can discover the organisation from the api
+				memberships, err := client.Me().ListMyMemberships(ctx)
+				if err != nil {
+					return fmt.Errorf("failed to list organisations: %w", err)
+				}
+				if len(memberships) > 0 {
+					organisation = memberships[0].Organisation.Slug
+				}
 			}
 		}
 
