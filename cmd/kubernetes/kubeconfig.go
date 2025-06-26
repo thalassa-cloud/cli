@@ -8,6 +8,14 @@ import (
 	"github.com/thalassa-cloud/client-go/kubernetes"
 )
 
+var (
+	useClusterNameInKubeconfig bool
+)
+
+func init() {
+	KubernetesKubeConfigCmd.Flags().BoolVarP(&useClusterNameInKubeconfig, "cluster-name-in-context", "n", false, "use the cluster name instead of the cluster identity in the kubeconfig context")
+}
+
 var KubernetesKubeConfigCmd = &cobra.Command{
 	Use:     "kubeconfig",
 	Aliases: []string{},
@@ -49,7 +57,6 @@ var KubernetesKubeConfigCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Printf("Getting kubeconfig for cluster %s\n", cluster.Name)
 		session, err := client.Kubernetes().GetKubernetesClusterKubeconfig(ctx, cluster.Identity)
 		if err != nil {
 			fmt.Println(err)
