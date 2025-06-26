@@ -1,5 +1,5 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-06-26T11:24:44+02:00
 linkTitle: "tcloud regions"
 title: "regions"
 slug: tcloud_regions
@@ -23,6 +23,7 @@ Thalassa Cloud Platform Regions
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```
