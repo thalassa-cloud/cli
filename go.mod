@@ -9,7 +9,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.9.1
-	github.com/thalassa-cloud/client-go v0.14.4
+	github.com/thalassa-cloud/client-go v0.16.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.33.3
 	k8s.io/utils v0.0.0-20250502105355-0f33e8f1c979
