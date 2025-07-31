@@ -112,6 +112,32 @@ func (c *configFileContextManager) RemoveContext(name string) error {
 	return c.Save()
 }
 
+// RemoveContextUser removes a user from the configuration.
+func (c *configFileContextManager) RemoveContextUser(name string) error {
+	// make sure there is no context using this user
+	for _, context := range c.config.Contexts {
+		if context.Context.User == name {
+			return fmt.Errorf("cannot remove user %q as it is still in use by context %q", name, context.Name)
+		}
+	}
+	fmt.Println("Removing user", name)
+	c.deleteUser(name)
+	return c.Save()
+}
+
+// RemoveContextServer removes a server from the configuration.
+func (c *configFileContextManager) RemoveContextServer(name string) error {
+	// make sure there is no context using this server
+	for _, context := range c.config.Contexts {
+		if context.Context.API == name {
+			return fmt.Errorf("cannot remove server %q as it is still in use by context %q", name, context.Name)
+		}
+	}
+	fmt.Println("Removing server", name)
+	c.removeAPI(name)
+	return c.Save()
+}
+
 // -----------
 
 func (c *configFileContextManager) getContextRef(name string) (ContextReference, bool) {

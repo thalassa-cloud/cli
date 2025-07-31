@@ -53,6 +53,14 @@ type ConfigManager interface {
 	// It returns an error if there is an issue removing the context.
 	RemoveContext(name string) error
 
+	// RemoveContextUser removes a user from the configuration.
+	// It returns an error if there is an issue removing the user.
+	RemoveContextUser(name string) error
+
+	// RemoveContextServer removes a server from the configuration.
+	// It returns an error if there is an issue removing the server.
+	RemoveContextServer(name string) error
+
 	// Config returns the current configuration.
 	Config() Config
 }
