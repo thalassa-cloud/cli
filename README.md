@@ -23,6 +23,29 @@ Authenticate with Thalassa Cloud:
 tcloud context create --api=https://api.thalassa.cloud --token=<PAT>
 ```
 
+## Configuration file
+
+### With personal access token
+
+```yaml
+configVersion: v1
+contexts:
+    - name: default
+      context:
+        api: api.thalassa.cloud
+        user: default
+        organisation: <ORG_SLUG_OR_IDENTITY>
+current-context: default
+servers:
+    - name: api.thalassa.cloud
+      api:
+        server: https://api.thalassa.cloud
+users:
+    - name: default
+      user:
+        token: <PAT>
+```
+
 ## Development
 
 ### Prerequisites
