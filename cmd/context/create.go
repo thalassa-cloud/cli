@@ -3,6 +3,7 @@ package context
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/url"
 
 	"github.com/spf13/cobra"
@@ -44,19 +45,20 @@ var createCmd = &cobra.Command{
 
 		if oidcClientID != "" && oidcClientSecret != "" {
 			if err := contextstate.LoginWithAPIEndpointOidc(ctx, oidcClientID, oidcClientSecret, apiURL); err != nil {
-				return err
+				return fmt.Errorf("failed to login with oidc: %w", err)
 			}
 		} else {
 			if err := contextstate.LoginWithAPIEndpoint(ctx, token, apiURL); err != nil {
-				return err
+				return fmt.Errorf("failed to login with token: %w", err)
 			}
 		}
+
 		var err error
 		organisation := contextstate.Organisation()
 		if organisation == "" {
 			organisation, err = getSelectedOrganisation([]string{})
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to get selected organisation: %w", err)
 			}
 		}
 
