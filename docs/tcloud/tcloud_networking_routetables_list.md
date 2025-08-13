@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud networking routetables list"
 title: "networking routetables list"
 slug: tcloud_networking_routetables_list
 url: /docs/tcloud/tcloud_networking_routetables_list/
-weight: 9970
+weight: 9963
 ---
 ## tcloud networking routetables list
 
@@ -28,6 +28,7 @@ tcloud networking routetables list [flags]
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```

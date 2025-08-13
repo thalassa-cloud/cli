@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud context"
 title: "context"
 slug: tcloud_context
 url: /docs/tcloud/tcloud_context/
-weight: 9983
+weight: 9981
 ---
 ## tcloud context
 
@@ -27,6 +27,7 @@ Manage context for the CLI. Contexts are used to manage multiple organisations a
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```
@@ -37,6 +38,8 @@ Manage context for the CLI. Contexts are used to manage multiple organisations a
 * [tcloud context create](/docs/tcloud/tcloud_context_create/)	 - Create a new context with authentication and organisation
 * [tcloud context current](/docs/tcloud/tcloud_context_current/)	 - Shows the current context
 * [tcloud context delete](/docs/tcloud/tcloud_context_delete/)	 - Delete a context
+* [tcloud context delete-server](/docs/tcloud/tcloud_context_delete-server/)	 - Delete a server
+* [tcloud context delete-user](/docs/tcloud/tcloud_context_delete-user/)	 - Delete a user
 * [tcloud context list](/docs/tcloud/tcloud_context_list/)	 - List the contexts
 * [tcloud context login](/docs/tcloud/tcloud_context_login/)	 - Login to Thalassa Cloud
 * [tcloud context organisation](/docs/tcloud/tcloud_context_organisation/)	 - Set the organisation in the current-context

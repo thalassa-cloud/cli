@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud context list"
 title: "context list"
 slug: tcloud_context_list
 url: /docs/tcloud/tcloud_context_list/
-weight: 9988
+weight: 9986
 ---
 ## tcloud context list
 
@@ -39,6 +39,7 @@ tcloud context list
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```

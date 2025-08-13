@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/cmd/context"
+	"github.com/thalassa-cloud/cli/cmd/dbaas"
 	"github.com/thalassa-cloud/cli/cmd/iaas/compute"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking"
 	"github.com/thalassa-cloud/cli/cmd/iaas/regions"
@@ -55,6 +56,7 @@ func init() {
 	RootCmd.AddCommand(compute.ComputeCmd)
 
 	RootCmd.AddCommand(kubernetes.KubernetesCmd)
+	RootCmd.AddCommand(dbaas.DbaasCmd)
 	RootCmd.AddCommand(me.MeCmd)
 
 	cobra.OnInitialize(contextstate.Init)

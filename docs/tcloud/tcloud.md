@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud"
 title: "tcloud"
 slug: tcloud
 url: /docs/tcloud/tcloud/
-weight: 9957
+weight: 9950
 ---
 ## tcloud
 
@@ -17,6 +17,7 @@ A CLI for working with the Thalassa Cloud Platform
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -h, --help                   help for tcloud
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
@@ -26,6 +27,7 @@ A CLI for working with the Thalassa Cloud Platform
 
 * [tcloud compute](/docs/tcloud/tcloud_compute/)	 - Manage compute resources
 * [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
+* [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
 * [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
 * [tcloud me](/docs/tcloud/tcloud_me/)	 - Get information about the current user
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources

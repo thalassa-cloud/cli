@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud kubernetes nodepools"
 title: "kubernetes nodepools"
 slug: tcloud_kubernetes_nodepools
 url: /docs/tcloud/tcloud_kubernetes_nodepools/
-weight: 9978
+weight: 9971
 ---
 ## tcloud kubernetes nodepools
 
@@ -36,6 +36,7 @@ Manage Kubernetes NodePools
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```

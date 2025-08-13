@@ -1,27 +1,35 @@
 ---
 date: 2025-08-14T00:09:06+02:00
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9951
+linkTitle: "tcloud dbaas versions"
+title: "dbaas versions"
+slug: tcloud_dbaas_versions
+url: /docs/tcloud/tcloud_dbaas_versions/
+weight: 9977
 ---
-## tcloud version
+## tcloud dbaas versions
 
-Print version information
+Get a list of database engine versions
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Get a list of available database engine versions for a specific engine
 
 ```
-tcloud version [flags]
+tcloud dbaas versions [flags]
+```
+
+### Examples
+
+```
+tcloud dbaas versions --engine postgres
+tcloud dbaas versions --engine postgres --no-header
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --engine string   Database engine type (e.g., postgres)
+  -h, --help            help for versions
 ```
 
 ### Options inherited from parent commands
@@ -38,5 +46,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
 

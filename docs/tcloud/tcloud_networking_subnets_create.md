@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud networking subnets create"
 title: "networking subnets create"
 slug: tcloud_networking_subnets_create
 url: /docs/tcloud/tcloud_networking_subnets_create/
-weight: 9968
+weight: 9961
 ---
 ## tcloud networking subnets create
 
@@ -32,6 +32,7 @@ tcloud networking subnets create [flags]
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```

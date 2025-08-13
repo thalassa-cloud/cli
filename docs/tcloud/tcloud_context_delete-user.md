@@ -1,27 +1,33 @@
 ---
 date: 2025-08-14T00:09:06+02:00
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9951
+linkTitle: "tcloud context delete-user"
+title: "context delete-user"
+slug: tcloud_context_delete-user
+url: /docs/tcloud/tcloud_context_delete-user/
+weight: 9987
 ---
-## tcloud version
+## tcloud context delete-user
 
-Print version information
+Delete a user
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Delete a user from the config
 
 ```
-tcloud version [flags]
+tcloud context delete-user [flags]
+```
+
+### Examples
+
+```
+tcloud context delete-user <user>
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for delete-user
 ```
 
 ### Options inherited from parent commands
@@ -38,5 +44,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 

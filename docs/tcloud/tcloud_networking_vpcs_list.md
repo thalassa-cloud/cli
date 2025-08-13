@@ -1,10 +1,10 @@
 ---
-date: 2025-05-14T17:58:13+02:00
+date: 2025-08-14T00:09:06+02:00
 linkTitle: "tcloud networking vpcs list"
 title: "networking vpcs list"
 slug: tcloud_networking_vpcs_list
 url: /docs/tcloud/tcloud_networking_vpcs_list/
-weight: 9963
+weight: 9956
 ---
 ## tcloud networking vpcs list
 
@@ -28,6 +28,7 @@ tcloud networking vpcs list [flags]
       --client-id string       OIDC client ID for OIDC authentication (overrides context)
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
+      --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
       --token string           Personal access token (overrides context)
 ```
