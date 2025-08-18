@@ -1,5 +1,5 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud networking natgateways"
 title: "networking natgateways"
 slug: tcloud_networking_natgateways
@@ -8,11 +8,19 @@ weight: 9964
 ---
 ## tcloud networking natgateways
 
-Manage natgateways
+Manage NAT gateways
 
 ### Synopsis
 
-Manage natgateways to manage your NAT gateways within the Thalassa Cloud Platform. This command will list all the NAT gateways within your organisation.
+Manage NAT gateways within the Thalassa Cloud Platform. This command will list all the NAT gateways within your organisation.
+
+### Examples
+
+```
+tcloud networking natgateways list
+tcloud networking natgateways list --region us-west-1
+tcloud networking natgateways view ngw-123
+```
 
 ### Options
 
@@ -35,5 +43,6 @@ Manage natgateways to manage your NAT gateways within the Thalassa Cloud Platfor
 ### SEE ALSO
 
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
-* [tcloud networking natgateways list](/docs/tcloud/tcloud_networking_natgateways_list/)	 - Get a list of natgateways
+* [tcloud networking natgateways list](/docs/tcloud/tcloud_networking_natgateways_list/)	 - Get a list of NAT gateways
+* [tcloud networking natgateways view](/docs/tcloud/tcloud_networking_natgateways_view/)	 - View NAT gateway details
 

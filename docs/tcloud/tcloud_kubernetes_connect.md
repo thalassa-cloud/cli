@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud kubernetes connect"
 title: "kubernetes connect"
 slug: tcloud_kubernetes_connect
 url: /docs/tcloud/tcloud_kubernetes_connect/
-weight: 9975
+weight: 9976
 ---
 ## tcloud kubernetes connect
 

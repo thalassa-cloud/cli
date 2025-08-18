@@ -1,5 +1,5 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud compute machine-types"
 title: "compute machine-types"
 slug: tcloud_compute_machine-types

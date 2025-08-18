@@ -1,26 +1,39 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud networking natgateways list"
 title: "networking natgateways list"
 slug: tcloud_networking_natgateways_list
 url: /docs/tcloud/tcloud_networking_natgateways_list/
-weight: 9965
+weight: 9966
 ---
 ## tcloud networking natgateways list
 
-Get a list of natgateways
+Get a list of NAT gateways
+
+### Synopsis
+
+Get a list of NAT gateways within your organisation
 
 ```
 tcloud networking natgateways list [flags]
 ```
 
+### Examples
+
+```
+tcloud networking natgateways list
+tcloud networking natgateways list --region us-west-1
+tcloud networking natgateways list --vpc vpc-123 --no-header
+```
+
 ### Options
 
 ```
+      --exact-time      Show exact time instead of relative time
   -h, --help            help for list
       --no-header       Do not print the header
-      --region string   Region of the natgateway
-      --vpc string      VPC of the natgateway
+      --region string   Region of the NAT gateway
+      --vpc string      VPC of the NAT gateway
 ```
 
 ### Options inherited from parent commands
@@ -37,5 +50,5 @@ tcloud networking natgateways list [flags]
 
 ### SEE ALSO
 
-* [tcloud networking natgateways](/docs/tcloud/tcloud_networking_natgateways/)	 - Manage natgateways
+* [tcloud networking natgateways](/docs/tcloud/tcloud_networking_natgateways/)	 - Manage NAT gateways
 

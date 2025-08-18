@@ -1,29 +1,29 @@
 ---
 date: 2025-08-14T00:38:24+02:00
-linkTitle: "tcloud dbaas list"
-title: "dbaas list"
-slug: tcloud_dbaas_list
-url: /docs/tcloud/tcloud_dbaas_list/
-weight: 9979
+linkTitle: "tcloud networking security-groups list"
+title: "networking security-groups list"
+slug: tcloud_networking_security-groups_list
+url: /docs/tcloud/tcloud_networking_security-groups_list/
+weight: 9959
 ---
-## tcloud dbaas list
+## tcloud networking security-groups list
 
-Get a list of database clusters
+Get a list of security groups
 
 ### Synopsis
 
-Get a list of database clusters within your organisation
+Get a list of security groups within your organisation
 
 ```
-tcloud dbaas list [flags]
+tcloud networking security-groups list [flags]
 ```
 
 ### Examples
 
 ```
-tcloud dbaas list
-tcloud dbaas list --no-header
-tcloud dbaas list --exact-time
+tcloud networking security-groups list
+tcloud networking security-groups list --no-header
+tcloud networking security-groups list --exact-time
 ```
 
 ### Options
@@ -32,6 +32,7 @@ tcloud dbaas list --exact-time
       --exact-time   Show exact time instead of relative time
   -h, --help         help for list
       --no-header    Do not print the header
+      --vpc string   Filter by VPC
 ```
 
 ### Options inherited from parent commands
@@ -48,5 +49,5 @@ tcloud dbaas list --exact-time
 
 ### SEE ALSO
 
-* [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
+* [tcloud networking security-groups](/docs/tcloud/tcloud_networking_security-groups/)	 - Manage security groups
 

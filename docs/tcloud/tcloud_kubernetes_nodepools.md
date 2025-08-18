@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud kubernetes nodepools"
 title: "kubernetes nodepools"
 slug: tcloud_kubernetes_nodepools
 url: /docs/tcloud/tcloud_kubernetes_nodepools/
-weight: 9971
+weight: 9972
 ---
 ## tcloud kubernetes nodepools
 

@@ -1,23 +1,35 @@
 ---
 date: 2025-08-14T00:38:24+02:00
-linkTitle: "tcloud networking"
-title: "networking"
-slug: tcloud_networking
-url: /docs/tcloud/tcloud_networking/
-weight: 9949
+linkTitle: "tcloud networking security-groups delete"
+title: "networking security-groups delete"
+slug: tcloud_networking_security-groups_delete
+url: /docs/tcloud/tcloud_networking_security-groups_delete/
+weight: 9960
 ---
-## tcloud networking
+## tcloud networking security-groups delete
 
-Manage networking resources
+Delete a security group
 
 ### Synopsis
 
-Manage networking resources in the Thalassa Cloud Platform
+Delete a security group. This command will delete the security group and all its rules.
+
+```
+tcloud networking security-groups delete [flags]
+```
+
+### Examples
+
+```
+tcloud networking security-groups delete sg-123
+tcloud networking security-groups delete sg-123 --wait
+```
 
 ### Options
 
 ```
-  -h, --help   help for networking
+  -h, --help   help for delete
+      --wait   Wait for the security group to be deleted
 ```
 
 ### Options inherited from parent commands
@@ -34,10 +46,5 @@ Manage networking resources in the Thalassa Cloud Platform
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
-* [tcloud networking natgateways](/docs/tcloud/tcloud_networking_natgateways/)	 - Manage NAT gateways
-* [tcloud networking routetables](/docs/tcloud/tcloud_networking_routetables/)	 - Manage routetables
 * [tcloud networking security-groups](/docs/tcloud/tcloud_networking_security-groups/)	 - Manage security groups
-* [tcloud networking subnets](/docs/tcloud/tcloud_networking_subnets/)	 - Manage subnets
-* [tcloud networking vpcs](/docs/tcloud/tcloud_networking_vpcs/)	 - Manage VPCs
 

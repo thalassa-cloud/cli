@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud dbaas instance-types"
 title: "dbaas instance-types"
 slug: tcloud_dbaas_instance-types
 url: /docs/tcloud/tcloud_dbaas_instance-types/
-weight: 9979
+weight: 9980
 ---
 ## tcloud dbaas instance-types
 

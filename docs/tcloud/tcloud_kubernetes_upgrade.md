@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud kubernetes upgrade"
 title: "kubernetes upgrade"
 slug: tcloud_kubernetes_upgrade
 url: /docs/tcloud/tcloud_kubernetes_upgrade/
-weight: 9970
+weight: 9971
 ---
 ## tcloud kubernetes upgrade
 

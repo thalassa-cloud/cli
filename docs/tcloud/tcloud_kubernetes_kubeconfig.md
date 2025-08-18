@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud kubernetes kubeconfig"
 title: "kubernetes kubeconfig"
 slug: tcloud_kubernetes_kubeconfig
 url: /docs/tcloud/tcloud_kubernetes_kubeconfig/
-weight: 9974
+weight: 9975
 ---
 ## tcloud kubernetes kubeconfig
 

@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud me organisations"
 title: "me organisations"
 slug: tcloud_me_organisations
 url: /docs/tcloud/tcloud_me_organisations/
-weight: 9967
+weight: 9968
 ---
 ## tcloud me organisations
 

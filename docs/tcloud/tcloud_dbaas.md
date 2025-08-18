@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud dbaas"
 title: "dbaas"
 slug: tcloud_dbaas
 url: /docs/tcloud/tcloud_dbaas/
-weight: 9976
+weight: 9977
 ---
 ## tcloud dbaas
 
@@ -43,7 +43,6 @@ tcloud dbaas versions --engine postgres
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
-* [tcloud dbaas engines](/docs/tcloud/tcloud_dbaas_engines/)	 - Get a list of database engines
 * [tcloud dbaas instance-types](/docs/tcloud/tcloud_dbaas_instance-types/)	 - Get a list of database instance types
 * [tcloud dbaas list](/docs/tcloud/tcloud_dbaas_list/)	 - Get a list of database clusters
 * [tcloud dbaas versions](/docs/tcloud/tcloud_dbaas_versions/)	 - Get a list of database engine versions

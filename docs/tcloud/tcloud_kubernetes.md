@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:09:06+02:00
+date: 2025-08-14T00:38:24+02:00
 linkTitle: "tcloud kubernetes"
 title: "kubernetes"
 slug: tcloud_kubernetes
 url: /docs/tcloud/tcloud_kubernetes/
-weight: 9968
+weight: 9969
 ---
 ## tcloud kubernetes
 

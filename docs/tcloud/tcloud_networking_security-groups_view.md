@@ -1,23 +1,35 @@
 ---
 date: 2025-08-14T00:38:24+02:00
-linkTitle: "tcloud networking"
-title: "networking"
-slug: tcloud_networking
-url: /docs/tcloud/tcloud_networking/
-weight: 9949
+linkTitle: "tcloud networking security-groups view"
+title: "networking security-groups view"
+slug: tcloud_networking_security-groups_view
+url: /docs/tcloud/tcloud_networking_security-groups_view/
+weight: 9958
 ---
-## tcloud networking
+## tcloud networking security-groups view
 
-Manage networking resources
+View security group details
 
 ### Synopsis
 
-Manage networking resources in the Thalassa Cloud Platform
+View detailed information about a specific security group
+
+```
+tcloud networking security-groups view [flags]
+```
+
+### Examples
+
+```
+tcloud networking security-groups view sg-123
+tcloud networking security-groups view sg-123 --output yaml
+```
 
 ### Options
 
 ```
-  -h, --help   help for networking
+  -h, --help            help for view
+  -o, --output string   Output format (yaml)
 ```
 
 ### Options inherited from parent commands
@@ -34,10 +46,5 @@ Manage networking resources in the Thalassa Cloud Platform
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
-* [tcloud networking natgateways](/docs/tcloud/tcloud_networking_natgateways/)	 - Manage NAT gateways
-* [tcloud networking routetables](/docs/tcloud/tcloud_networking_routetables/)	 - Manage routetables
 * [tcloud networking security-groups](/docs/tcloud/tcloud_networking_security-groups/)	 - Manage security groups
-* [tcloud networking subnets](/docs/tcloud/tcloud_networking_subnets/)	 - Manage subnets
-* [tcloud networking vpcs](/docs/tcloud/tcloud_networking_vpcs/)	 - Manage VPCs
 
