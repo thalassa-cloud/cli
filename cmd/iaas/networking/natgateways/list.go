@@ -8,6 +8,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/iaas"
 )
 
@@ -21,10 +22,12 @@ var (
 	vpc           string
 )
 
-// getCmd represents the get command
-var getCmd = &cobra.Command{
+// listCmd represents the list command
+var listCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "Get a list of natgateways",
+	Short:   "Get a list of NAT gateways",
+	Long:    "Get a list of NAT gateways within your organisation",
+	Example: "tcloud networking natgateways list\ntcloud networking natgateways list --region us-west-1\ntcloud networking natgateways list --vpc vpc-123 --no-header",
 	Aliases: []string{"g", "get", "ls"},
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -33,18 +36,30 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		natgateways, err := client.IaaS().ListNatGateways(cmd.Context(), &iaas.ListNatGatewaysRequest{})
+
+		f := filters.Filters{}
+		if region != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "region",
+				Value: region,
+			})
+		}
+
+		if vpc != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "vpc",
+				Value: vpc,
+			})
+		}
+
+		natgateways, err := client.IaaS().ListNatGateways(cmd.Context(), &iaas.ListNatGatewaysRequest{
+			Filters: f,
+		})
 		if err != nil {
 			return err
 		}
 		body := make([][]string, 0, len(natgateways))
 		for _, ngw := range natgateways {
-			if region != "" && ngw.Vpc.CloudRegion != nil && (ngw.Vpc.CloudRegion.Name != region && ngw.Vpc.CloudRegion.Identity != region && ngw.Vpc.CloudRegion.Slug != region) {
-				continue
-			}
-			if vpc != "" && (ngw.Vpc.Name != vpc && ngw.Vpc.Identity != vpc && ngw.Vpc.Slug != vpc) {
-				continue
-			}
 
 			regionName := ""
 			if ngw.Vpc.CloudRegion != nil {
@@ -77,9 +92,14 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	NatGatewaysCmd.AddCommand(getCmd)
+	NatGatewaysCmd.AddCommand(listCmd)
 
-	getCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
-	getCmd.Flags().StringVar(&region, "region", "", "Region of the natgateway")
-	getCmd.Flags().StringVar(&vpc, "vpc", "", "VPC of the natgateway")
+	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
+	listCmd.Flags().StringVar(&region, "region", "", "Region of the NAT gateway")
+	listCmd.Flags().StringVar(&vpc, "vpc", "", "VPC of the NAT gateway")
+	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show exact time instead of relative time")
+
+	// Add completion
+	listCmd.RegisterFlagCompletionFunc("region", completeRegion)
+	listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
 }
