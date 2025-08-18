@@ -1,4 +1,4 @@
-package volumes
+package snapshots
 
 import (
 	"fmt"
@@ -22,9 +22,9 @@ var (
 )
 
 // getCmd represents the get command
-var getCmd = &cobra.Command{
+var listCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "Get a list of volumes",
+	Short:   "Get a list of snapshots",
 	Aliases: []string{"g", "get", "ls"},
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -33,27 +33,28 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		volumes, err := client.IaaS().ListVolumes(cmd.Context(), &iaas.ListVolumesRequest{})
+		snapshots, err := client.IaaS().ListSnapshots(cmd.Context(), &iaas.ListSnapshotsRequest{})
 		if err != nil {
 			return err
 		}
-		body := make([][]string, 0, len(volumes))
-		for _, volume := range volumes {
-			volumeType := ""
-			if volume.VolumeType != nil {
-				volumeType = volume.VolumeType.Name
+		body := make([][]string, 0, len(snapshots))
+		for _, snapshot := range snapshots {
+			size := 0
+			if snapshot.SizeGB != nil {
+				size = *snapshot.SizeGB
 			}
+
 			item := []string{
-				volume.Identity,
-				volume.Name,
-				volume.Region.Name,
-				volumeType,
-				fmt.Sprintf("%dGB", volume.Size),
-				formattime.FormatTime(volume.CreatedAt.Local(), showExactTime),
+				snapshot.Identity,
+				snapshot.Name,
+				snapshot.Region.Name,
+				fmt.Sprintf("%dGB", size),
+				formattime.FormatTime(snapshot.CreatedAt.Local(), showExactTime),
 			}
+
 			if showLabels {
 				labels := []string{}
-				for k, v := range volume.Annotations {
+				for k, v := range snapshot.Annotations {
 					labels = append(labels, fmt.Sprintf("%s=%s", k, v))
 				}
 				item = append(item, strings.Join(labels, ", "))
@@ -64,7 +65,7 @@ var getCmd = &cobra.Command{
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			headers := []string{"ID", "Name", "Region", "Type", "Size", "Age"}
+			headers := []string{"ID", "Name", "Region", "Size", "Age"}
 			if showLabels {
 				headers = append(headers, "Labels")
 			}
@@ -75,8 +76,8 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	VolumesCmd.AddCommand(getCmd)
+	SnapshotsCmd.AddCommand(listCmd)
 
-	getCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
-	getCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
+	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
+	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
 }
