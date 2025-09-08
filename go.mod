@@ -11,14 +11,14 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/thalassa-cloud/client-go v0.18.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8s.io/apimachinery v0.33.4
-	k8s.io/utils v0.0.0-20250502105355-0f33e8f1c979
+	k8s.io/apimachinery v0.34.0
+	k8s.io/utils v0.0.0-20250604170112-4c0f3b243397
 	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
-	github.com/fxamacker/cbor/v2 v2.8.0 // indirect
+	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
 	github.com/go-resty/resty/v2 v2.16.5 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
@@ -36,4 +36,5 @@ require (
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
+	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
 )
