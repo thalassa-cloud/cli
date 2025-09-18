@@ -2,6 +2,7 @@ package kubernetes
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -18,12 +19,12 @@ var KubernetesKubeConfigCmd = &cobra.Command{
 		ctx := cmd.Context()
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 
 		if len(args) != 1 {
-			fmt.Println("must provide a cluster. Missing value <cluster>")
+			fmt.Fprintln(os.Stderr, "must provide a cluster. Missing value <cluster>")
 			return
 		}
 
@@ -45,11 +46,11 @@ var KubernetesKubeConfigCmd = &cobra.Command{
 			}
 		}
 		if cluster == nil {
-			fmt.Println("cluster not found")
+			fmt.Fprintln(os.Stderr, "cluster not found")
 			return
 		}
 
-		fmt.Printf("Getting kubeconfig for cluster %s\n", cluster.Name)
+		fmt.Fprintf(os.Stderr, "Getting kubeconfig for cluster %s\n", cluster.Name)
 		session, err := client.Kubernetes().GetKubernetesClusterKubeconfig(ctx, cluster.Identity)
 		if err != nil {
 			fmt.Println(err)
