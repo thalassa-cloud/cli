@@ -1,25 +1,28 @@
 ---
 date: 2025-09-29T22:35:32+02:00
-linkTitle: "tcloud kubernetes connect"
-title: "kubernetes connect"
-slug: tcloud_kubernetes_connect
-url: /docs/tcloud/tcloud_kubernetes_connect/
-weight: 9976
+linkTitle: "tcloud storage volumes detach"
+title: "storage volumes detach"
+slug: tcloud_storage_volumes_detach
+url: /docs/tcloud/tcloud_storage_volumes_detach/
+weight: 9940
 ---
-## tcloud kubernetes connect
+## tcloud storage volumes detach
 
-Connect your shell to the Kubernetes Cluster
+Detach a volume
+
+### Synopsis
+
+Detach a volume from any current attachment target by its identity.
 
 ```
-tcloud kubernetes connect [flags]
+tcloud storage volumes detach [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help                     help for connect
-      --kubeconfig-path string   path to the kubeconfig file
-      --temp                     use a temporary kubeconfig file (default true)
+      --force   Force the detachment and skip the confirmation
+  -h, --help    help for detach
 ```
 
 ### Options inherited from parent commands
@@ -36,5 +39,5 @@ tcloud kubernetes connect [flags]
 
 ### SEE ALSO
 
-* [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
+* [tcloud storage volumes](/docs/tcloud/tcloud_storage_volumes/)	 - Manage storage volumes
 

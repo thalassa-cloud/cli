@@ -1,25 +1,19 @@
 ---
 date: 2025-09-29T22:35:32+02:00
-linkTitle: "tcloud kubernetes connect"
-title: "kubernetes connect"
-slug: tcloud_kubernetes_connect
-url: /docs/tcloud/tcloud_kubernetes_connect/
-weight: 9976
+linkTitle: "tcloud storage"
+title: "storage"
+slug: tcloud_storage
+url: /docs/tcloud/tcloud_storage/
+weight: 9937
 ---
-## tcloud kubernetes connect
+## tcloud storage
 
-Connect your shell to the Kubernetes Cluster
-
-```
-tcloud kubernetes connect [flags]
-```
+Manage storage resources
 
 ### Options
 
 ```
-  -h, --help                     help for connect
-      --kubeconfig-path string   path to the kubeconfig file
-      --temp                     use a temporary kubeconfig file (default true)
+  -h, --help   help for storage
 ```
 
 ### Options inherited from parent commands
@@ -36,5 +30,7 @@ tcloud kubernetes connect [flags]
 
 ### SEE ALSO
 
-* [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
+* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud storage snapshots](/docs/tcloud/tcloud_storage_snapshots/)	 - Manage volume snapshots
+* [tcloud storage volumes](/docs/tcloud/tcloud_storage_volumes/)	 - Manage storage volumes
 

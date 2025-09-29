@@ -1,25 +1,28 @@
 ---
 date: 2025-09-29T22:35:32+02:00
-linkTitle: "tcloud kubernetes connect"
-title: "kubernetes connect"
-slug: tcloud_kubernetes_connect
-url: /docs/tcloud/tcloud_kubernetes_connect/
-weight: 9976
+linkTitle: "tcloud storage volumes attach"
+title: "storage volumes attach"
+slug: tcloud_storage_volumes_attach
+url: /docs/tcloud/tcloud_storage_volumes_attach/
+weight: 9942
 ---
-## tcloud kubernetes connect
+## tcloud storage volumes attach
 
-Connect your shell to the Kubernetes Cluster
+Attach volume(s) to a virtual machine
+
+### Synopsis
+
+Attach one or more volumes to a virtual machine instance by identity.
 
 ```
-tcloud kubernetes connect [flags]
+tcloud storage volumes attach <volume-id> [<volume-id> ...] [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help                     help for connect
-      --kubeconfig-path string   path to the kubeconfig file
-      --temp                     use a temporary kubeconfig file (default true)
+  -h, --help              help for attach
+      --instance string   Virtual machine instance identity
 ```
 
 ### Options inherited from parent commands
@@ -36,5 +39,5 @@ tcloud kubernetes connect [flags]
 
 ### SEE ALSO
 
-* [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
+* [tcloud storage volumes](/docs/tcloud/tcloud_storage_volumes/)	 - Manage storage volumes
 

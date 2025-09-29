@@ -1,25 +1,28 @@
 ---
 date: 2025-09-29T22:35:32+02:00
-linkTitle: "tcloud kubernetes connect"
-title: "kubernetes connect"
-slug: tcloud_kubernetes_connect
-url: /docs/tcloud/tcloud_kubernetes_connect/
-weight: 9976
+linkTitle: "tcloud storage snapshots delete"
+title: "storage snapshots delete"
+slug: tcloud_storage_snapshots_delete
+url: /docs/tcloud/tcloud_storage_snapshots_delete/
+weight: 9945
 ---
-## tcloud kubernetes connect
+## tcloud storage snapshots delete
 
-Connect your shell to the Kubernetes Cluster
+Delete a snapshot
+
+### Synopsis
+
+Delete a snapshot by its identity.
 
 ```
-tcloud kubernetes connect [flags]
+tcloud storage snapshots delete [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help                     help for connect
-      --kubeconfig-path string   path to the kubeconfig file
-      --temp                     use a temporary kubeconfig file (default true)
+      --force   Force the deletion and skip the confirmation
+  -h, --help    help for delete
 ```
 
 ### Options inherited from parent commands
@@ -36,5 +39,5 @@ tcloud kubernetes connect [flags]
 
 ### SEE ALSO
 
-* [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
+* [tcloud storage snapshots](/docs/tcloud/tcloud_storage_snapshots/)	 - Manage volume snapshots
 

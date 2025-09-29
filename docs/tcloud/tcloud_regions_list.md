@@ -1,5 +1,5 @@
 ---
-date: 2025-08-14T00:38:24+02:00
+date: 2025-09-29T22:35:32+02:00
 linkTitle: "tcloud regions list"
 title: "regions list"
 slug: tcloud_regions_list

@@ -1,10 +1,10 @@
 ---
-date: 2025-08-14T00:38:24+02:00
+date: 2025-09-29T22:35:32+02:00
 linkTitle: "tcloud"
 title: "tcloud"
 slug: tcloud
 url: /docs/tcloud/tcloud/
-weight: 9945
+weight: 9935
 ---
 ## tcloud
 
@@ -32,5 +32,6 @@ A CLI for working with the Thalassa Cloud Platform
 * [tcloud me](/docs/tcloud/tcloud_me/)	 - Get information about the current user
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
 * [tcloud regions](/docs/tcloud/tcloud_regions/)	 - Thalassa Cloud Platform Regions
+* [tcloud storage](/docs/tcloud/tcloud_storage/)	 - Manage storage resources
 * [tcloud version](/docs/tcloud/tcloud_version/)	 - Print version information
 
