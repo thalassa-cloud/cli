@@ -1,8 +1,6 @@
 package completion
 
 import (
-	"context"
-
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -15,7 +13,7 @@ func CompleteVPCID(cmd *cobra.Command, args []string, toComplete string) ([]stri
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	vpcs, err := client.IaaS().ListVpcs(context.Background(), &iaas.ListVpcsRequest{})
+	vpcs, err := client.IaaS().ListVpcs(cmd.Context(), &iaas.ListVpcsRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
@@ -35,7 +33,7 @@ func CompleteRegion(cmd *cobra.Command, args []string, toComplete string) ([]str
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	regions, err := client.IaaS().ListRegions(context.Background(), &iaas.ListRegionsRequest{})
+	regions, err := client.IaaS().ListRegions(cmd.Context(), &iaas.ListRegionsRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
@@ -56,7 +54,7 @@ func CompleteSubnetID(cmd *cobra.Command, args []string, toComplete string) ([]s
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	subnets, err := client.IaaS().ListSubnets(context.Background(), &iaas.ListSubnetsRequest{})
+	subnets, err := client.IaaS().ListSubnets(cmd.Context(), &iaas.ListSubnetsRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
@@ -80,7 +78,7 @@ func CompleteSecurityGroupID(cmd *cobra.Command, args []string, toComplete strin
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	securityGroups, err := client.IaaS().ListSecurityGroups(context.Background(), &iaas.ListSecurityGroupsRequest{})
+	securityGroups, err := client.IaaS().ListSecurityGroups(cmd.Context(), &iaas.ListSecurityGroupsRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
@@ -104,7 +102,7 @@ func CompleteNatGatewayID(cmd *cobra.Command, args []string, toComplete string) 
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	natGateways, err := client.IaaS().ListNatGateways(context.Background(), &iaas.ListNatGatewaysRequest{})
+	natGateways, err := client.IaaS().ListNatGateways(cmd.Context(), &iaas.ListNatGatewaysRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
@@ -128,7 +126,7 @@ func CompleteMachineID(cmd *cobra.Command, args []string, toComplete string) ([]
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	machines, err := client.IaaS().ListMachines(context.Background(), &iaas.ListMachinesRequest{})
+	machines, err := client.IaaS().ListMachines(cmd.Context(), &iaas.ListMachinesRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
@@ -136,6 +134,50 @@ func CompleteMachineID(cmd *cobra.Command, args []string, toComplete string) ([]
 	var completions []string
 	for _, machine := range machines {
 		completions = append(completions, machine.Identity)
+	}
+
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+func CompleteSnapshotID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	snapshots, err := client.IaaS().ListSnapshots(cmd.Context(), &iaas.ListSnapshotsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	var completions []string
+	for _, snapshot := range snapshots {
+		completions = append(completions, snapshot.Identity)
+	}
+
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+func CompleteVolumeID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	volumes, err := client.IaaS().ListVolumes(cmd.Context(), &iaas.ListVolumesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	var completions []string
+	for _, volume := range volumes {
+		completions = append(completions, volume.Identity)
 	}
 
 	return completions, cobra.ShellCompDirectiveNoFileComp
