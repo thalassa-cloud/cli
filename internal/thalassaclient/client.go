@@ -1,6 +1,7 @@
 package thalassaclient
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
@@ -27,16 +28,19 @@ func GetThalassaClient() (thalassa.Client, error) {
 		fmt.Println("Options:", opts)
 	}
 
-	token := contextstate.Token()
+	token := contextstate.PersonalAccessToken()
 	clientID := contextstate.ClientIdOrFlag()
 	clientSecret := contextstate.ClientSecretOrFlag()
 
-	if token != "" {
-		opts = append(opts, client.WithAuthPersonalToken(token))
-	}
-
-	if clientID != "" && clientSecret != "" {
+	accessToken := contextstate.AccessToken()
+	if accessToken != "" {
+		opts = append(opts, client.WithToken(accessToken))
+	} else if clientID != "" && clientSecret != "" {
 		opts = append(opts, client.WithAuthOIDC(clientID, clientSecret, fmt.Sprintf("%s/oidc/token", context.Servers.API.Server)))
+	} else if token != "" {
+		opts = append(opts, client.WithAuthPersonalToken(token))
+	} else {
+		return nil, errors.New("no authentication method provided")
 	}
 
 	client, err := thalassa.NewClient(opts...)
