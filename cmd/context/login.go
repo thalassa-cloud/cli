@@ -18,7 +18,7 @@ var loginCmd = &cobra.Command{
 	Long:  "Login to Thalassa Cloud using a personal access token, using the current context. Overrides the current context if --name is set.",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		token := contextstate.Token()
+		token := contextstate.PersonalAccessToken()
 		apiURL := contextstate.Server()
 
 		if apiURL == "" {

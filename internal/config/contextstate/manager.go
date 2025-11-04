@@ -19,6 +19,8 @@ var (
 	EndpointFlag            string
 	PersonalAccessTokenFlag string
 
+	AccessTokenFlag string
+
 	OidcClientIDFlag     string
 	OidcClientSecretFlag string
 
@@ -141,11 +143,23 @@ func Server() string {
 	return currentcontext.Servers.API.Server
 }
 
-func Token() string {
+func AccessToken() string {
+	if AccessTokenFlag != "" {
+		return AccessTokenFlag
+	}
+	if accessToken := os.Getenv("THALASSA_ACCESS_TOKEN"); accessToken != "" {
+		return accessToken
+	}
+	return ""
+}
+
+func PersonalAccessToken() string {
 	if PersonalAccessTokenFlag != "" {
 		return PersonalAccessTokenFlag
 	}
-
+	if personalAccessToken := os.Getenv("THALASSA_PERSONAL_ACCESS_TOKEN"); personalAccessToken != "" {
+		return personalAccessToken
+	}
 	currentcontext, err := globalConfigManager.Get()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

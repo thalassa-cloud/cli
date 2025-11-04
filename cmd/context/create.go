@@ -31,7 +31,7 @@ var createCmd = &cobra.Command{
 			}
 		}
 
-		token := contextstate.Token()
+		token := contextstate.PersonalAccessToken()
 		apiURL := contextstate.Server()
 		if apiURL == "" {
 			return errors.New("api endpoint is required")
@@ -113,7 +113,7 @@ func newDefaultContext(contextName, organisation, apiName string) contextstate.C
 		Users: contextstate.Users{
 			Name: contextName,
 			User: contextstate.User{
-				Token: contextstate.Token(),
+				Token: contextstate.PersonalAccessToken(),
 			},
 		},
 	}

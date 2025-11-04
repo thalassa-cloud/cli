@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/cmd/audit"
 	"github.com/thalassa-cloud/cli/cmd/context"
 	"github.com/thalassa-cloud/cli/cmd/dbaas"
 	"github.com/thalassa-cloud/cli/cmd/iaas/compute"
@@ -14,6 +15,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/iaas/storage"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes"
 	"github.com/thalassa-cloud/cli/cmd/me"
+	"github.com/thalassa-cloud/cli/cmd/oidc"
 	"github.com/thalassa-cloud/cli/cmd/version"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 )
@@ -41,6 +43,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&contextstate.OrganisationFlag, "organisation", "O", "", "Organisation slug or identity (overrides context)")
 	RootCmd.PersistentFlags().StringVarP(&contextstate.ContextFlag, "context", "c", "", "Context name")
 	RootCmd.PersistentFlags().StringVar(&contextstate.EndpointFlag, "api", "", "API endpoint (overrides context)")
+	RootCmd.PersistentFlags().StringVar(&contextstate.AccessTokenFlag, "access-token", "", "Access Token authentication (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.PersonalAccessTokenFlag, "token", "", "Personal access token (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientIDFlag, "client-id", "", "OIDC client ID for OIDC authentication (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientSecretFlag, "client-secret", "", "OIDC client secret for OIDC authentication (overrides context)")
@@ -58,6 +61,8 @@ func init() {
 	RootCmd.AddCommand(kubernetes.KubernetesCmd)
 	RootCmd.AddCommand(dbaas.DbaasCmd)
 	RootCmd.AddCommand(me.MeCmd)
+	RootCmd.AddCommand(audit.AuditCmd)
+	RootCmd.AddCommand(oidc.OidcCmd)
 
 	cobra.OnInitialize(contextstate.Init)
 }
