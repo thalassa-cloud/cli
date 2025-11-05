@@ -48,6 +48,7 @@ type Users struct {
 
 type User struct {
 	Token        string `yaml:"token,omitempty"`
+	AccessToken  string `yaml:"accessToken,omitempty"`
 	ClientID     string `yaml:"clientID,omitempty"`
 	ClientSecret string `yaml:"clientSecret,omitempty"`
 }

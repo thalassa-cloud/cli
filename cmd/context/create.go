@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -39,11 +40,19 @@ var createCmd = &cobra.Command{
 
 		oidcClientID := contextstate.ClientIdOrFlag()
 		oidcClientSecret := contextstate.ClientSecretOrFlag()
-		if token == "" && oidcClientID == "" && oidcClientSecret == "" {
+		accessToken := contextstate.AccessToken()
+		if token == "" && oidcClientID == "" && oidcClientSecret == "" && accessToken == "" {
 			return errors.New("no token or oidc client id and secret set")
 		}
 
-		if oidcClientID != "" && oidcClientSecret != "" {
+		if accessToken != "" {
+			if strings.HasPrefix(accessToken, "tc_pat_") {
+				return errors.New("access token is a personal access token, use 'tcloud context login --token <token>' to login with a personal access token")
+			}
+			if err := contextstate.LoginWithAccessToken(ctx, accessToken, apiURL); err != nil {
+				return fmt.Errorf("failed to login with access token: %w", err)
+			}
+		} else if oidcClientID != "" && oidcClientSecret != "" {
 			if err := contextstate.LoginWithAPIEndpointOidc(ctx, oidcClientID, oidcClientSecret, apiURL); err != nil {
 				return fmt.Errorf("failed to login with oidc: %w", err)
 			}

@@ -11,6 +11,20 @@ import (
 
 const (
 	DefaultConfigFilename = ".tcloud"
+	DefaultAPIURL         = "https://api.thalassa.cloud"
+)
+
+const (
+	ThalassaConfigEnvVar  = "THALASSA_CONFIG"
+	ThalassaCConfigEnvVar = "THALASSACONFIG"
+
+	ThalassaAccessTokenEnvVar         = "THALASSA_ACCESS_TOKEN"
+	ThalassaPersonalAccessTokenEnvVar = "THALASSA_PERSONAL_ACCESS_TOKEN"
+	ThalassaOIDCClientIDEnvVar        = "THALASSA_OIDC_CLIENT_ID"
+	ThalassaOIDCClientSecretEnvVar    = "THALASSA_OIDC_CLIENT_SECRET"
+	ThalassaOrganisationIDEnvVar      = "THALASSA_ORGANISATION_ID"
+
+	ThalassaAPIEndpointEnvVar = "THALASSA_API_ENDPOINT"
 )
 
 var (
@@ -77,10 +91,10 @@ func Init() {
 }
 
 func getConfigFilename() string {
-	if configFilename := os.Getenv("THALASSA_CONFIG"); configFilename != "" {
+	if configFilename := os.Getenv(ThalassaConfigEnvVar); configFilename != "" {
 		return configFilename
 	}
-	if configFilename := os.Getenv("THALASSACONFIG"); configFilename != "" {
+	if configFilename := os.Getenv(ThalassaCConfigEnvVar); configFilename != "" {
 		return configFilename
 	}
 	home, err := homedir.Dir()
@@ -119,35 +133,40 @@ func Organisation() string {
 	if OrganisationFlag != "" {
 		return OrganisationFlag
 	}
+	if organisation := os.Getenv(ThalassaOrganisationIDEnvVar); organisation != "" {
+		return organisation
+	}
 
 	currentcontext, err := globalConfigManager.Get()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return ""
 	}
-	organisation := currentcontext.Organisation
-	return organisation
+	return currentcontext.Organisation
 }
 
 func Server() string {
 	if EndpointFlag != "" {
 		return EndpointFlag
 	}
+	if server := os.Getenv(ThalassaAPIEndpointEnvVar); server != "" {
+		return server
+	}
 
 	currentcontext, err := globalConfigManager.Get()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return DefaultAPIURL
 	}
-
-	return currentcontext.Servers.API.Server
+	if currentcontext.Servers.API.Server != "" {
+		return currentcontext.Servers.API.Server
+	}
+	return DefaultAPIURL
 }
 
 func AccessToken() string {
 	if AccessTokenFlag != "" {
 		return AccessTokenFlag
 	}
-	if accessToken := os.Getenv("THALASSA_ACCESS_TOKEN"); accessToken != "" {
+	if accessToken := os.Getenv(ThalassaAccessTokenEnvVar); accessToken != "" {
 		return accessToken
 	}
 	return ""
@@ -157,13 +176,12 @@ func PersonalAccessToken() string {
 	if PersonalAccessTokenFlag != "" {
 		return PersonalAccessTokenFlag
 	}
-	if personalAccessToken := os.Getenv("THALASSA_PERSONAL_ACCESS_TOKEN"); personalAccessToken != "" {
+	if personalAccessToken := os.Getenv(ThalassaPersonalAccessTokenEnvVar); personalAccessToken != "" {
 		return personalAccessToken
 	}
 	currentcontext, err := globalConfigManager.Get()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return ""
 	}
 
 	return currentcontext.Users.User.Token
@@ -173,14 +191,16 @@ func ClientIdOrFlag() string {
 	if OidcClientIDFlag != "" {
 		return OidcClientIDFlag
 	}
+	if clientID := os.Getenv(ThalassaOIDCClientIDEnvVar); clientID != "" {
+		return clientID
+	}
 	return ClientId()
 }
 
 func ClientId() string {
 	currentcontext, err := globalConfigManager.Get()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return ""
 	}
 	return currentcontext.Users.User.ClientID
 }
@@ -189,14 +209,16 @@ func ClientSecretOrFlag() string {
 	if OidcClientSecretFlag != "" {
 		return OidcClientSecretFlag
 	}
+	if clientSecret := os.Getenv(ThalassaOIDCClientSecretEnvVar); clientSecret != "" {
+		return clientSecret
+	}
 	return ClientSecret()
 }
 
 func ClientSecret() string {
 	currentcontext, err := globalConfigManager.Get()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return ""
 	}
 	return currentcontext.Users.User.ClientSecret
 }
