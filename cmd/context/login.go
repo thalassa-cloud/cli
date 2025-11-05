@@ -3,22 +3,23 @@ package context
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/client-go/pkg/client"
-	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
 // createCmd represents the create command
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Login to Thalassa Cloud",
-	Long:  "Login to Thalassa Cloud using a personal access token, using the current context. Overrides the current context if --name is set.",
+	Long:  "Login to Thalassa Cloud using a personal access token, access token, or OIDC client id and secret, using the current context. Overrides the current context if --name is set.",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		token := contextstate.PersonalAccessToken()
+		accessToken := contextstate.AccessToken()
 		apiURL := contextstate.Server()
 
 		if apiURL == "" {
@@ -33,27 +34,27 @@ var loginCmd = &cobra.Command{
 		opts := []client.Option{}
 		if oidcClientID != "" && oidcClientSecret != "" {
 			opts = append(opts, client.WithAuthOIDC(oidcClientID, oidcClientSecret, tokenURL))
-		} else {
+		} else if accessToken != "" {
+			opts = append(opts, client.WithToken(accessToken))
+		} else if token != "" {
 			opts = append(opts, client.WithAuthPersonalToken(token))
 		}
 		if len(opts) == 0 {
 			return errors.New("no authentication method provided")
 		}
 		opts = append(opts, client.WithBaseURL(apiURL))
-		opts = append(opts, client.WithOrganisation(contextstate.Organisation()))
-		client, err := thalassa.NewClient(opts...)
-
-		// Test the token and api endpoint
-		if err != nil {
-			return err
-		}
-		_, err = client.Me().ListMyOrganisations(cmd.Context())
-		if err != nil {
-			return fmt.Errorf("failed to test token and api endpoint: %w", err)
+		if contextstate.Organisation() != "" {
+			opts = append(opts, client.WithOrganisation(contextstate.Organisation()))
 		}
 
 		if oidcClientID != "" && oidcClientSecret != "" {
 			return contextstate.LoginWithAPIEndpointOidc(cmd.Context(), oidcClientID, oidcClientSecret, apiURL)
+		}
+		if accessToken != "" {
+			if strings.HasPrefix(accessToken, "tc_pat_") {
+				return errors.New("access token is a personal access token, use 'tcloud context login --token <token>' to login with a personal access token")
+			}
+			return contextstate.LoginWithAccessToken(cmd.Context(), accessToken, apiURL)
 		}
 		return contextstate.LoginWithAPIEndpoint(cmd.Context(), token, apiURL)
 	},

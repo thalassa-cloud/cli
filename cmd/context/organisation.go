@@ -1,7 +1,6 @@
 package context
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -48,9 +47,8 @@ func getSelectedOrganisation(args []string) (string, error) {
 		return fzf.InteractiveChoice(command)
 	} else if len(args) == 1 {
 		return args[0], nil
-	} else {
-		return "", errors.New("invalid organisation")
 	}
+	return "", nil
 }
 
 func init() {

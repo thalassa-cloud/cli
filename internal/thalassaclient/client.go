@@ -11,15 +11,25 @@ import (
 )
 
 func GetThalassaClient() (thalassa.Client, error) {
+	var org string
 	context, err := contextstate.GetContext()
 	if err != nil {
-		return nil, err
+		if !errors.Is(err, contextstate.ErrContextNotFound) {
+			return nil, fmt.Errorf("failed to get context: %w", err)
+		}
+	}
+	endpoint := "https://api.thalassa.cloud"
+	if context.Servers.API.Server != "" {
+		endpoint = context.Servers.API.Server
 	}
 
 	opts := []client.Option{
-		client.WithBaseURL(context.Servers.API.Server),
-		client.WithOrganisation(context.Organisation),
+		client.WithBaseURL(endpoint),
 		client.WithUserAgent(version.UserAgent()),
+	}
+	org = context.Organisation
+	if org != "" {
+		opts = append(opts, client.WithOrganisation(org))
 	}
 
 	if contextstate.Debug() {
@@ -31,12 +41,11 @@ func GetThalassaClient() (thalassa.Client, error) {
 	token := contextstate.PersonalAccessToken()
 	clientID := contextstate.ClientIdOrFlag()
 	clientSecret := contextstate.ClientSecretOrFlag()
-
 	accessToken := contextstate.AccessToken()
 	if accessToken != "" {
 		opts = append(opts, client.WithToken(accessToken))
 	} else if clientID != "" && clientSecret != "" {
-		opts = append(opts, client.WithAuthOIDC(clientID, clientSecret, fmt.Sprintf("%s/oidc/token", context.Servers.API.Server)))
+		opts = append(opts, client.WithAuthOIDC(clientID, clientSecret, fmt.Sprintf("%s/oidc/token", endpoint)))
 	} else if token != "" {
 		opts = append(opts, client.WithAuthPersonalToken(token))
 	} else {
@@ -45,7 +54,7 @@ func GetThalassaClient() (thalassa.Client, error) {
 
 	client, err := thalassa.NewClient(opts...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create client: %w", err)
 	}
 	return client, nil
 }
