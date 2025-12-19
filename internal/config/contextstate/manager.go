@@ -20,8 +20,8 @@ const (
 
 	ThalassaAccessTokenEnvVar         = "THALASSA_ACCESS_TOKEN"
 	ThalassaPersonalAccessTokenEnvVar = "THALASSA_PERSONAL_ACCESS_TOKEN"
-	ThalassaOIDCClientIDEnvVar        = "THALASSA_OIDC_CLIENT_ID"
-	ThalassaOIDCClientSecretEnvVar    = "THALASSA_OIDC_CLIENT_SECRET"
+	ThalassaOIDCClientIDEnvVar        = "THALASSA_CLIENT_ID"
+	ThalassaOIDCClientSecretEnvVar    = "THALASSA_CLIENT_SECRET"
 	ThalassaOrganisationIDEnvVar      = "THALASSA_ORGANISATION_ID"
 
 	ThalassaAPIEndpointEnvVar = "THALASSA_API_ENDPOINT"
