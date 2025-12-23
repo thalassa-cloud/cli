@@ -1,28 +1,37 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud compute machine-images"
+title: "compute machine-images"
+slug: tcloud_compute_machine-images
+url: /docs/tcloud/compute/machine-images/
+weight: 9997
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud compute machine-images
 
-Print version information
+Get a list of machine images
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Get a list of machine images available in the current organisation
 
 ```
-tcloud version [flags]
+tcloud compute machine-images [flags]
+```
+
+### Examples
+
+```
+thalassa compute machine-images
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help            help for machine-images
+      --no-header       Do not print the header
+  -o, --output string   Output format. One of: wide
+      --show-labels     Show labels associated with machines
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +49,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud compute](/docs/tcloud/tcloud_compute/)	 - Manage compute resources
 

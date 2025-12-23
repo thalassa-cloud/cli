@@ -1,28 +1,38 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud dbaas list"
+title: "dbaas list"
+slug: tcloud_dbaas_list
+url: /docs/tcloud/dbaas/list/
+weight: 9977
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud dbaas list
 
-Print version information
+Get a list of database clusters
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Get a list of database clusters within your organisation
 
 ```
-tcloud version [flags]
+tcloud dbaas list [flags]
+```
+
+### Examples
+
+```
+tcloud dbaas list
+tcloud dbaas list --no-header
+tcloud dbaas list --exact-time
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --exact-time   Show exact time instead of relative time
+  -h, --help         help for list
+      --no-header    Do not print the header
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +50,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
 

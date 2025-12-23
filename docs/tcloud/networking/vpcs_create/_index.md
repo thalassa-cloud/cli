@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking vpcs create"
+title: "networking vpcs create"
+slug: tcloud_networking_vpcs_create
+url: /docs/tcloud/networking/vpcs_create/
+weight: 9949
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking vpcs create
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Create a vpc
 
 ```
-tcloud version [flags]
+tcloud networking vpcs create [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --cidrs strings        CIDRs of the vpc (default [10.0.0.0/16])
+      --description string   Description of the vpc
+  -h, --help                 help for create
+      --name string          Name of the vpc
+      --no-header            Do not print the header
+      --region string        Region of the vpc
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking vpcs](/docs/tcloud/networking/vpcs/)	 - Manage VPCs
 

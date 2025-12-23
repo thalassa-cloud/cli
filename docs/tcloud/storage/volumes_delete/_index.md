@@ -1,28 +1,31 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud storage volumes delete"
+title: "storage volumes delete"
+slug: tcloud_storage_volumes_delete
+url: /docs/tcloud/storage/volumes_delete/
+weight: 9935
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud storage volumes delete
 
-Print version information
+Delete volume(s)
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Delete volume(s) by identity or label selector.
 
 ```
-tcloud version [flags]
+tcloud storage volumes delete [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --force             Force the deletion and skip the confirmation
+  -h, --help              help for delete
+  -l, --selector string   Label selector to filter volumes (format: key1=value1,key2=value2)
+      --wait              Wait for the volume(s) to be deleted
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +43,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud storage volumes](/docs/tcloud/storage/volumes/)	 - Manage storage volumes
 

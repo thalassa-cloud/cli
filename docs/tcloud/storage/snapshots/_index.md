@@ -1,28 +1,20 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud storage snapshots"
+title: "storage snapshots"
+slug: tcloud_storage_snapshots
+url: /docs/tcloud/storage/snapshots/
+weight: 9937
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud storage snapshots
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Manage volume snapshots
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for snapshots
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +32,8 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud storage](/docs/tcloud/tcloud_storage/)	 - Manage storage resources
+* [tcloud storage snapshots create](/docs/tcloud/storage/snapshots_create/)	 - Create a snapshot
+* [tcloud storage snapshots delete](/docs/tcloud/storage/snapshots_delete/)	 - Delete snapshot(s)
+* [tcloud storage snapshots list](/docs/tcloud/storage/snapshots_list/)	 - Get a list of snapshots
 

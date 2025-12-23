@@ -1,28 +1,24 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud compute"
+title: "compute"
+slug: tcloud_compute
+url: /docs/tcloud/tcloud_compute/
+weight: 9990
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud compute
 
-Print version information
+Manage compute resources
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Manage compute resources in the Thalassa Cloud Platform
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for compute
 ```
 
 ### Options inherited from parent commands
@@ -41,4 +37,7 @@ tcloud version [flags]
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud compute machine-images](/docs/tcloud/compute/machine-images/)	 - Get a list of machine images
+* [tcloud compute machine-types](/docs/tcloud/compute/machine-types/)	 - Get a list of machine types
+* [tcloud compute machines](/docs/tcloud/compute/machines/)	 - Manage virtual machine instances
 

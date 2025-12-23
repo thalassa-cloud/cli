@@ -1,28 +1,36 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking security-groups view"
+title: "networking security-groups view"
+slug: tcloud_networking_security-groups_view
+url: /docs/tcloud/networking/security-groups_view/
+weight: 9955
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking security-groups view
 
-Print version information
+View security group details
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+View detailed information about a specific security group
 
 ```
-tcloud version [flags]
+tcloud networking security-groups view [flags]
+```
+
+### Examples
+
+```
+tcloud networking security-groups view sg-123
+tcloud networking security-groups view sg-123 --output yaml
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help            help for view
+  -o, --output string   Output format (yaml)
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +48,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking security-groups](/docs/tcloud/networking/security-groups/)	 - Manage security groups
 

@@ -1,28 +1,24 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking"
+title: "networking"
+slug: tcloud_networking
+url: /docs/tcloud/tcloud_networking/
+weight: 9945
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking
 
-Print version information
+Manage networking resources
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Manage networking resources in the Thalassa Cloud Platform
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for networking
 ```
 
 ### Options inherited from parent commands
@@ -41,4 +37,9 @@ tcloud version [flags]
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking natgateways](/docs/tcloud/networking/natgateways/)	 - Manage NAT gateways
+* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage routetables
+* [tcloud networking security-groups](/docs/tcloud/networking/security-groups/)	 - Manage security groups
+* [tcloud networking subnets](/docs/tcloud/networking/subnets/)	 - Manage subnets
+* [tcloud networking vpcs](/docs/tcloud/networking/vpcs/)	 - Manage VPCs
 

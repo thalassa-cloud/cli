@@ -1,28 +1,20 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking vpcs"
+title: "networking vpcs"
+slug: tcloud_networking_vpcs
+url: /docs/tcloud/networking/vpcs/
+weight: 9946
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking vpcs
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Manage VPCs
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for vpcs
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +32,8 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
+* [tcloud networking vpcs create](/docs/tcloud/networking/vpcs_create/)	 - Create a vpc
+* [tcloud networking vpcs delete](/docs/tcloud/networking/vpcs_delete/)	 - Delete VPC(s)
+* [tcloud networking vpcs list](/docs/tcloud/networking/vpcs_list/)	 - Get a list of vpcs
 

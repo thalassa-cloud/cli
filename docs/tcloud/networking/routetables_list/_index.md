@@ -1,28 +1,27 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking routetables list"
+title: "networking routetables list"
+slug: tcloud_networking_routetables_list
+url: /docs/tcloud/networking/routetables_list/
+weight: 9960
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking routetables list
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Get a list of routetables
 
 ```
-tcloud version [flags]
+tcloud networking routetables list [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help              help for list
+      --no-header         Do not print the header
+  -l, --selector string   Label selector to filter route tables (format: key1=value1,key2=value2)
+      --show-labels       Show labels
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +39,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage routetables
 

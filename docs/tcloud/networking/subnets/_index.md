@@ -1,28 +1,20 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking subnets"
+title: "networking subnets"
+slug: tcloud_networking_subnets
+url: /docs/tcloud/networking/subnets/
+weight: 9950
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking subnets
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Manage subnets
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for subnets
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +32,8 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
+* [tcloud networking subnets create](/docs/tcloud/networking/subnets_create/)	 - Create a subnet
+* [tcloud networking subnets delete](/docs/tcloud/networking/subnets_delete/)	 - Delete subnet(s)
+* [tcloud networking subnets list](/docs/tcloud/networking/subnets_list/)	 - Get a list of subnets
 

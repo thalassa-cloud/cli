@@ -1,28 +1,34 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud context delete-server"
+title: "context delete-server"
+slug: tcloud_context_delete-server
+url: /docs/tcloud/context/delete-server/
+weight: 9986
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud context delete-server
 
-Print version information
+Delete a server
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Delete a server from the config
 
 ```
-tcloud version [flags]
+tcloud context delete-server [flags]
+```
+
+### Examples
+
+```
+tcloud context delete-server <server>
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for delete-server
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +46,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 

@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud context login"
+title: "context login"
+slug: tcloud_context_login
+url: /docs/tcloud/context/login/
+weight: 9983
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud context login
 
-Print version information
+Login to Thalassa Cloud
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Login to Thalassa Cloud using a personal access token, access token, or OIDC client id and secret, using the current context. Overrides the current context if --name is set.
 
 ```
-tcloud version [flags]
+tcloud context login [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help          help for login
+      --name string   name of the context (default "default")
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 

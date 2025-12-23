@@ -1,28 +1,24 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud kubernetes kubeconfig"
+title: "kubernetes kubeconfig"
+slug: tcloud_kubernetes_kubeconfig
+url: /docs/tcloud/kubernetes/kubeconfig/
+weight: 9973
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud kubernetes kubeconfig
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Kubernetes Kubeconfig management
 
 ```
-tcloud version [flags]
+tcloud kubernetes kubeconfig [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for kubeconfig
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +36,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
 

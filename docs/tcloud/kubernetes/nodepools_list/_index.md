@@ -1,28 +1,27 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud kubernetes nodepools list"
+title: "kubernetes nodepools list"
+slug: tcloud_kubernetes_nodepools_list
+url: /docs/tcloud/kubernetes/nodepools_list/
+weight: 9971
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud kubernetes nodepools list
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Kubernetes Cluster NodePool list
 
 ```
-tcloud version [flags]
+tcloud kubernetes nodepools list [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --cluster string   Cluster ID
+  -h, --help             help for list
+      --no-header        Do not print the header
+      --vpc string       VPC ID
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +39,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud kubernetes nodepools](/docs/tcloud/kubernetes/nodepools/)	 - Manage Kubernetes NodePools
 

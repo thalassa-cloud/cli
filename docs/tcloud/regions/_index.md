@@ -1,28 +1,20 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud regions"
+title: "regions"
+slug: tcloud_regions
+url: /docs/tcloud/tcloud_regions/
+weight: 9941
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud regions
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Thalassa Cloud Platform Regions
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for regions
 ```
 
 ### Options inherited from parent commands
@@ -41,4 +33,5 @@ tcloud version [flags]
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud regions list](/docs/tcloud/regions/list/)	 - Get a list of regions
 

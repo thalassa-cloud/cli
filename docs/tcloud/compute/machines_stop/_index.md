@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud compute machines stop"
+title: "compute machines stop"
+slug: tcloud_compute_machines_stop
+url: /docs/tcloud/compute/machines_stop/
+weight: 9992
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud compute machines stop
 
-Print version information
+Stop a machine
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Stop a machine to stop it from running. This command will stop the machine and all the services associated with it.
 
 ```
-tcloud version [flags]
+tcloud compute machines stop [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for stop
+  -w, --wait   Wait for the machine to be stopped
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud compute machines](/docs/tcloud/compute/machines/)	 - Manage virtual machine instances
 

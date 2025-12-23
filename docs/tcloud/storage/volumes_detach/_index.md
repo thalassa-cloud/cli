@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud storage volumes detach"
+title: "storage volumes detach"
+slug: tcloud_storage_volumes_detach
+url: /docs/tcloud/storage/volumes_detach/
+weight: 9934
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud storage volumes detach
 
-Print version information
+Detach a volume
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Detach a volume from any current attachment target by its identity.
 
 ```
-tcloud version [flags]
+tcloud storage volumes detach [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --force   Force the detachment and skip the confirmation
+  -h, --help    help for detach
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud storage volumes](/docs/tcloud/storage/volumes/)	 - Manage storage volumes
 

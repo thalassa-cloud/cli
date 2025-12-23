@@ -1,28 +1,35 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud dbaas instance-types"
+title: "dbaas instance-types"
+slug: tcloud_dbaas_instance-types
+url: /docs/tcloud/dbaas/instance-types/
+weight: 9978
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud dbaas instance-types
 
-Print version information
+Get a list of database instance types
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Get a list of available database instance types within your organisation
 
 ```
-tcloud version [flags]
+tcloud dbaas instance-types [flags]
+```
+
+### Examples
+
+```
+tcloud dbaas instance-types
+tcloud dbaas instance-types --no-header
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for instance-types
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +47,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
 

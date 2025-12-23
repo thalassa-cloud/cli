@@ -1,28 +1,20 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud me"
+title: "me"
+slug: tcloud_me
+url: /docs/tcloud/tcloud_me/
+weight: 9965
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud me
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+Get information about the current user
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for me
 ```
 
 ### Options inherited from parent commands
@@ -41,4 +33,5 @@ tcloud version [flags]
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud me organisations](/docs/tcloud/me/organisations/)	 - Get information about the current user's organisations
 

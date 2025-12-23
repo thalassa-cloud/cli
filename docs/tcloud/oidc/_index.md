@@ -1,28 +1,24 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud oidc"
+title: "oidc"
+slug: tcloud_oidc
+url: /docs/tcloud/tcloud_oidc/
+weight: 9943
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud oidc
 
-Print version information
+OIDC token operations
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
-
-```
-tcloud version [flags]
-```
+OIDC token operations for Thalassa Cloud, such as OIDC Federation and token exchange
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for oidc
 ```
 
 ### Options inherited from parent commands
@@ -41,4 +37,5 @@ tcloud version [flags]
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud oidc token-exchange](/docs/tcloud/oidc/token-exchange/)	 - Exchange an OIDC token for an access token
 

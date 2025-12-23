@@ -1,28 +1,26 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud kubernetes connect"
+title: "kubernetes connect"
+slug: tcloud_kubernetes_connect
+url: /docs/tcloud/kubernetes/connect/
+weight: 9974
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud kubernetes connect
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Connect your shell to the Kubernetes Cluster
 
 ```
-tcloud version [flags]
+tcloud kubernetes connect [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help                     help for connect
+      --kubeconfig-path string   path to the kubeconfig file
+      --temp                     use a temporary kubeconfig file (default true)
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +38,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
 

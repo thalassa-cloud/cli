@@ -1,28 +1,34 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud context current"
+title: "context current"
+slug: tcloud_context_current
+url: /docs/tcloud/context/current/
+weight: 9988
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud context current
 
-Print version information
+Shows the current context
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Shows the current context (or the context set with the --context flag)
 
 ```
-tcloud version [flags]
+tcloud context current [flags]
+```
+
+### Examples
+
+```
+tcloud context current
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for current
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +46,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 

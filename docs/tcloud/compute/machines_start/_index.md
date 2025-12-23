@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud compute machines start"
+title: "compute machines start"
+slug: tcloud_compute_machines_start
+url: /docs/tcloud/compute/machines_start/
+weight: 9993
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud compute machines start
 
-Print version information
+Start a machine
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Start a machine to start it from stopped state. This command will start the machine and all the services associated with it.
 
 ```
-tcloud version [flags]
+tcloud compute machines start [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for start
+  -w, --wait   Wait for the machine to be started
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud compute machines](/docs/tcloud/compute/machines/)	 - Manage virtual machine instances
 

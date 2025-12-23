@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud storage volumes attach"
+title: "storage volumes attach"
+slug: tcloud_storage_volumes_attach
+url: /docs/tcloud/storage/volumes_attach/
+weight: 9936
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud storage volumes attach
 
-Print version information
+Attach volume(s) to a virtual machine
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Attach one or more volumes to a virtual machine instance by identity.
 
 ```
-tcloud version [flags]
+tcloud storage volumes attach <volume-id> [<volume-id> ...] [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help              help for attach
+      --instance string   Virtual machine instance identity
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud storage volumes](/docs/tcloud/storage/volumes/)	 - Manage storage volumes
 

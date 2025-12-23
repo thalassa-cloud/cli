@@ -1,28 +1,36 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking natgateways view"
+title: "networking natgateways view"
+slug: tcloud_networking_natgateways_view
+url: /docs/tcloud/networking/natgateways_view/
+weight: 9962
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking natgateways view
 
-Print version information
+View NAT gateway details
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+View detailed information about a specific NAT gateway
 
 ```
-tcloud version [flags]
+tcloud networking natgateways view [flags]
+```
+
+### Examples
+
+```
+tcloud networking natgateways view ngw-123
+tcloud networking natgateways view ngw-123 --output yaml
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help            help for view
+  -o, --output string   Output format (yaml)
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +48,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking natgateways](/docs/tcloud/networking/natgateways/)	 - Manage NAT gateways
 

@@ -1,28 +1,34 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud context organisation"
+title: "context organisation"
+slug: tcloud_context_organisation
+url: /docs/tcloud/context/organisation/
+weight: 9982
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud context organisation
 
-Print version information
+Set the organisation in the current-context
 
 ### Synopsis
 
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Set the organisation in the current-context
 
 ```
-tcloud version [flags]
+tcloud context organisation <organisation> [flags]
+```
+
+### Examples
+
+```
+tcloud context use-organisation <organisation>
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for organisation
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +46,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 

@@ -1,28 +1,29 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud networking subnets create"
+title: "networking subnets create"
+slug: tcloud_networking_subnets_create
+url: /docs/tcloud/networking/subnets_create/
+weight: 9953
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud networking subnets create
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Create a subnet
 
 ```
-tcloud version [flags]
+tcloud networking subnets create [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --cidr string          CIDR of the subnet
+      --description string   Description of the subnet
+  -h, --help                 help for create
+      --name string          Name of the subnet
+      --no-header            Do not print the header
+      --vpc string           VPC of the subnet
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +41,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking subnets](/docs/tcloud/networking/subnets/)	 - Manage subnets
 

@@ -1,28 +1,26 @@
 ---
-linkTitle: "tcloud version"
-title: "version"
-slug: tcloud_version
-url: /docs/tcloud/tcloud_version/
-weight: 9930
+linkTitle: "tcloud context create"
+title: "context create"
+slug: tcloud_context_create
+url: /docs/tcloud/context/create/
+weight: 9989
 cascade:
   type: docs
 ---
-## tcloud version
+## tcloud context create
 
-Print version information
-
-### Synopsis
-
-Print version information about the Thalassa Cloud CLI. This command will display the version of the CLI
+Create a new context with authentication and organisation
 
 ```
-tcloud version [flags]
+tcloud context create [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+      --create-context   creates a context (default true)
+  -h, --help             help for create
+      --name string      name of the context (default "default")
 ```
 
 ### Options inherited from parent commands
@@ -40,5 +38,5 @@ tcloud version [flags]
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 
