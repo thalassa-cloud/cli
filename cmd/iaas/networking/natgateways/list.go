@@ -2,10 +2,13 @@ package natgateways
 
 import (
 	"fmt"
+	"sort"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/filters"
@@ -17,9 +20,11 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime bool
-	region        string
-	vpc           string
+	showExactTime     bool
+	showLabels        bool
+	listLabelSelector string
+	region            string
+	vpc               string
 )
 
 // listCmd represents the list command
@@ -52,6 +57,12 @@ var listCmd = &cobra.Command{
 			})
 		}
 
+		if listLabelSelector != "" {
+			f = append(f, &filters.LabelFilter{
+				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+
 		natgateways, err := client.IaaS().ListNatGateways(cmd.Context(), &iaas.ListNatGatewaysRequest{
 			Filters: f,
 		})
@@ -72,20 +83,39 @@ var listCmd = &cobra.Command{
 				}
 			}
 
-			body = append(body, []string{
+			row := []string{
 				ngw.Identity,
 				ngw.Name,
+				string(ngw.Status),
 				ngw.Vpc.Name,
 				regionName,
 				ngw.EndpointIP,
 				formattime.FormatTime(ngw.CreatedAt.Local(), showExactTime),
-			})
+			}
+
+			if showLabels {
+				labels := []string{}
+				for k, v := range ngw.Labels {
+					labels = append(labels, k+"="+v)
+				}
+				sort.Strings(labels)
+				if len(labels) == 0 {
+					labels = []string{"-"}
+				}
+				row = append(row, strings.Join(labels, ","))
+			}
+
+			body = append(body, row)
 		}
 
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			table.Print([]string{"ID", "Name", "VPC", "Region", "IP", "Age"}, body)
+			headers := []string{"ID", "Name", "Status", "VPC", "Region", "IP", "Age"}
+			if showLabels {
+				headers = append(headers, "Labels")
+			}
+			table.Print(headers, body)
 		}
 		return nil
 	},
@@ -98,6 +128,8 @@ func init() {
 	listCmd.Flags().StringVar(&region, "region", "", "Region of the NAT gateway")
 	listCmd.Flags().StringVar(&vpc, "vpc", "", "VPC of the NAT gateway")
 	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show exact time instead of relative time")
+	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
+	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter NAT gateways (format: key1=value1,key2=value2)")
 
 	// Add completion
 	listCmd.RegisterFlagCompletionFunc("region", completeRegion)

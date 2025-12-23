@@ -8,8 +8,10 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/iaas"
 
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -20,9 +22,10 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime bool
-	showLabels    bool
-	outputFormat  string
+	showExactTime    bool
+	showLabels       bool
+	listLabelSelector string
+	outputFormat     string
 )
 
 // getCmd represents the get command
@@ -37,7 +40,17 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		machines, err := client.IaaS().ListMachines(cmd.Context(), &iaas.ListMachinesRequest{})
+
+		f := []filters.Filter{}
+		if listLabelSelector != "" {
+			f = append(f, &filters.LabelFilter{
+				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+
+		machines, err := client.IaaS().ListMachines(cmd.Context(), &iaas.ListMachinesRequest{
+			Filters: f,
+		})
 		if err != nil {
 			return err
 		}
@@ -134,5 +147,6 @@ func init() {
 	getCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	getCmd.Flags().BoolVar(&showExactTime, "show-exact-time", false, "Show exact time instead of relative time")
 	getCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels associated with machines")
+	getCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter machines (format: key1=value1,key2=value2)")
 	getCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format. One of: wide")
 }

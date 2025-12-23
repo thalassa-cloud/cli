@@ -7,8 +7,10 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/iaas"
 )
 
@@ -17,8 +19,9 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime bool
-	showLabels    bool
+	showExactTime     bool
+	showLabels        bool
+	listLabelSelector string
 )
 
 // getCmd represents the get command
@@ -33,7 +36,17 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		snapshots, err := client.IaaS().ListSnapshots(cmd.Context(), &iaas.ListSnapshotsRequest{})
+
+		f := []filters.Filter{}
+		if listLabelSelector != "" {
+			f = append(f, &filters.LabelFilter{
+				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+
+		snapshots, err := client.IaaS().ListSnapshots(cmd.Context(), &iaas.ListSnapshotsRequest{
+			Filters: f,
+		})
 		if err != nil {
 			return err
 		}
@@ -47,6 +60,7 @@ var listCmd = &cobra.Command{
 			item := []string{
 				snapshot.Identity,
 				snapshot.Name,
+				string(snapshot.Status),
 				snapshot.Region.Name,
 				fmt.Sprintf("%dGB", size),
 				formattime.FormatTime(snapshot.CreatedAt.Local(), showExactTime),
@@ -65,7 +79,7 @@ var listCmd = &cobra.Command{
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			headers := []string{"ID", "Name", "Region", "Size", "Age"}
+			headers := []string{"ID", "Name", "Status", "Region", "Size", "Age"}
 			if showLabels {
 				headers = append(headers, "Labels")
 			}
@@ -80,4 +94,5 @@ func init() {
 
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
+	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter snapshots (format: key1=value1,key2=value2)")
 }

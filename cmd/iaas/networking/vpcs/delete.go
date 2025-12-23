@@ -114,5 +114,5 @@ func init() {
 
 	deleteCmd.Flags().BoolVar(&wait, "wait", false, "Wait for the VPC(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&force, "force", false, "Force the deletion and skip the confirmation")
-	deleteCmd.Flags().StringVar(&labelSelector, "selector", "", "Label selector to filter VPCs (format: key1=value1,key2=value2)")
+	deleteCmd.Flags().StringVarP(&labelSelector, "selector", "l", "", "Label selector to filter VPCs (format: key1=value1,key2=value2)")
 }
