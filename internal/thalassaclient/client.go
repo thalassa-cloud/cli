@@ -11,30 +11,19 @@ import (
 )
 
 func GetThalassaClient() (thalassa.Client, error) {
-	var org string
-	context, err := contextstate.GetContext()
-	if err != nil {
-		if !errors.Is(err, contextstate.ErrContextNotFound) {
-			return nil, fmt.Errorf("failed to get context: %w", err)
-		}
-	}
-	endpoint := "https://api.thalassa.cloud"
-	if context.Servers.API.Server != "" {
-		endpoint = context.Servers.API.Server
-	}
+	endpoint := contextstate.Server()
+	org := contextstate.Organisation()
 
 	opts := []client.Option{
 		client.WithBaseURL(endpoint),
 		client.WithUserAgent(version.UserAgent()),
 	}
-	org = context.Organisation
 	if org != "" {
 		opts = append(opts, client.WithOrganisation(org))
 	}
 
 	if contextstate.Debug() {
 		fmt.Println("Debug mode enabled")
-		fmt.Println("Context:", context)
 		fmt.Println("Options:", opts)
 	}
 
