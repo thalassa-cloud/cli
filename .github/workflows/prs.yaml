@@ -22,7 +22,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v4
       - name: Run tests
-        run: go test -v -p 1 $(go list ./... | grep -v '^./e2e')
+        run: go test -v -p 1 $(go list ./... | grep -v 'e2e')
       - uses: goreleaser/goreleaser-action@v5
         with:
           # either 'goreleaser' (default) or 'goreleaser-pro':
