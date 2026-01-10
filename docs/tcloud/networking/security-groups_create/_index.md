@@ -3,7 +3,7 @@ linkTitle: "tcloud networking security-groups create"
 title: "networking security-groups create"
 slug: tcloud_networking_security-groups_create
 url: /docs/tcloud/networking/security-groups_create/
-weight: 9958
+weight: 9948
 cascade:
   type: docs
 ---

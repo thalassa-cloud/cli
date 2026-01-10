@@ -3,7 +3,7 @@ linkTitle: "tcloud networking natgateways"
 title: "networking natgateways"
 slug: tcloud_networking_natgateways
 url: /docs/tcloud/networking/natgateways/
-weight: 9961
+weight: 9951
 cascade:
   type: docs
 ---

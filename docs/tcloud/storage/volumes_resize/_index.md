@@ -1,29 +1,32 @@
 ---
-linkTitle: "tcloud storage volumes detach"
-title: "storage volumes detach"
-slug: tcloud_storage_volumes_detach
-url: /docs/tcloud/storage/volumes_detach/
-weight: 9924
+linkTitle: "tcloud storage volumes resize"
+title: "storage volumes resize"
+slug: tcloud_storage_volumes_resize
+url: /docs/tcloud/storage/volumes_resize/
+weight: 9922
 cascade:
   type: docs
 ---
-## tcloud storage volumes detach
+## tcloud storage volumes resize
 
-Detach a volume
+Resize volume(s)
 
 ### Synopsis
 
-Detach a volume from any current attachment target by its identity.
+Resize volume(s) to a new size in GB. The new size must be larger than the current size. Can resize multiple volumes by identity or using a label selector.
 
 ```
-tcloud storage volumes detach [flags]
+tcloud storage volumes resize [volume-id...] [flags]
 ```
 
 ### Options
 
 ```
-      --force   Force the detachment and skip the confirmation
-  -h, --help    help for detach
+      --force             Force the resize and skip the confirmation
+  -h, --help              help for resize
+  -l, --selector string   Label selector to filter volumes (format: key1=value1,key2=value2)
+      --size int          New size in GB (required)
+      --wait              Wait for the resize operation to complete
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools list"
 title: "kubernetes nodepools list"
 slug: tcloud_kubernetes_nodepools_list
 url: /docs/tcloud/kubernetes/nodepools_list/
-weight: 9971
+weight: 9964
 cascade:
   type: docs
 ---

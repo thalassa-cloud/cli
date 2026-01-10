@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes kubeconfig"
 title: "kubernetes kubeconfig"
 slug: tcloud_kubernetes_kubeconfig
 url: /docs/tcloud/kubernetes/kubeconfig/
-weight: 9973
+weight: 9969
 cascade:
   type: docs
 ---

@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets"
 title: "networking subnets"
 slug: tcloud_networking_subnets
 url: /docs/tcloud/networking/subnets/
-weight: 9950
+weight: 9940
 cascade:
   type: docs
 ---

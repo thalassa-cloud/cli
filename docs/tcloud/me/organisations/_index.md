@@ -3,7 +3,7 @@ linkTitle: "tcloud me organisations"
 title: "me organisations"
 slug: tcloud_me_organisations
 url: /docs/tcloud/me/organisations/
-weight: 9966
+weight: 9956
 cascade:
   type: docs
 ---

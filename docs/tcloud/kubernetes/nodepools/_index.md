@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools"
 title: "kubernetes nodepools"
 slug: tcloud_kubernetes_nodepools
 url: /docs/tcloud/kubernetes/nodepools/
-weight: 9970
+weight: 9962
 cascade:
   type: docs
 ---
@@ -15,10 +15,10 @@ Manage Kubernetes NodePools
 
 ```
   # List all nodepools in a cluster
-  tcloud kubernetes nodepools list my-cluster
+  tcloud kubernetes nodepools list
 
   # Create a new nodepool
-  tcloud kubernetes nodepools create --cluster my-cluster --name worker-pool --machine-type pgp-medium --num-nodes 3
+  tcloud kubernetes nodepools create --cluster my-cluster --name worker --machine-type pgp-medium --num-nodes 3 --availability-zone nl-01a
 
   # Delete a nodepool
   tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool
@@ -46,5 +46,8 @@ Manage Kubernetes NodePools
 ### SEE ALSO
 
 * [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
+* [tcloud kubernetes nodepools create](/docs/tcloud/kubernetes/nodepools_create/)	 - Create a Kubernetes node pool
+* [tcloud kubernetes nodepools delete](/docs/tcloud/kubernetes/nodepools_delete/)	 - Delete a Kubernetes node pool
 * [tcloud kubernetes nodepools list](/docs/tcloud/kubernetes/nodepools_list/)	 - Kubernetes Cluster NodePool list
+* [tcloud kubernetes nodepools update](/docs/tcloud/kubernetes/nodepools_update/)	 - Update a Kubernetes node pool
 

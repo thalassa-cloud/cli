@@ -1,29 +1,43 @@
 ---
-linkTitle: "tcloud kubernetes list"
-title: "kubernetes list"
-slug: tcloud_kubernetes_list
-url: /docs/tcloud/kubernetes/list/
-weight: 9967
+linkTitle: "tcloud kubernetes delete"
+title: "kubernetes delete"
+slug: tcloud_kubernetes_delete
+url: /docs/tcloud/kubernetes/delete/
+weight: 9970
 cascade:
   type: docs
 ---
-## tcloud kubernetes list
+## tcloud kubernetes delete
 
-Get a list of Kubernetes clusters
+Delete a Kubernetes cluster
 
 ### Synopsis
 
-Get a list of Kubernetes clusters within your organisation
+Delete a Kubernetes cluster and all associated resources.
+
+This command will delete the cluster and all node pools, nodes, and other resources
+associated with it. This operation cannot be undone.
+
+Examples:
+  # Delete a cluster
+  tcloud kubernetes delete my-cluster
+
+  # Delete a cluster and wait for completion
+  tcloud kubernetes delete my-cluster --wait
+
+  # Delete a cluster without confirmation
+  tcloud kubernetes delete my-cluster --force
 
 ```
-tcloud kubernetes list [flags]
+tcloud kubernetes delete <cluster> [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help        help for list
-      --no-header   Do not print the header
+      --force   Skip confirmation prompt
+  -h, --help    help for delete
+      --wait    Wait for the cluster to be deleted before returning
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshots delete"
 title: "storage snapshots delete"
 slug: tcloud_storage_snapshots_delete
 url: /docs/tcloud/storage/snapshots_delete/
-weight: 9939
+weight: 9929
 cascade:
   type: docs
 ---

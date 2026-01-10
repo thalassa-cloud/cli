@@ -3,7 +3,7 @@ linkTitle: "tcloud networking natgateways delete"
 title: "networking natgateways delete"
 slug: tcloud_networking_natgateways_delete
 url: /docs/tcloud/networking/natgateways_delete/
-weight: 9964
+weight: 9954
 cascade:
   type: docs
 ---
