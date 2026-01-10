@@ -134,5 +134,4 @@ func init() {
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	listCmd.Flags().StringVar(&cluster, ClusterFlag, "", "Cluster ID")
 	listCmd.Flags().StringVar(&vpc, VpcFlag, "", "VPC ID")
-	KubernetesNodePoolsCmd.AddCommand(listCmd)
 }

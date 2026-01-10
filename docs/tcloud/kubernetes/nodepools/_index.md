@@ -18,10 +18,10 @@ Manage Kubernetes NodePools
   tcloud kubernetes nodepools list my-cluster
 
   # Create a new nodepool
-  tcloud kubernetes nodepools create my-cluster --name worker-pool --size 3
+  tcloud kubernetes nodepools create --cluster my-cluster --name worker-pool --machine-type pgp-medium --num-nodes 3
 
   # Delete a nodepool
-  tcloud kubernetes nodepools delete my-cluster worker-pool
+  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool
 ```
 
 ### Options

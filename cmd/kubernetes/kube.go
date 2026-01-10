@@ -18,4 +18,8 @@ func init() {
 	KubernetesCmd.AddCommand(kubernetesversions.KubernetesVersionsCmd)
 	KubernetesCmd.AddCommand(nodepools.KubernetesNodePoolsCmd)
 	KubernetesCmd.AddCommand(connect.KubernetesConnectCmd)
+	KubernetesCmd.AddCommand(listCmd)
+	KubernetesCmd.AddCommand(createCmd)
+	KubernetesCmd.AddCommand(updateCmd)
+	KubernetesCmd.AddCommand(deleteCmd)
 }
