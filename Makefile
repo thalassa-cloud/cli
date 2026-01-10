@@ -37,7 +37,10 @@ build:
 	chmod +x bin/${BINARY};
 
 test: ## Run unittests
-	@go test -short ${PKG_LIST}
+	@gotestsum $(filter-out ./e2e/...,$(PKG_LIST))
+
+test-e2e: build ## Run E2E tests (requires TCLOUD_E2E_* environment variables)
+	@gotestsum ./e2e/... -v
 
 docs:
 	go run tools/docs.go
@@ -45,4 +48,4 @@ docs:
 clean:
 	-rm -f bin/${BINARY}-* bin/${BINARY}
 
-.PHONY: link linux darwin windows test fmt clean docs
+.PHONY: link linux darwin windows test test-e2e fmt clean docs

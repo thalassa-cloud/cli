@@ -67,6 +67,25 @@ make build
 make test
 ```
 
+### Run E2E tests
+
+> Note: Running E2E tests creates real resources and you may be charged for these!
+
+```bash
+# Build the binary first
+make build
+
+# Set environment variables
+export TCLOUD_E2E_API_ENDPOINT="https://api.thalassa.cloud"
+export TCLOUD_E2E_PERSONAL_ACCESS_TOKEN="your-token"
+export TCLOUD_E2E_ORGANISATION="org-id"
+
+# Run tests
+make test-e2e
+# or
+go test ./e2e/... -v
+```
+
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
