@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes resize"
 title: "storage volumes resize"
 slug: tcloud_storage_volumes_resize
 url: /docs/tcloud/storage/volumes_resize/
-weight: 9922
+weight: 9909
 cascade:
   type: docs
 ---

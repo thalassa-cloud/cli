@@ -1,20 +1,27 @@
 ---
-linkTitle: "tcloud networking vpcs"
-title: "networking vpcs"
-slug: tcloud_networking_vpcs
-url: /docs/tcloud/networking/vpcs/
-weight: 9929
+linkTitle: "tcloud networking vpc-peering list"
+title: "networking vpc-peering list"
+slug: tcloud_networking_vpc-peering_list
+url: /docs/tcloud/networking/vpc-peering_list/
+weight: 9936
 cascade:
   type: docs
 ---
-## tcloud networking vpcs
+## tcloud networking vpc-peering list
 
-Manage VPCs
+List VPC peering connections
+
+```
+tcloud networking vpc-peering list [flags]
+```
 
 ### Options
 
 ```
-  -h, --help   help for vpcs
+  -h, --help              help for list
+      --no-header         Do not print the header
+  -l, --selector string   Label selector to filter connections (format: key1=value1,key2=value2)
+      --show-labels       Show labels
 ```
 
 ### Options inherited from parent commands
@@ -32,8 +39,5 @@ Manage VPCs
 
 ### SEE ALSO
 
-* [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
-* [tcloud networking vpcs create](/docs/tcloud/networking/vpcs_create/)	 - Create a vpc
-* [tcloud networking vpcs delete](/docs/tcloud/networking/vpcs_delete/)	 - Delete VPC(s)
-* [tcloud networking vpcs list](/docs/tcloud/networking/vpcs_list/)	 - Get a list of vpcs
+* [tcloud networking vpc-peering](/docs/tcloud/networking/vpc-peering/)	 - Manage VPC peering connections
 

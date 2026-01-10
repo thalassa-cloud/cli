@@ -1,24 +1,39 @@
 ---
-linkTitle: "tcloud networking"
-title: "networking"
-slug: tcloud_networking
-url: /docs/tcloud/tcloud_networking/
-weight: 9928
+linkTitle: "tcloud networking vpc-peering reject"
+title: "networking vpc-peering reject"
+slug: tcloud_networking_vpc-peering_reject
+url: /docs/tcloud/networking/vpc-peering_reject/
+weight: 9935
 cascade:
   type: docs
 ---
-## tcloud networking
+## tcloud networking vpc-peering reject
 
-Manage networking resources
+Reject a VPC peering connection
 
 ### Synopsis
 
-Manage networking resources in the Thalassa Cloud Platform
+Reject a pending VPC peering connection request
+
+```
+tcloud networking vpc-peering reject [flags]
+```
+
+### Examples
+
+```
+tcloud networking vpc-peering reject vpcpc-123
+tcloud networking vpc-peering reject vpcpc-123 --reason 'Not needed'
+tcloud networking vpc-peering reject vpcpc-123 --force
+```
 
 ### Options
 
 ```
-  -h, --help   help for networking
+      --force           Force the rejection and skip the confirmation
+  -h, --help            help for reject
+      --no-header       Do not print the header
+      --reason string   Reason for rejecting the peering connection
 ```
 
 ### Options inherited from parent commands
@@ -36,11 +51,5 @@ Manage networking resources in the Thalassa Cloud Platform
 
 ### SEE ALSO
 
-* [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
-* [tcloud networking natgateways](/docs/tcloud/networking/natgateways/)	 - Manage NAT gateways
-* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage routetables
-* [tcloud networking security-groups](/docs/tcloud/networking/security-groups/)	 - Manage security groups
-* [tcloud networking subnets](/docs/tcloud/networking/subnets/)	 - Manage subnets
 * [tcloud networking vpc-peering](/docs/tcloud/networking/vpc-peering/)	 - Manage VPC peering connections
-* [tcloud networking vpcs](/docs/tcloud/networking/vpcs/)	 - Manage VPCs
 

@@ -1,22 +1,30 @@
 ---
-linkTitle: "tcloud storage snapshots delete"
-title: "storage snapshots delete"
-slug: tcloud_storage_snapshots_delete
-url: /docs/tcloud/storage/snapshots_delete/
-weight: 9917
+linkTitle: "tcloud networking vpc-peering delete"
+title: "networking vpc-peering delete"
+slug: tcloud_networking_vpc-peering_delete
+url: /docs/tcloud/networking/vpc-peering_delete/
+weight: 9937
 cascade:
   type: docs
 ---
-## tcloud storage snapshots delete
+## tcloud networking vpc-peering delete
 
-Delete snapshot(s)
+Delete VPC peering connection(s)
 
 ### Synopsis
 
-Delete snapshot(s) by identity or label selector.
+Delete VPC peering connection(s) by identity or label selector
 
 ```
-tcloud storage snapshots delete [flags]
+tcloud networking vpc-peering delete [flags]
+```
+
+### Examples
+
+```
+tcloud networking vpc-peering delete vpcpc-123
+tcloud networking vpc-peering delete vpcpc-123 vpcpc-456 --force
+tcloud networking vpc-peering delete --selector environment=test --force
 ```
 
 ### Options
@@ -24,8 +32,7 @@ tcloud storage snapshots delete [flags]
 ```
       --force             Force the deletion and skip the confirmation
   -h, --help              help for delete
-  -l, --selector string   Label selector to filter snapshots (format: key1=value1,key2=value2)
-      --wait              Wait for the snapshot(s) to be deleted
+  -l, --selector string   Label selector to filter connections (format: key1=value1,key2=value2)
 ```
 
 ### Options inherited from parent commands
@@ -43,5 +50,5 @@ tcloud storage snapshots delete [flags]
 
 ### SEE ALSO
 
-* [tcloud storage snapshots](/docs/tcloud/storage/snapshots/)	 - Manage volume snapshots
+* [tcloud networking vpc-peering](/docs/tcloud/networking/vpc-peering/)	 - Manage VPC peering connections
 

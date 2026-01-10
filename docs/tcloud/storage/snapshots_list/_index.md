@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshots list"
 title: "storage snapshots list"
 slug: tcloud_storage_snapshots_list
 url: /docs/tcloud/storage/snapshots_list/
-weight: 9928
+weight: 9916
 cascade:
   type: docs
 ---

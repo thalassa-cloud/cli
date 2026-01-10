@@ -3,7 +3,7 @@ linkTitle: "tcloud"
 title: "tcloud"
 slug: tcloud
 url: /docs/tcloud/tcloud/
-weight: 9918
+weight: 9905
 cascade:
   type: docs
 ---
@@ -34,6 +34,7 @@ A CLI for working with the Thalassa Cloud Platform
 * [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
 * [tcloud me](/docs/tcloud/tcloud_me/)	 - Get information about the current user
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
+* [tcloud object-storage](/docs/tcloud/tcloud_object-storage/)	 - Manage object storage buckets
 * [tcloud oidc](/docs/tcloud/tcloud_oidc/)	 - OIDC token operations
 * [tcloud regions](/docs/tcloud/tcloud_regions/)	 - Thalassa Cloud Platform Regions
 * [tcloud storage](/docs/tcloud/tcloud_storage/)	 - Manage storage resources

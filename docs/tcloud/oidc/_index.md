@@ -3,7 +3,7 @@ linkTitle: "tcloud oidc"
 title: "oidc"
 slug: tcloud_oidc
 url: /docs/tcloud/tcloud_oidc/
-weight: 9933
+weight: 9921
 cascade:
   type: docs
 ---

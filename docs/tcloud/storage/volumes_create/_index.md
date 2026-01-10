@@ -1,34 +1,38 @@
 ---
-linkTitle: "tcloud storage snapshots create"
-title: "storage snapshots create"
-slug: tcloud_storage_snapshots_create
-url: /docs/tcloud/storage/snapshots_create/
-weight: 9918
+linkTitle: "tcloud storage volumes create"
+title: "storage volumes create"
+slug: tcloud_storage_volumes_create
+url: /docs/tcloud/storage/volumes_create/
+weight: 9913
 cascade:
   type: docs
 ---
-## tcloud storage snapshots create
+## tcloud storage volumes create
 
-Create a snapshot
+Create a volume
 
 ### Synopsis
 
-Create a snapshot from a volume by providing a name and volume ID.
+Create a new storage volume. The volume can be attached to machines after creation.
 
 ```
-tcloud storage snapshots create <name> [flags]
+tcloud storage volumes create [flags]
 ```
 
 ### Options
 
 ```
       --annotations strings   Annotations in key=value format (can be specified multiple times)
-      --delete-protection     Enable delete protection for the snapshot
-      --description string    Description of the snapshot
+      --delete-protection     Enable delete protection
+      --description string    Description of the volume
   -h, --help                  help for create
       --labels strings        Labels in key=value format (can be specified multiple times)
-      --volume string         Volume identity to create snapshot from
-      --wait                  Wait for the snapshot to be ready for use
+      --name string           Name of the volume (required)
+      --no-header             Do not print the header
+      --region string         Region of the volume (required)
+      --size int              Size of the volume in GB (required)
+      --type string           Volume type (default "block")
+      --wait                  Wait for the volume to be available before returning
 ```
 
 ### Options inherited from parent commands
@@ -46,5 +50,5 @@ tcloud storage snapshots create <name> [flags]
 
 ### SEE ALSO
 
-* [tcloud storage snapshots](/docs/tcloud/storage/snapshots/)	 - Manage volume snapshots
+* [tcloud storage volumes](/docs/tcloud/storage/volumes/)	 - Manage storage volumes
 

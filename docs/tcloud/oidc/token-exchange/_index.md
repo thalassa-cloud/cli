@@ -3,7 +3,7 @@ linkTitle: "tcloud oidc token-exchange"
 title: "oidc token-exchange"
 slug: tcloud_oidc_token-exchange
 url: /docs/tcloud/oidc/token-exchange/
-weight: 9934
+weight: 9922
 cascade:
   type: docs
 ---

@@ -1,20 +1,26 @@
 ---
-linkTitle: "tcloud networking vpcs"
-title: "networking vpcs"
-slug: tcloud_networking_vpcs
-url: /docs/tcloud/networking/vpcs/
-weight: 9929
+linkTitle: "tcloud object-storage list"
+title: "object-storage list"
+slug: tcloud_object-storage_list
+url: /docs/tcloud/object-storage/list/
+weight: 9925
 cascade:
   type: docs
 ---
-## tcloud networking vpcs
+## tcloud object-storage list
 
-Manage VPCs
+List object storage buckets
+
+```
+tcloud object-storage list [flags]
+```
 
 ### Options
 
 ```
-  -h, --help   help for vpcs
+  -h, --help          help for list
+      --no-header     Do not print the header
+      --show-labels   Show labels
 ```
 
 ### Options inherited from parent commands
@@ -32,8 +38,5 @@ Manage VPCs
 
 ### SEE ALSO
 
-* [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
-* [tcloud networking vpcs create](/docs/tcloud/networking/vpcs_create/)	 - Create a vpc
-* [tcloud networking vpcs delete](/docs/tcloud/networking/vpcs_delete/)	 - Delete VPC(s)
-* [tcloud networking vpcs list](/docs/tcloud/networking/vpcs_list/)	 - Get a list of vpcs
+* [tcloud object-storage](/docs/tcloud/tcloud_object-storage/)	 - Manage object storage buckets
 
