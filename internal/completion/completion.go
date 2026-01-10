@@ -310,3 +310,33 @@ func CompleteKubernetesCluster(cmd *cobra.Command, args []string, toComplete str
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
+
+// CompleteVpcPeeringConnectionID provides completion for VPC peering connection identities, names, and slugs
+func CompleteVpcPeeringConnectionID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	connections, err := client.IaaS().ListVpcPeeringConnections(cmd.Context(), &iaas.ListVpcPeeringConnectionsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0)
+	for _, conn := range connections {
+		desc := fmt.Sprintf("%s (%s)", conn.Name, conn.Status)
+		completions = append(completions, conn.Identity+"\t"+desc)
+		if conn.Name != "" && conn.Name != conn.Identity {
+			completions = append(completions, conn.Name+"\t"+desc)
+		}
+		if conn.Slug != "" && conn.Slug != conn.Identity && conn.Slug != conn.Name {
+			completions = append(completions, conn.Slug+"\t"+desc)
+		}
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
