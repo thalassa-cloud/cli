@@ -343,6 +343,7 @@ func (c *TestConfig) CreateSubnet(t *testing.T, vpcIdentity string) string {
 }
 
 // GetVolume gets a valid volume from the API for use in tests
+// If no volume exists, it creates one and registers cleanup
 func (c *TestConfig) GetVolume(t *testing.T) string {
 	t.Helper()
 
@@ -354,15 +355,57 @@ func (c *TestConfig) GetVolume(t *testing.T) string {
 	}
 
 	volumes := volumesResult.GetLines()
-	if len(volumes) == 0 {
-		t.Fatal("No volumes available")
+	if len(volumes) > 0 {
+		// Use the first existing volume (format: identity is first column)
+		volumeLine := strings.Fields(volumes[0])
+		if len(volumeLine) > 0 {
+			return volumeLine[0]
+		}
 	}
 
-	// Use the first volume (format: identity is first column)
-	volumeLine := strings.Fields(volumes[0])
-	if len(volumeLine) == 0 {
-		t.Fatal("Invalid volume format")
+	// No volumes exist, create one
+	return c.CreateVolume(t)
+}
+
+// CreateVolume creates a volume for testing and registers cleanup
+func (c *TestConfig) CreateVolume(t *testing.T) string {
+	t.Helper()
+
+	region := c.GetRegion(t)
+	volumeName := "e2e-test-volume-" + time.Now().Format("20060102150405")
+
+	// Create volume with 'block' volume type
+	createResult := c.RunCommand(t, "storage", "volumes", "create",
+		"--name", volumeName,
+		"--region", region,
+		"--size", "10",
+		"--type", "block",
+		"--no-header")
+	createResult.PrintOutput(t)
+
+	if createResult.ExitCode != 0 {
+		t.Fatalf("Failed to create volume: %s", createResult.Stderr)
 	}
 
-	return volumeLine[0]
+	// Extract volume identity from output
+	createOutput := createResult.GetLines()
+	if len(createOutput) == 0 {
+		t.Fatal("Create command succeeded but produced no output")
+	}
+
+	volumeFields := strings.Fields(createOutput[0])
+	if len(volumeFields) == 0 {
+		t.Fatal("Create output format is unexpected")
+	}
+	volumeIdentity := volumeFields[0]
+
+	// Register cleanup to delete the volume
+	t.Cleanup(func() {
+		deleteResult := c.RunCommand(t, "storage", "volumes", "delete", volumeIdentity, "--force")
+		if deleteResult.ExitCode != 0 {
+			t.Logf("Failed to clean up volume %s: %s", volumeIdentity, deleteResult.Stderr)
+		}
+	})
+
+	return volumeIdentity
 }

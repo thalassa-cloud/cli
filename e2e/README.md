@@ -2,6 +2,10 @@
 
 This directory contains end-to-end (E2E) tests for the Thalassa Cloud CLI. These tests execute the actual CLI binary against a real API endpoint to verify that commands work correctly.
 
+> ![IMPORTANT]
+> This expects to be ran against an organisation that DOES NOT have other resources provisioned. The E2E tests contain cleanup and is not validated to not touch resources outside of the E2E tests.
+> Please use Service Account Access credentials or workflow Identity Federation, so access is limited to your test organisation.
+
 ## Prerequisites
 
 1. Build the CLI binary:
