@@ -48,5 +48,8 @@ jobs:
           THALASSA_ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
           echo "THALASSA_ACCESS_TOKEN=$THALASSA_ACCESS_TOKEN" >> $GITHUB_ENV
 
+      # setup gotestsum
+      - name: Setup gotestsum
+        run: go install gotest.tools/gotestsum@latest
       - name: Run E2E tests
         run: make test-e2e
