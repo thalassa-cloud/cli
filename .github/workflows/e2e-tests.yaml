@@ -8,6 +8,7 @@ on:
 env:
   TCLOUD_E2E_ORGANISATION: "o-d5obcgg3fspc73f7vqpg"
   THALASSA_SERVICE_ACCOUNT_ID: "sa-d5obd77ua50s73ab91ig"
+  TCLOUD_E2E_API_ENDPOINT: "https://api.thalassa.cloud"
 
 jobs:
   e2e-tests:
