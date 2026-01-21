@@ -7,7 +7,7 @@ import (
 
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
-	"github.com/thalassa-cloud/client-go/dbaas/dbaasalphav1"
+	"github.com/thalassa-cloud/client-go/dbaas"
 )
 
 var engineType string
@@ -31,9 +31,9 @@ var versionsCmd = &cobra.Command{
 		}
 
 		// Parse the engine type
-		engine := dbaasalphav1.DbClusterDatabaseEngine(engineType)
+		engine := dbaas.DbClusterDatabaseEngine(engineType)
 
-		versions, err := client.DbaaSAlphaV1().ListEngineVersions(cmd.Context(), engine, &dbaasalphav1.ListEngineVersionsRequest{})
+		versions, err := client.DBaaS().ListEngineVersions(cmd.Context(), engine, &dbaas.ListEngineVersionsRequest{})
 		if err != nil {
 			return err
 		}

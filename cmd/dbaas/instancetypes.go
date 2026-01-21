@@ -8,7 +8,7 @@ import (
 
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
-	"github.com/thalassa-cloud/client-go/dbaas/dbaasalphav1"
+	"github.com/thalassa-cloud/client-go/dbaas"
 )
 
 // instanceTypesCmd represents the instance-types command
@@ -24,7 +24,7 @@ var instanceTypesCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		instanceTypes, err := client.DbaaSAlphaV1().ListDatabaseInstanceTypes(cmd.Context(), &dbaasalphav1.ListDatabaseInstanceTypesRequest{})
+		instanceTypes, err := client.DBaaS().ListDatabaseInstanceTypes(cmd.Context(), &dbaas.ListDatabaseInstanceTypesRequest{})
 		if err != nil {
 			return err
 		}

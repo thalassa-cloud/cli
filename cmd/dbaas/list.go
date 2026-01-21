@@ -2,13 +2,17 @@ package dbaas
 
 import (
 	"fmt"
+	"sort"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
-	"github.com/thalassa-cloud/client-go/dbaas/dbaasalphav1"
+	"github.com/thalassa-cloud/client-go/dbaas"
+	"github.com/thalassa-cloud/client-go/filters"
 )
 
 const NoHeaderKey = "no-header"
@@ -16,7 +20,9 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime bool
+	showExactTime     bool
+	showLabels        bool
+	listLabelSelector string
 )
 
 // listCmd represents the list command
@@ -32,7 +38,17 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		clusters, err := client.DbaaSAlphaV1().ListDbClusters(cmd.Context(), &dbaasalphav1.ListDbClustersRequest{})
+
+		f := []filters.Filter{}
+		if listLabelSelector != "" {
+			f = append(f, &filters.LabelFilter{
+				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+
+		clusters, err := client.DBaaS().ListDbClusters(cmd.Context(), &dbaas.ListDbClustersRequest{
+			Filters: f,
+		})
 		if err != nil {
 			return err
 		}
@@ -54,7 +70,7 @@ var listCmd = &cobra.Command{
 				instanceType = cluster.DatabaseInstanceType.Name
 			}
 
-			body = append(body, []string{
+			row := []string{
 				cluster.Identity,
 				cluster.Name,
 				vpcName,
@@ -65,7 +81,21 @@ var listCmd = &cobra.Command{
 				fmt.Sprintf("%d GB", cluster.AllocatedStorage),
 				string(cluster.Status),
 				formattime.FormatTime(cluster.CreatedAt.Local(), showExactTime),
-			})
+			}
+
+			if showLabels {
+				labelStrs := []string{}
+				for k, v := range cluster.Labels {
+					labelStrs = append(labelStrs, k+"="+v)
+				}
+				sort.Strings(labelStrs)
+				if len(labelStrs) == 0 {
+					labelStrs = []string{"-"}
+				}
+				row = append(row, strings.Join(labelStrs, ","))
+			}
+
+			body = append(body, row)
 		}
 		if len(body) == 0 {
 			fmt.Println("No database clusters found")
@@ -75,7 +105,11 @@ var listCmd = &cobra.Command{
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			table.Print([]string{"ID", "Name", "VPC", "Engine", "Version", "Instance Type", "Replicas", "Storage", "Status", "Age"}, body)
+			headers := []string{"ID", "Name", "VPC", "Engine", "Version", "Instance Type", "Replicas", "Storage", "Status", "Age"}
+			if showLabels {
+				headers = append(headers, "Labels")
+			}
+			table.Print(headers, body)
 		}
 		return nil
 	},
@@ -85,4 +119,6 @@ func init() {
 	DbaasCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show exact time instead of relative time")
+	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
+	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter clusters (format: key1=value1,key2=value2)")
 }
