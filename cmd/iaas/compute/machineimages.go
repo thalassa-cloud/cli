@@ -4,10 +4,14 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/iaas"
 )
+
+var listLabelSelector string
 
 var getMachineImagesCmd = &cobra.Command{
 	Use:     "machine-images",
@@ -21,7 +25,17 @@ var getMachineImagesCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		images, err := client.IaaS().ListMachineImages(cmd.Context(), &iaas.ListMachineImagesRequest{})
+
+		f := []filters.Filter{}
+		if listLabelSelector != "" {
+			f = append(f, &filters.LabelFilter{
+				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+
+		images, err := client.IaaS().ListMachineImages(cmd.Context(), &iaas.ListMachineImagesRequest{
+			Filters: f,
+		})
 		if err != nil {
 			return err
 		}
@@ -58,4 +72,5 @@ func init() {
 	getMachineImagesCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	getMachineImagesCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels associated with machines")
 	getMachineImagesCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format. One of: wide")
+	getMachineImagesCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter machine images (format: key1=value1,key2=value2)")
 }
