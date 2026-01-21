@@ -12,6 +12,10 @@ env:
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
     strategy:
       matrix:
         go-version: ["1.24"]
