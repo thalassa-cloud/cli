@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
@@ -20,9 +21,10 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime    bool
-	showLabels       bool
+	showExactTime     bool
+	showLabels        bool
 	listLabelSelector string
+	listVpcFilter     string
 )
 
 // getCmd represents the get command
@@ -39,6 +41,12 @@ var getCmd = &cobra.Command{
 		}
 
 		f := []filters.Filter{}
+		if listVpcFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "vpc",
+				Value: listVpcFilter,
+			})
+		}
 		if listLabelSelector != "" {
 			f = append(f, &filters.LabelFilter{
 				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
@@ -53,11 +61,19 @@ var getCmd = &cobra.Command{
 		}
 		body := make([][]string, 0, len(subnets))
 		for _, subnet := range subnets {
+
+			vpcName := ""
+			if subnet.Vpc != nil {
+				vpcName = subnet.Vpc.Name
+			} else {
+				vpcName = subnet.VpcIdentity
+			}
+
 			row := []string{
 				subnet.Identity,
 				subnet.Name,
 				string(subnet.Status),
-				subnet.Vpc.Name,
+				vpcName,
 				subnet.Cidr,
 				formattime.FormatTime(subnet.CreatedAt.Local(), showExactTime),
 			}
@@ -96,4 +112,8 @@ func init() {
 	getCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	getCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
 	getCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter subnets (format: key1=value1,key2=value2)")
+	getCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "Filter by VPC")
+
+	// Add completion
+	getCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }
