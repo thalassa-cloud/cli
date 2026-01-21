@@ -37,10 +37,10 @@ build:
 	chmod +x bin/${BINARY};
 
 test: ## Run unittests
-	@gotestsum $(filter-out ./e2e/...,$(PKG_LIST))
+	@gotestsum --format=testname $(filter-out ./e2e/...,$(PKG_LIST))
 
 test-e2e: build ## Run E2E tests (requires TCLOUD_E2E_* environment variables)
-	@gotestsum ./e2e/... -v
+	@gotestsum --format=testname ./e2e/...
 
 docs:
 	go run tools/docs.go
