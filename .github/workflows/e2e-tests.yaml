@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  THALASSA_ORGANISATION_ID: "o-d5obcgg3fspc73f7vqpg"
+  TCLOUD_E2E_ORGANISATION: "o-d5obcgg3fspc73f7vqpg"
   THALASSA_SERVICE_ACCOUNT_ID: "sa-d5obd77ua50s73ab91ig"
 
 jobs:
@@ -43,10 +43,10 @@ jobs:
             -d "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
             -d "subject_token=${{ steps.oidc.outputs.token }}" \
             -d "subject_token_type=urn:ietf:params:oauth:token-type:id_token" \
-            -d "organisation_id=${{ env.THALASSA_ORGANISATION_ID }}" \
+            -d "organisation_id=${{ env.TCLOUD_E2E_ORGANISATION }}" \
             -d "service_account_id=${{ env.THALASSA_SERVICE_ACCOUNT_ID }}")
-          THALASSA_ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
-          echo "THALASSA_ACCESS_TOKEN=$THALASSA_ACCESS_TOKEN" >> $GITHUB_ENV
+          TCLOUD_E2E_ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          echo "TCLOUD_E2E_ACCESS_TOKEN=$TCLOUD_E2E_ACCESS_TOKEN" >> $GITHUB_ENV
 
       # setup gotestsum
       - name: Setup gotestsum
