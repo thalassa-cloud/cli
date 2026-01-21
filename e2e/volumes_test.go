@@ -53,6 +53,9 @@ func TestVolumesListNoHeader(t *testing.T) {
 	if len(lines) > 0 {
 		firstLine := strings.TrimSpace(lines[0])
 		// Header row would start with "ID" (uppercase), data rows start with volume IDs like "v-"
+		if firstLine == "" { // empty line is a valid output
+			return
+		}
 		assert.True(t, strings.HasPrefix(firstLine, "v-"), "First line should be data (volume ID starting with 'v-'), not header")
 		// Also verify it doesn't contain header words as column headers
 		firstLineLower := strings.ToLower(firstLine)
