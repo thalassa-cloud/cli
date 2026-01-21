@@ -5,8 +5,10 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/dbaas"
 	"github.com/thalassa-cloud/client-go/iaas"
 	"github.com/thalassa-cloud/client-go/kubernetes"
+	"github.com/thalassa-cloud/client-go/tfs"
 )
 
 // CompleteVPCID provides completion for VPC IDs
@@ -181,6 +183,50 @@ func CompleteVolumeID(cmd *cobra.Command, args []string, toComplete string) ([]s
 	var completions []string
 	for _, volume := range volumes {
 		completions = append(completions, volume.Identity)
+	}
+
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+func CompleteTfsInstanceID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	instances, err := client.Tfs().ListTfsInstances(cmd.Context(), &tfs.ListTfsInstancesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	var completions []string
+	for _, instance := range instances {
+		completions = append(completions, instance.Identity)
+	}
+
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+func CompleteDbClusterID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	clusters, err := client.DBaaS().ListDbClusters(cmd.Context(), &dbaas.ListDbClustersRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	var completions []string
+	for _, cluster := range clusters {
+		completions = append(completions, cluster.Identity)
 	}
 
 	return completions, cobra.ShellCompDirectiveNoFileComp

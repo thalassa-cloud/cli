@@ -3,6 +3,7 @@ package storage
 import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/cmd/iaas/storage/snapshots"
+	"github.com/thalassa-cloud/cli/cmd/iaas/storage/tfs"
 	"github.com/thalassa-cloud/cli/cmd/iaas/storage/volumes"
 )
 
@@ -16,4 +17,5 @@ var StorageCmd = &cobra.Command{
 func init() {
 	StorageCmd.AddCommand(volumes.VolumesCmd)
 	StorageCmd.AddCommand(snapshots.SnapshotsCmd)
+	StorageCmd.AddCommand(tfs.TfsCmd)
 }
