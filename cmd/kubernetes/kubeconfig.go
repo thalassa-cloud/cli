@@ -5,16 +5,17 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 )
 
 var KubernetesKubeConfigCmd = &cobra.Command{
-	Use:     "kubeconfig",
-	Aliases: []string{},
-	Short:   "Kubernetes Kubeconfig management",
-
-	Args: cobra.MaximumNArgs(1),
+	Use:               "kubeconfig",
+	Aliases:           []string{},
+	Short:             "Kubernetes Kubeconfig management",
+	ValidArgsFunction: completion.CompleteKubernetesCluster,
+	Args:              cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := cmd.Context()
 		client, err := thalassaclient.GetThalassaClient()

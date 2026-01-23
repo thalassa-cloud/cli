@@ -386,3 +386,26 @@ func CompleteVpcPeeringConnectionID(cmd *cobra.Command, args []string, toComplet
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
+
+// CompleteOrganisation provides completion for organisation identities and slugs
+func CompleteOrganisation(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	organisations, err := client.Me().ListMyOrganisations(cmd.Context())
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0)
+	for _, org := range organisations {
+		desc := org.Name
+		completions = append(completions, org.Identity+"\t"+desc)
+		if org.Slug != "" && org.Slug != org.Identity {
+			completions = append(completions, org.Slug+"\t"+desc)
+		}
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}

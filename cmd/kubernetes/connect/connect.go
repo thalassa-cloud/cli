@@ -10,6 +10,7 @@ import (
 	"text/template"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -35,11 +36,11 @@ type KubeconfigTemplateInput struct {
 }
 
 var KubernetesConnectCmd = &cobra.Command{
-	Use:     "connect",
-	Aliases: []string{"connection", "shell", "c"},
-	Short:   "Connect your shell to the Kubernetes Cluster",
-
-	Args: cobra.MaximumNArgs(1),
+	Use:               "connect",
+	Aliases:           []string{"connection", "shell", "c"},
+	Short:             "Connect your shell to the Kubernetes Cluster",
+	Args:              cobra.MaximumNArgs(1),
+	ValidArgsFunction: completion.CompleteKubernetesCluster,
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := cmd.Context()
 

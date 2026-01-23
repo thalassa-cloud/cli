@@ -18,6 +18,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/objectstorage"
 	"github.com/thalassa-cloud/cli/cmd/oidc"
 	"github.com/thalassa-cloud/cli/cmd/version"
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 )
 
@@ -49,6 +50,9 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientIDFlag, "client-id", "", "OIDC client ID for OIDC authentication (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientSecretFlag, "client-secret", "", "OIDC client secret for OIDC authentication (overrides context)")
 	RootCmd.PersistentFlags().BoolVar(&contextstate.DebugFlag, "debug", false, "Debug mode")
+
+	// Register completions
+	RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
 
 	RootCmd.AddCommand(context.ContextCmd)
 	RootCmd.AddCommand(version.VersionCmd)
