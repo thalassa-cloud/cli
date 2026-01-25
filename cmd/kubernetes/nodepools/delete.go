@@ -14,7 +14,7 @@ import (
 
 var (
 	deleteNodePoolCluster string
-	deleteNodePoolName    string
+	deleteNodePoolId      string
 	deleteNodePoolWait    bool
 	deleteNodePoolForce   bool
 )
@@ -30,13 +30,13 @@ The cluster must be in a ready state to delete node pools.
 
 Examples:
   # Delete a node pool
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool
 
   # Delete a node pool and wait for completion
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool --wait
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --wait
 
   # Delete a node pool without confirmation
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool --force`,
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --force`,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
@@ -44,12 +44,12 @@ Examples:
 		if deleteNodePoolCluster == "" {
 			return fmt.Errorf("--cluster is required")
 		}
-		if deleteNodePoolName == "" {
-			return fmt.Errorf("--name is required")
+		if deleteNodePoolId == "" {
+			return fmt.Errorf("--nodepool is required")
 		}
 
 		clusterIdentifier := deleteNodePoolCluster
-		nodePoolIdentifier := deleteNodePoolName
+		nodePoolIdentifier := deleteNodePoolId
 
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
@@ -138,9 +138,10 @@ func init() {
 	// Command is registered in kubernetesclusters.go
 
 	deleteCmd.Flags().StringVar(&deleteNodePoolCluster, "cluster", "", "Cluster identity, name, or slug (required)")
-	deleteCmd.Flags().StringVar(&deleteNodePoolName, "name", "", "Node pool name, identity, or slug (required)")
+	deleteCmd.Flags().StringVar(&deleteNodePoolId, "nodepool", "", "Node pool name, identity, or slug (required)")
 	deleteCmd.Flags().BoolVar(&deleteNodePoolWait, "wait", false, "Wait for the node pool to be deleted before returning")
 	deleteCmd.Flags().BoolVar(&deleteNodePoolForce, "force", false, "Skip confirmation prompt")
 
-	deleteCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteKubernetesCluster)
+	deleteCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
+	deleteCmd.RegisterFlagCompletionFunc("nodepool", completion.CompleteKubernetesNodePool)
 }

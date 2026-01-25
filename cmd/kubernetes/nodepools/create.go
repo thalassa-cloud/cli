@@ -225,6 +225,7 @@ func init() {
 
 	createCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteKubernetesCluster)
 	createCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)
+	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
 	createCmd.RegisterFlagCompletionFunc("upgrade-strategy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"manual", "auto", "always", "on-delete", "inplace", "never"}, cobra.ShellCompDirectiveNoFileComp
 	})
