@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
@@ -22,10 +23,13 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime    bool
-	showLabels       bool
+	showExactTime     bool
+	showLabels        bool
 	listLabelSelector string
-	outputFormat     string
+	outputFormat      string
+	listRegionFilter  string
+	listVpcFilter     string
+	listStatusFilter  string
 )
 
 // getCmd represents the get command
@@ -45,6 +49,24 @@ var getCmd = &cobra.Command{
 		if listLabelSelector != "" {
 			f = append(f, &filters.LabelFilter{
 				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+		if listRegionFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "region",
+				Value: listRegionFilter,
+			})
+		}
+		if listVpcFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "vpc",
+				Value: listVpcFilter,
+			})
+		}
+		if listStatusFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "status",
+				Value: listStatusFilter,
 			})
 		}
 
@@ -149,4 +171,11 @@ func init() {
 	getCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels associated with machines")
 	getCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter machines (format: key1=value1,key2=value2)")
 	getCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format. One of: wide")
+	getCmd.Flags().StringVar(&listRegionFilter, "region", "", "Region of the machine")
+	getCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "VPC of the machine")
+	getCmd.Flags().StringVar(&listStatusFilter, "status", "", "Status of the machine")
+
+	// Register completions
+	getCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	getCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }
