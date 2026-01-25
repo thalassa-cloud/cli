@@ -7,10 +7,13 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/dbaas"
+	"github.com/thalassa-cloud/client-go/iaas"
 )
 
 var (
@@ -19,8 +22,10 @@ var (
 	createClusterEngine           string
 	createClusterEngineVersion    string
 	createClusterInstanceType     string
+	createClusterVpc              string
 	createClusterSubnet           string
 	createClusterStorage          int
+	createclusterVolumeType       string
 	createClusterReplicas         int
 	createClusterLabels           []string
 	createClusterAnnotations      []string
@@ -59,14 +64,38 @@ var createCmd = &cobra.Command{
 			return fmt.Errorf("replicas must be 0 or greater")
 		}
 
-		// Resolve subnet if provided
-		var subnetIdentity string
-		if createClusterSubnet != "" {
-			subnet, err := client.IaaS().GetSubnet(cmd.Context(), createClusterSubnet)
+		// Resolve volume type
+		volumeTypes, err := client.IaaS().ListVolumeTypes(cmd.Context(), &iaas.ListVolumeTypesRequest{})
+		if err != nil {
+			return fmt.Errorf("failed to get volume type: %w", err)
+		}
+		volumeType, err := iaasutil.FindVolumeTypeByIdentitySlugOrNameWithError(volumeTypes, createclusterVolumeType)
+		if err != nil {
+			return err
+		}
+
+		createclusterVolumeType = volumeType.Identity
+
+		// Resolve subnet (required)
+		if createClusterSubnet == "" {
+			return fmt.Errorf("subnet is required")
+		}
+		subnet, err := iaasutil.GetSubnetByIdentitySlugOrName(cmd.Context(), client.IaaS(), createClusterSubnet)
+		if err != nil {
+			return fmt.Errorf("failed to get subnet: %w", err)
+		}
+		subnetIdentity := subnet.Identity
+
+		// Resolve and validate VPC if provided
+		if createClusterVpc != "" {
+			vpc, err := iaasutil.GetVPCByIdentitySlugOrName(cmd.Context(), client.IaaS(), createClusterVpc)
 			if err != nil {
-				return fmt.Errorf("failed to get subnet: %w", err)
+				return fmt.Errorf("failed to get vpc: %w", err)
 			}
-			subnetIdentity = subnet.Identity
+			// Validate that the subnet belongs to the specified VPC
+			if subnet.Vpc != nil && subnet.Vpc.Identity != vpc.Identity {
+				return fmt.Errorf("subnet %s does not belong to VPC %s", subnetIdentity, vpc.Identity)
+			}
 		}
 
 		// Parse labels from key=value format
@@ -93,6 +122,7 @@ var createCmd = &cobra.Command{
 			Engine:                       dbaas.DbClusterDatabaseEngine(createClusterEngine),
 			EngineVersion:                createClusterEngineVersion,
 			DatabaseInstanceTypeIdentity: createClusterInstanceType,
+			VolumeTypeClassIdentity:      createclusterVolumeType,
 			SubnetIdentity:               subnetIdentity,
 			AllocatedStorage:             uint64(createClusterStorage),
 			Labels:                       labels,
@@ -182,7 +212,10 @@ func init() {
 	createCmd.Flags().StringVar(&createClusterEngine, "engine", "", "Database engine (e.g., postgres) (required)")
 	createCmd.Flags().StringVar(&createClusterEngineVersion, "engine-version", "", "Engine version (required)")
 	createCmd.Flags().StringVar(&createClusterInstanceType, "instance-type", "", "Instance type (required)")
-	createCmd.Flags().StringVar(&createClusterSubnet, "subnet", "", "Subnet identity")
+
+	createCmd.Flags().StringVar(&createClusterVpc, "vpc", "", "VPC identity, slug, or name")
+	createCmd.Flags().StringVar(&createClusterSubnet, "subnet", "", "Subnet identity, slug, or name (required)")
+	createCmd.Flags().StringVar(&createclusterVolumeType, "volume-type", "block", "Volume type")
 	createCmd.Flags().IntVar(&createClusterStorage, "storage", 0, "Storage size in GB (required)")
 	createCmd.Flags().IntVar(&createClusterReplicas, "replicas", 0, "Number of replicas (default: 0)")
 	createCmd.Flags().StringSliceVar(&createClusterLabels, "labels", []string{}, "Labels in key=value format (can be specified multiple times)")
@@ -190,10 +223,16 @@ func init() {
 	createCmd.Flags().BoolVar(&createClusterDeleteProtection, "delete-protection", false, "Enable delete protection")
 	createCmd.Flags().BoolVar(&createClusterWait, "wait", false, "Wait for the database cluster to be available before returning")
 
+	// Register completions
+	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
+	createCmd.RegisterFlagCompletionFunc("engine-version", completion.CompleteDbEngineVersion)
+
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("engine")
 	_ = createCmd.MarkFlagRequired("engine-version")
 	_ = createCmd.MarkFlagRequired("instance-type")
-	_ = createCmd.MarkFlagRequired("vpc")
+	_ = createCmd.MarkFlagRequired("subnet")
+	_ = createCmd.MarkFlagRequired("volume-type")
 	_ = createCmd.MarkFlagRequired("storage")
 }

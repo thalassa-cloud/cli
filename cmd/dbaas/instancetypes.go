@@ -42,9 +42,9 @@ var instanceTypesCmd = &cobra.Command{
 			body = append(body, []string{
 				instanceType.Identity,
 				instanceType.Name,
+				instanceType.CategorySlug,
 				fmt.Sprintf("%d vCPU", instanceType.Cpus),
 				fmt.Sprintf("%d GB", instanceType.Memory),
-				instanceType.Description,
 				instanceType.Architecture,
 			})
 		}
@@ -56,7 +56,7 @@ var instanceTypesCmd = &cobra.Command{
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			table.Print([]string{"ID", "Name", "vCPU", "Memory", "Description", "Architecture"}, body)
+			table.Print([]string{"ID", "Name", "Category", "vCPU", "Memory", "Architecture"}, body)
 		}
 		return nil
 	},

@@ -7,7 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
 	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -23,6 +25,9 @@ var (
 	showExactTime     bool
 	showLabels        bool
 	listLabelSelector string
+	listEngineFilter  string
+	listVpcFilter     string
+	listSubnetFilter  string
 )
 
 // listCmd represents the list command
@@ -40,6 +45,40 @@ var listCmd = &cobra.Command{
 		}
 
 		f := []filters.Filter{}
+
+		// Resolve VPC filter if provided
+		if listVpcFilter != "" {
+			vpc, err := iaasutil.GetVPCByIdentitySlugOrName(cmd.Context(), client.IaaS(), listVpcFilter)
+			if err != nil {
+				return fmt.Errorf("failed to get vpc: %w", err)
+			}
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "vpc",
+				Value: vpc.Identity,
+			})
+		}
+
+		// Resolve subnet filter if provided
+		if listSubnetFilter != "" {
+			subnet, err := iaasutil.GetSubnetByIdentitySlugOrName(cmd.Context(), client.IaaS(), listSubnetFilter)
+			if err != nil {
+				return fmt.Errorf("failed to get subnet: %w", err)
+			}
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "subnet",
+				Value: subnet.Identity,
+			})
+		}
+
+		// Add engine filter if provided
+		if listEngineFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "engine",
+				Value: listEngineFilter,
+			})
+		}
+
+		// Add label selector filter if provided
 		if listLabelSelector != "" {
 			f = append(f, &filters.LabelFilter{
 				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
@@ -60,6 +99,11 @@ var listCmd = &cobra.Command{
 				vpcName = cluster.Vpc.Name
 			}
 
+			subnetName := ""
+			if cluster.Subnet != nil {
+				subnetName = cluster.Subnet.Name
+			}
+
 			engineVersion := cluster.EngineVersion
 			if cluster.DatabaseEngineVersion != nil {
 				engineVersion = cluster.DatabaseEngineVersion.EngineVersion
@@ -74,6 +118,7 @@ var listCmd = &cobra.Command{
 				cluster.Identity,
 				cluster.Name,
 				vpcName,
+				subnetName,
 				string(cluster.Engine),
 				engineVersion,
 				instanceType,
@@ -105,7 +150,7 @@ var listCmd = &cobra.Command{
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			headers := []string{"ID", "Name", "VPC", "Engine", "Version", "Instance Type", "Replicas", "Storage", "Status", "Age"}
+			headers := []string{"ID", "Name", "VPC", "Subnet", "Engine", "Version", "Instance Type", "Replicas", "Storage", "Status", "Age"}
 			if showLabels {
 				headers = append(headers, "Labels")
 			}
@@ -121,4 +166,11 @@ func init() {
 	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show exact time instead of relative time")
 	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
 	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter clusters (format: key1=value1,key2=value2)")
+	listCmd.Flags().StringVar(&listEngineFilter, "engine", "", "Filter by database engine (e.g., postgres)")
+	listCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "Filter by VPC identity, slug, or name")
+	listCmd.Flags().StringVar(&listSubnetFilter, "subnet", "", "Filter by subnet identity, slug, or name")
+
+	// Register completions
+	listCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	listCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
 }

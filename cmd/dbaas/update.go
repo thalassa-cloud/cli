@@ -174,4 +174,7 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateClusterLabels, "labels", []string{}, "Labels in key=value format (can be specified multiple times)")
 	updateCmd.Flags().StringSliceVar(&updateClusterAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	updateCmd.Flags().BoolVar(&updateClusterDeleteProtection, "delete-protection", false, "Enable or disable delete protection")
+
+	// Register completions
+	updateCmd.RegisterFlagCompletionFunc("instance-type", completion.CompleteDbInstanceType)
 }
