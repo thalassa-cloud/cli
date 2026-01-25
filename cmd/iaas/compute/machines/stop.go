@@ -20,7 +20,7 @@ var stopCmd = &cobra.Command{
 	Short:   "Stop a machine",
 	Long:    "Stop a machine to stop it from running. This command will stop the machine and all the services associated with it.",
 	Aliases: []string{"s", "stop"},
-	Args:    cobra.NoArgs,
+	Args:    cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		client, err := thalassaclient.GetThalassaClient()

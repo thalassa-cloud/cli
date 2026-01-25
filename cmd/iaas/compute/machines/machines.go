@@ -7,7 +7,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
 )
 
@@ -23,10 +22,6 @@ func init() {
 }
 
 func getSelectedMachine(args []string) (string, error) {
-	if contextstate.OrganisationFlag != "" {
-		return contextstate.OrganisationFlag, nil
-	}
-
 	if len(args) == 0 && fzf.IsInteractiveMode(os.Stdout) {
 		command := fmt.Sprintf("%s compute machines ls --no-header", os.Args[0])
 		return fzf.InteractiveChoice(command)

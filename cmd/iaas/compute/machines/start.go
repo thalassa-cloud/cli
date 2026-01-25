@@ -16,7 +16,7 @@ var startCmd = &cobra.Command{
 	Short:   "Start a machine",
 	Long:    "Start a machine to start it from stopped state. This command will start the machine and all the services associated with it.",
 	Aliases: []string{"s", "start"},
-	Args:    cobra.NoArgs,
+	Args:    cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		client, err := thalassaclient.GetThalassaClient()

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -134,4 +135,8 @@ func init() {
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	listCmd.Flags().StringVar(&cluster, ClusterFlag, "", "Cluster ID")
 	listCmd.Flags().StringVar(&vpc, VpcFlag, "", "VPC ID")
+
+	// Register completions
+	listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
+	listCmd.RegisterFlagCompletionFunc(VpcFlag, completion.CompleteVPCID)
 }

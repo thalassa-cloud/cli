@@ -1,14 +1,18 @@
 package subnets
 
 import (
+	"context"
 	"fmt"
+	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
-	"github.com/thalassa-cloud/client-go/pkg/client"
 )
 
 const (
@@ -23,6 +27,7 @@ const (
 
 var (
 	createSubnetValues = iaas.CreateSubnet{}
+	createSubnetWait   bool
 )
 
 // getCmd represents the get command
@@ -46,26 +51,9 @@ var createCmd = &cobra.Command{
 			return fmt.Errorf("cidr is required")
 		}
 
-		vpc, err := tcclient.IaaS().GetVpc(cmd.Context(), createSubnetValues.VpcIdentity)
+		vpc, err := iaasutil.GetVPCByIdentitySlugOrName(cmd.Context(), tcclient.IaaS(), createSubnetValues.VpcIdentity)
 		if err != nil {
-			if client.IsNotFound(err) {
-				vpcs, err := tcclient.IaaS().ListVpcs(cmd.Context(), &iaas.ListVpcsRequest{})
-				if err != nil {
-					return err
-				}
-				for _, v := range vpcs {
-					if v.Slug == createSubnetValues.VpcIdentity {
-						createSubnetValues.VpcIdentity = v.Identity
-						vpc = &v
-						break
-					}
-				}
-				if vpc == nil {
-					return fmt.Errorf("vpc not found")
-				}
-			} else {
-				return err
-			}
+			return err
 		}
 		createSubnetValues.VpcIdentity = vpc.Identity
 
@@ -73,6 +61,36 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+
+		if createSubnetWait {
+			ctxWithTimeout, cancel := context.WithTimeout(cmd.Context(), 10*time.Minute)
+			defer cancel()
+
+			fmt.Println("Waiting for subnet to be ready...")
+			for {
+				subnet, err = tcclient.IaaS().GetSubnet(ctxWithTimeout, subnet.Identity)
+				if err != nil {
+					return fmt.Errorf("failed to get subnet: %w", err)
+				}
+				// Subnet is ready when status is "ready" or "available"
+				status := string(subnet.Status)
+				if strings.EqualFold(status, "ready") || strings.EqualFold(status, "available") {
+					break
+				}
+				// Check for failed state
+				if strings.EqualFold(status, "failed") || strings.EqualFold(status, "error") {
+					return fmt.Errorf("subnet creation failed with status: %s", status)
+				}
+				select {
+				case <-ctxWithTimeout.Done():
+					return fmt.Errorf("timeout waiting for subnet %s to be ready (current status: %s)", subnet.Identity, status)
+				case <-time.After(2 * time.Second):
+					// Continue polling
+				}
+			}
+			fmt.Println("Subnet is ready")
+		}
+
 		body := make([][]string, 0, 1)
 		body = append(body, []string{
 			subnet.Identity,
@@ -97,4 +115,8 @@ func init() {
 	createCmd.Flags().StringVar(&createSubnetValues.Description, CreateFlagDescription, "", "Description of the subnet")
 	createCmd.Flags().StringVar(&createSubnetValues.VpcIdentity, CreateFlagVpc, "", "VPC of the subnet")
 	createCmd.Flags().StringVar(&createSubnetValues.Cidr, CreateFlagCIDR, "", "CIDR of the subnet")
+	createCmd.Flags().BoolVar(&createSubnetWait, "wait", false, "Wait for the subnet to be ready before returning")
+
+	// Register completions
+	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }

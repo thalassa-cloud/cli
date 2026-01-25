@@ -1,12 +1,15 @@
 package vpcs
 
 import (
+	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 
@@ -25,6 +28,7 @@ const (
 
 var (
 	createVpcValues = iaas.CreateVpc{}
+	createVpcWait  bool
 )
 
 // getCmd represents the get command
@@ -50,7 +54,11 @@ var createCmd = &cobra.Command{
 			return fmt.Errorf("cidrs is required")
 		}
 
-		region, err := client.IaaS().GetRegion(cmd.Context(), createVpcValues.CloudRegionIdentity)
+		regions, err := client.IaaS().ListRegions(cmd.Context(), &iaas.ListRegionsRequest{})
+		if err != nil {
+			return err
+		}
+		region, err := iaasutil.FindRegionByIdentitySlugOrNameWithError(regions, createVpcValues.CloudRegionIdentity)
 		if err != nil {
 			return err
 		}
@@ -60,6 +68,35 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+
+		if createVpcWait {
+			ctxWithTimeout, cancel := context.WithTimeout(cmd.Context(), 10*time.Minute)
+			defer cancel()
+
+			fmt.Println("Waiting for VPC to be ready...")
+			for {
+				vpc, err = client.IaaS().GetVpc(ctxWithTimeout, vpc.Identity)
+				if err != nil {
+					return fmt.Errorf("failed to get vpc: %w", err)
+				}
+				// VPC is ready when status is "ready" or "available"
+				if strings.EqualFold(vpc.Status, "ready") || strings.EqualFold(vpc.Status, "available") {
+					break
+				}
+				// Check for failed state
+				if strings.EqualFold(vpc.Status, "failed") || strings.EqualFold(vpc.Status, "error") {
+					return fmt.Errorf("vpc creation failed with status: %s", vpc.Status)
+				}
+				select {
+				case <-ctxWithTimeout.Done():
+					return fmt.Errorf("timeout waiting for vpc %s to be ready (current status: %s)", vpc.Identity, vpc.Status)
+				case <-time.After(2 * time.Second):
+					// Continue polling
+				}
+			}
+			fmt.Println("VPC is ready")
+		}
+
 		body := make([][]string, 0, 1)
 		body = append(body, []string{
 			vpc.Identity,
@@ -85,6 +122,7 @@ func init() {
 	createCmd.Flags().StringVar(&createVpcValues.Description, CreateFlagDescription, "", "Description of the vpc")
 	createCmd.Flags().StringVar(&createVpcValues.CloudRegionIdentity, CreateFlagRegion, "", "Region of the vpc")
 	createCmd.Flags().StringSliceVar(&createVpcValues.VpcCidrs, CreateFlagCIDRs, []string{"10.0.0.0/16"}, "CIDRs of the vpc")
+	createCmd.Flags().BoolVar(&createVpcWait, "wait", false, "Wait for the VPC to be ready before returning")
 	// createCmd.Flags().StringSliceVar(&createVpcValues.Labels, CreateFlagLabels, []string{}, "Labels of the vpc")
 	// createCmd.Flags().StringSliceVar(&createVpcValues.Annotations, CreateFlagAnnotations, []string{}, "Annotations of the vpc")
 }

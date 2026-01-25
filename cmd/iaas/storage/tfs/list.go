@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
@@ -23,6 +24,9 @@ var (
 	showExactTime     bool
 	showLabels        bool
 	listLabelSelector string
+	listRegionFilter  string
+	listVpcFilter     string
+	listStatusFilter  string
 )
 
 // listCmd represents the list command
@@ -41,6 +45,24 @@ var listCmd = &cobra.Command{
 		if listLabelSelector != "" {
 			f = append(f, &filters.LabelFilter{
 				MatchLabels: labels.ParseLabelSelector(listLabelSelector),
+			})
+		}
+		if listRegionFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "region",
+				Value: listRegionFilter,
+			})
+		}
+		if listVpcFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "vpc",
+				Value: listVpcFilter,
+			})
+		}
+		if listStatusFilter != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "status",
+				Value: listStatusFilter,
 			})
 		}
 
@@ -101,4 +123,11 @@ func init() {
 	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show exact time instead of relative time")
 	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
 	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter TFS instances (format: key1=value1,key2=value2)")
+	listCmd.Flags().StringVar(&listRegionFilter, "region", "", "Region of the TFS instance")
+	listCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "VPC of the TFS instance")
+	listCmd.Flags().StringVar(&listStatusFilter, "status", "", "Status of the TFS instance")
+
+	// Register completions
+	listCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	listCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }

@@ -25,7 +25,7 @@ var deleteCmd = &cobra.Command{
 	Long:    "Delete machine(s) by identity or label selector. This command will delete the machine(s) and all the services associated with it.",
 	Example: "tcloud compute machines delete vm-123\ntcloud compute machines delete vm-123 vm-456 --wait\ntcloud compute machines delete --selector environment=test --force",
 	Aliases: []string{"d", "del", "remove"},
-	Args:    cobra.MinimumNArgs(0),
+	Args:    cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 && labelSelector == "" {
 			// Try interactive selection if no args and no selector

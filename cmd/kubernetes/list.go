@@ -5,18 +5,25 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 )
 
 const NoHeaderKey = "no-header"
 
+const (
+	VpcFlag = "vpc"
+)
+
 var noHeader bool
 
 var (
 	showExactTime bool
+	vpc           string
 )
 
 // listCmd represents the get command
@@ -31,7 +38,16 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create client: %w", err)
 		}
-		clusters, err := client.Kubernetes().ListKubernetesClusters(cmd.Context(), &kubernetes.ListKubernetesClustersRequest{})
+		f := []filters.Filter{}
+		if vpc != "" {
+			f = append(f, &filters.FilterKeyValue{
+				Key:   "vpc",
+				Value: vpc,
+			})
+		}
+		clusters, err := client.Kubernetes().ListKubernetesClusters(cmd.Context(), &kubernetes.ListKubernetesClustersRequest{
+			Filters: f,
+		})
 		if err != nil {
 			return err
 		}
@@ -68,5 +84,9 @@ var listCmd = &cobra.Command{
 
 func init() {
 	KubernetesCmd.AddCommand(listCmd)
+
+	// flags
+	listCmd.Flags().StringVar(&vpc, VpcFlag, "", "VPC ID")
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
+	listCmd.RegisterFlagCompletionFunc(VpcFlag, completion.CompleteVPCID)
 }

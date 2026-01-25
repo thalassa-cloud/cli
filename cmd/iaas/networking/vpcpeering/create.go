@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -165,6 +166,10 @@ func init() {
 	createCmd.Flags().BoolVar(&createAutoAccept, CreateFlagAutoAccept, false, "Automatically accept the peering connection (only if requester and accepter are in same region and organisation)")
 	createCmd.Flags().StringSliceVar(&createLabels, CreateFlagLabels, []string{}, "Labels in key=value format")
 	createCmd.Flags().StringSliceVar(&createAnnotations, CreateFlagAnnotations, []string{}, "Annotations in key=value format")
+
+	// Register completions
+	createCmd.RegisterFlagCompletionFunc("requester-vpc", completion.CompleteVPCID)
+	createCmd.RegisterFlagCompletionFunc("accepter-vpc", completion.CompleteVPCID)
 
 	createCmd.MarkFlagRequired(CreateFlagName)
 	createCmd.MarkFlagRequired(CreateFlagRequesterVpc)

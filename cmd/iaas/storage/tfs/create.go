@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -170,6 +171,10 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createTfsAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	createCmd.Flags().BoolVar(&createTfsDeleteProtection, "delete-protection", false, "Enable delete protection")
 	createCmd.Flags().BoolVar(&createTfsWait, "wait", false, "Wait for the TFS instance to be available before returning")
+
+	// Register completions
+	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
 
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("region")

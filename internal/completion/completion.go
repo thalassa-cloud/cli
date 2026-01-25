@@ -2,6 +2,7 @@ package completion
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -326,6 +327,112 @@ func CompleteKubernetesVersion(cmd *cobra.Command, args []string, toComplete str
 		completions = append(completions, v.Identity+"\t"+v.Name)
 		if v.Slug != "" {
 			completions = append(completions, v.Slug+"\t"+v.Name)
+		}
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteDbEngineVersion provides completion for DBaaS engine versions
+// It requires the --engine flag to be set to determine which engine versions to return
+func CompleteDbEngineVersion(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	// Get the engine flag value
+	engineFlag, err := cmd.Flags().GetString("engine")
+	if err != nil || engineFlag == "" {
+		// If engine is not set, return empty (user needs to set engine first)
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	// Parse the engine type
+	engine := dbaas.DbClusterDatabaseEngine(engineFlag)
+
+	versions, err := client.DBaaS().ListEngineVersions(cmd.Context(), engine, &dbaas.ListEngineVersionsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0)
+	for _, v := range versions {
+		desc := fmt.Sprintf("%s (%d.%d)", v.EngineVersion, v.MajorVersion, v.MinorVersion)
+		completions = append(completions, v.Identity+"\t"+desc)
+		completions = append(completions, v.EngineVersion+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteDbInstanceType provides completion for DBaaS instance types
+func CompleteDbInstanceType(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	instanceTypes, err := client.DBaaS().ListDatabaseInstanceTypes(cmd.Context(), &dbaas.ListDatabaseInstanceTypesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0)
+	for _, it := range instanceTypes {
+		desc := fmt.Sprintf("%d vCPU, %d GB RAM (%s)", it.Cpus, it.Memory, it.CategorySlug)
+		completions = append(completions, it.Identity+"\t"+desc)
+		completions = append(completions, it.Name+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteKubernetesNodePool provides completion for Kubernetes node pools
+// It requires the --cluster flag to be set to determine which node pools to return
+func CompleteKubernetesNodePool(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	// Get the cluster flag value
+	clusterFlag, err := cmd.Flags().GetString("cluster")
+	if err != nil || clusterFlag == "" {
+		// If cluster is not set, return empty (user needs to set cluster first)
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	// Resolve cluster by identity, name, or slug
+	clusters, err := client.Kubernetes().ListKubernetesClusters(cmd.Context(), &kubernetes.ListKubernetesClustersRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	var cluster *kubernetes.KubernetesCluster
+	for _, c := range clusters {
+		if strings.EqualFold(c.Identity, clusterFlag) || strings.EqualFold(c.Name, clusterFlag) || strings.EqualFold(c.Slug, clusterFlag) {
+			cluster = &c
+			break
+		}
+	}
+
+	if cluster == nil {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	// List node pools for the cluster
+	nodePools, err := client.Kubernetes().ListKubernetesNodePools(cmd.Context(), cluster.Identity, &kubernetes.ListKubernetesNodePoolsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0)
+	for _, np := range nodePools {
+		desc := fmt.Sprintf("%s (%s)", np.Name, np.Status)
+		completions = append(completions, np.Identity+"\t"+desc)
+		if np.Name != "" && np.Name != np.Identity {
+			completions = append(completions, np.Name+"\t"+desc)
+		}
+		if np.Slug != "" && np.Slug != np.Identity && np.Slug != np.Name {
+			completions = append(completions, np.Slug+"\t"+desc)
 		}
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
