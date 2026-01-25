@@ -147,4 +147,9 @@ func init() {
 	tokenExchangeCmd.Flags().StringVar(&organisationIDFlag, "organisation-id", "", "Organisation ID (can also be set via context)")
 	tokenExchangeCmd.Flags().StringVar(&serviceAccountIDFlag, "service-account-id", "", "Service account ID (can also be set via THALASSA_SERVICE_ACCOUNT_ID env var)")
 	tokenExchangeCmd.Flags().StringVar(&accessTokenLifetimeFlag, "access-token-lifetime", "1h", "Access token lifetime (min: 1m, max: 24h, default: 1h)")
+
+	// mark required flags
+	_ = tokenExchangeCmd.MarkFlagRequired("subject-token")
+	_ = tokenExchangeCmd.MarkFlagRequired("organisation-id")
+	_ = tokenExchangeCmd.MarkFlagRequired("service-account-id")
 }
