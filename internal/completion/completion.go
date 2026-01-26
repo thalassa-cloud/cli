@@ -233,6 +233,36 @@ func CompleteDbClusterID(cmd *cobra.Command, args []string, toComplete string) (
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
+// CompleteDbBackupID provides completion for DBaaS backup IDs
+func CompleteDbBackupID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	backups, err := client.DBaaS().ListDbBackupsForOrganisation(cmd.Context(), &dbaas.ListDbBackupsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	var completions []string
+	for _, backup := range backups {
+		// Skip backups that are already in args to avoid duplicates
+		alreadyAdded := false
+		for _, arg := range args {
+			if arg == backup.Identity {
+				alreadyAdded = true
+				break
+			}
+		}
+		if !alreadyAdded {
+			completions = append(completions, backup.Identity)
+		}
+	}
+
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
 // CompleteOutputFormat provides completion for output format options
 func CompleteOutputFormat(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	return []string{"yaml"}, cobra.ShellCompDirectiveNoFileComp
