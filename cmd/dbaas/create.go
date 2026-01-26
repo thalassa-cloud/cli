@@ -17,28 +17,31 @@ import (
 )
 
 var (
-	createClusterName             string
-	createClusterDescription      string
-	createClusterEngine           string
-	createClusterEngineVersion    string
-	createClusterInstanceType     string
-	createClusterVpc              string
-	createClusterSubnet           string
-	createClusterStorage          int
-	createclusterVolumeType       string
-	createClusterReplicas         int
-	createClusterLabels           []string
-	createClusterAnnotations      []string
-	createClusterDeleteProtection bool
-	createClusterWait             bool
+	createClusterName                                 string
+	createClusterDescription                          string
+	createClusterEngine                               string
+	createClusterEngineVersion                        string
+	createClusterInstanceType                         string
+	createClusterVpc                                  string
+	createClusterSubnet                               string
+	createClusterStorage                              int
+	createclusterVolumeType                           string
+	createClusterReplicas                             int
+	createClusterLabels                               []string
+	createClusterAnnotations                          []string
+	createClusterDeleteProtection                     bool
+	createClusterWait                                 bool
+	createClusterProvisionDbBackupObjectStorageBucket bool
+	createClusterDbBackupObjectStorageId              string
 )
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "Create a database cluster",
-	Long:  "Create a new database cluster in the Thalassa Cloud Platform.",
-	Args:  cobra.NoArgs,
+	Use:     "create",
+	Aliases: []string{"create-cluster", "cluster-create"},
+	Short:   "Create a database cluster",
+	Long:    "Create a new database cluster in the Thalassa Cloud Platform.",
+	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
@@ -104,6 +107,8 @@ var createCmd = &cobra.Command{
 			parts := strings.SplitN(label, "=", 2)
 			if len(parts) == 2 {
 				labels[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1])
+			} else {
+				labels[label] = ""
 			}
 		}
 
@@ -113,6 +118,8 @@ var createCmd = &cobra.Command{
 			parts := strings.SplitN(annotation, "=", 2)
 			if len(parts) == 2 {
 				annotations[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1])
+			} else {
+				annotations[annotation] = ""
 			}
 		}
 
@@ -128,6 +135,10 @@ var createCmd = &cobra.Command{
 			Labels:                       labels,
 			Annotations:                  annotations,
 			DeleteProtection:             createClusterDeleteProtection,
+			ProvisionDbObjectStore:       createClusterProvisionDbBackupObjectStorageBucket,
+		}
+		if createClusterDbBackupObjectStorageId != "" { // todo; ensure this exists
+			req.DbObjectStoreIdentity = &createClusterDbBackupObjectStorageId
 		}
 
 		if createClusterReplicas > 0 {
@@ -222,6 +233,8 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createClusterAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	createCmd.Flags().BoolVar(&createClusterDeleteProtection, "delete-protection", false, "Enable delete protection")
 	createCmd.Flags().BoolVar(&createClusterWait, "wait", false, "Wait for the database cluster to be available before returning")
+	createCmd.Flags().BoolVar(&createClusterProvisionDbBackupObjectStorageBucket, "with-backup-bucket", false, "Provision a backup object storage bucket for the database cluster")
+	createCmd.Flags().StringVar(&createClusterDbBackupObjectStorageId, "backup-object-storage-id", "", "Backup object storage ID (enables backup storage, requires --with-backup-bucket=false)")
 
 	// Register completions
 	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
