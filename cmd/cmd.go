@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/cmd/api"
 	"github.com/thalassa-cloud/cli/cmd/audit"
 	"github.com/thalassa-cloud/cli/cmd/context"
 	"github.com/thalassa-cloud/cli/cmd/dbaas"
@@ -54,6 +55,7 @@ func init() {
 	// Register completions
 	RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
 
+	RootCmd.AddCommand(api.ApiCmd)
 	RootCmd.AddCommand(context.ContextCmd)
 	RootCmd.AddCommand(version.VersionCmd)
 
