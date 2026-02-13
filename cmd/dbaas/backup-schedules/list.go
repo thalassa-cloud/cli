@@ -45,7 +45,7 @@ var backupScheduleListCmd = &cobra.Command{
 		// If cluster identity is provided as argument, list schedules for that cluster
 		if len(args) > 0 {
 			clusterIdentity := args[0]
-			schedules, err = client.DBaaS().ListDbBackupSchedules(cmd.Context(), clusterIdentity)
+			schedules, err = client.DBaaS().ListDbBackupSchedules(cmd.Context(), clusterIdentity, &dbaas.ListDbBackupSchedulesRequest{})
 			if err != nil {
 				return fmt.Errorf("failed to list backup schedules for cluster: %w", err)
 			}
