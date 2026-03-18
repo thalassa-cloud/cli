@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
 var (
@@ -65,9 +66,29 @@ var createCmd = &cobra.Command{
 		var err error
 		organisation := contextstate.Organisation()
 		if organisation == "" {
-			organisation, err = getSelectedOrganisation([]string{})
-			if err != nil {
-				return fmt.Errorf("failed to get selected organisation: %w", err)
+			fmt.Printf("No organisation provided, resolving organisation...\n")
+			client, cerr := thalassaclient.GetThalassaClient()
+			if cerr != nil {
+				return fmt.Errorf("cannot resolve organisation: %w", cerr)
+			}
+			orgs, lerr := client.Me().ListMyOrganisations(ctx)
+			if lerr != nil {
+				return fmt.Errorf("failed to list organisations: %w", lerr)
+			}
+			switch len(orgs) {
+			case 0:
+				return errors.New("no organisations associated with your account; use --organisation <slug> once you have access, or ask to be invited to an organisation")
+			case 1:
+				organisation = orgs[0].Slug
+				if organisation == "" {
+					organisation = orgs[0].Identity
+				}
+				fmt.Printf("Found 1 organisation, using %s\n", organisation)
+			default:
+				organisation, err = getSelectedOrganisation([]string{})
+				if err != nil {
+					return fmt.Errorf("failed to get selected organisation: %w", err)
+				}
 			}
 		}
 
