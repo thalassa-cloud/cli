@@ -3,7 +3,7 @@ linkTitle: "tcloud compute machines list"
 title: "compute machines list"
 slug: tcloud_compute_machines_list
 url: /docs/tcloud/compute/machines_list/
-weight: 9994
+weight: 9992
 cascade:
   type: docs
 ---
@@ -21,9 +21,12 @@ tcloud compute machines list [flags]
   -h, --help              help for list
       --no-header         Do not print the header
   -o, --output string     Output format. One of: wide
+      --region string     Region of the machine
   -l, --selector string   Label selector to filter machines (format: key1=value1,key2=value2)
       --show-exact-time   Show exact time instead of relative time
       --show-labels       Show labels associated with machines
+      --status string     Status of the machine
+      --vpc string        VPC of the machine
 ```
 
 ### Options inherited from parent commands

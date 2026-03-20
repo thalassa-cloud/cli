@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes update"
 title: "kubernetes update"
 slug: tcloud_kubernetes_update
 url: /docs/tcloud/kubernetes/update/
-weight: 9960
+weight: 9890
 cascade:
   type: docs
 ---

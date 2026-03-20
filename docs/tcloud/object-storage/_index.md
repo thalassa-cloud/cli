@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage"
 title: "object-storage"
 slug: tcloud_object-storage
 url: /docs/tcloud/tcloud_object-storage/
-weight: 9923
+weight: 9853
 cascade:
   type: docs
 ---

@@ -3,7 +3,7 @@ linkTitle: "tcloud compute machines delete"
 title: "compute machines delete"
 slug: tcloud_compute_machines_delete
 url: /docs/tcloud/compute/machines_delete/
-weight: 9995
+weight: 9993
 cascade:
   type: docs
 ---

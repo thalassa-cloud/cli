@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools delete"
 title: "kubernetes nodepools delete"
 slug: tcloud_kubernetes_nodepools_delete
 url: /docs/tcloud/kubernetes/nodepools_delete/
-weight: 9965
+weight: 9895
 cascade:
   type: docs
 ---
@@ -20,13 +20,13 @@ The cluster must be in a ready state to delete node pools.
 
 Examples:
   # Delete a node pool
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool
 
   # Delete a node pool and wait for completion
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool --wait
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --wait
 
   # Delete a node pool without confirmation
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool --force
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --force
 
 ```
 tcloud kubernetes nodepools delete [flags]
@@ -35,11 +35,11 @@ tcloud kubernetes nodepools delete [flags]
 ### Options
 
 ```
-      --cluster string   Cluster identity, name, or slug (required)
-      --force            Skip confirmation prompt
-  -h, --help             help for delete
-      --name string      Node pool name, identity, or slug (required)
-      --wait             Wait for the node pool to be deleted before returning
+      --cluster string    Cluster identity, name, or slug (required)
+      --force             Skip confirmation prompt
+  -h, --help              help for delete
+      --nodepool string   Node pool name, identity, or slug (required)
+      --wait              Wait for the node pool to be deleted before returning
 ```
 
 ### Options inherited from parent commands

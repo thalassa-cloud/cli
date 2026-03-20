@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpc-peering delete"
 title: "networking vpc-peering delete"
 slug: tcloud_networking_vpc-peering_delete
 url: /docs/tcloud/networking/vpc-peering_delete/
-weight: 9937
+weight: 9867
 cascade:
   type: docs
 ---

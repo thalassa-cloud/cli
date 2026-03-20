@@ -3,7 +3,7 @@ linkTitle: "tcloud compute machine-images"
 title: "compute machine-images"
 slug: tcloud_compute_machine-images
 url: /docs/tcloud/compute/machine-images/
-weight: 9997
+weight: 9995
 cascade:
   type: docs
 ---
@@ -28,10 +28,11 @@ thalassa compute machine-images
 ### Options
 
 ```
-  -h, --help            help for machine-images
-      --no-header       Do not print the header
-  -o, --output string   Output format. One of: wide
-      --show-labels     Show labels associated with machines
+  -h, --help              help for machine-images
+      --no-header         Do not print the header
+  -o, --output string     Output format. One of: wide
+  -l, --selector string   Label selector to filter machine images (format: key1=value1,key2=value2)
+      --show-labels       Show labels associated with machines
 ```
 
 ### Options inherited from parent commands

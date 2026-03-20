@@ -3,7 +3,7 @@ linkTitle: "tcloud context current"
 title: "context current"
 slug: tcloud_context_current
 url: /docs/tcloud/context/current/
-weight: 9988
+weight: 9986
 cascade:
   type: docs
 ---

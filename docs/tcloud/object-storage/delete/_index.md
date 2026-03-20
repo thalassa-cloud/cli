@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage delete"
 title: "object-storage delete"
 slug: tcloud_object-storage_delete
 url: /docs/tcloud/object-storage/delete/
-weight: 9926
+weight: 9856
 cascade:
   type: docs
 ---

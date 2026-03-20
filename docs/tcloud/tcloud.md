@@ -3,7 +3,7 @@ linkTitle: "tcloud"
 title: "tcloud"
 slug: tcloud
 url: /docs/tcloud/tcloud/
-weight: 9905
+weight: 9829
 cascade:
   type: docs
 ---
@@ -27,10 +27,12 @@ A CLI for working with the Thalassa Cloud Platform
 
 ### SEE ALSO
 
+* [tcloud api](/docs/tcloud/tcloud_api/)	 - Direct API access
 * [tcloud audit](/docs/tcloud/tcloud_audit/)	 - Manage organisation audit logs
 * [tcloud compute](/docs/tcloud/tcloud_compute/)	 - Manage compute resources
 * [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 * [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
+* [tcloud iam](/docs/tcloud/tcloud_iam/)	 - Identity and access management for your organisation
 * [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
 * [tcloud me](/docs/tcloud/tcloud_me/)	 - Get information about the current user
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources

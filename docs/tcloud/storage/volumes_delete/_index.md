@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes delete"
 title: "storage volumes delete"
 slug: tcloud_storage_volumes_delete
 url: /docs/tcloud/storage/volumes_delete/
-weight: 9912
+weight: 9836
 cascade:
   type: docs
 ---

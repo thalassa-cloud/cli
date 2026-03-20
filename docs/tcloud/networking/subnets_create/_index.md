@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets create"
 title: "networking subnets create"
 slug: tcloud_networking_subnets_create
 url: /docs/tcloud/networking/subnets_create/
-weight: 9943
+weight: 9873
 cascade:
   type: docs
 ---
@@ -24,6 +24,7 @@ tcloud networking subnets create [flags]
       --name string          Name of the subnet
       --no-header            Do not print the header
       --vpc string           VPC of the subnet
+      --wait                 Wait for the subnet to be ready before returning
 ```
 
 ### Options inherited from parent commands

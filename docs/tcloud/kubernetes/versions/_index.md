@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes versions"
 title: "kubernetes versions"
 slug: tcloud_kubernetes_versions
 url: /docs/tcloud/kubernetes/versions/
-weight: 9958
+weight: 9888
 cascade:
   type: docs
 ---

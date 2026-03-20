@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpcs create"
 title: "networking vpcs create"
 slug: tcloud_networking_vpcs_create
 url: /docs/tcloud/networking/vpcs_create/
-weight: 9932
+weight: 9862
 cascade:
   type: docs
 ---
@@ -24,6 +24,7 @@ tcloud networking vpcs create [flags]
       --name string          Name of the vpc
       --no-header            Do not print the header
       --region string        Region of the vpc
+      --wait                 Wait for the VPC to be ready before returning
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes create"
 title: "kubernetes create"
 slug: tcloud_kubernetes_create
 url: /docs/tcloud/kubernetes/create/
-weight: 9972
+weight: 9902
 cascade:
   type: docs
 ---

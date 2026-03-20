@@ -3,7 +3,7 @@ linkTitle: "tcloud context delete"
 title: "context delete"
 slug: tcloud_context_delete
 url: /docs/tcloud/context/delete/
-weight: 9987
+weight: 9985
 cascade:
   type: docs
 ---
