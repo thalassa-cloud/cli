@@ -364,7 +364,6 @@ Examples:
 			}
 		}
 
-		// Output in table format like IaaS commands
 		vpcName := ""
 		if cluster.VPC != nil {
 			vpcName = cluster.VPC.Name
@@ -487,7 +486,6 @@ func createNodePool(ctx context.Context, client thalassa.Client, cluster *kubern
 			}
 		}
 
-		// Output in table format like IaaS commands
 		replicas := formatReplicas(nodePool)
 		body := [][]string{
 			{

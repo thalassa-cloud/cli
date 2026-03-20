@@ -222,7 +222,6 @@ to manage labels and annotations separately.`,
 			}
 		}
 
-		// Output in table format like IaaS commands
 		vpcName := ""
 		if updatedCluster.VPC != nil {
 			vpcName = updatedCluster.VPC.Name

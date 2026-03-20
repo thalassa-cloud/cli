@@ -257,7 +257,6 @@ to manage labels and annotations separately.`,
 			}
 		}
 
-		// Output in table format like IaaS commands
 		replicas := formatReplicasForUpdate(updatedNodePool)
 		body := [][]string{
 			{
