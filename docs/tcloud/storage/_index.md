@@ -3,7 +3,7 @@ linkTitle: "tcloud storage"
 title: "storage"
 slug: tcloud_storage
 url: /docs/tcloud/tcloud_storage/
-weight: 9907
+weight: 9831
 cascade:
   type: docs
 ---
@@ -34,5 +34,6 @@ Manage storage resources
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
 * [tcloud storage snapshots](/docs/tcloud/storage/snapshots/)	 - Manage volume snapshots
+* [tcloud storage tfs](/docs/tcloud/storage/tfs/)	 - Manage TFS (Thalassa File System) instances
 * [tcloud storage volumes](/docs/tcloud/storage/volumes/)	 - Manage storage volumes
 

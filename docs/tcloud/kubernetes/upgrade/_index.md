@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes upgrade"
 title: "kubernetes upgrade"
 slug: tcloud_kubernetes_upgrade
 url: /docs/tcloud/kubernetes/upgrade/
-weight: 9959
+weight: 9889
 cascade:
   type: docs
 ---

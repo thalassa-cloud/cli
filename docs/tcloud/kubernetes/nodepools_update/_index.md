@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools update"
 title: "kubernetes nodepools update"
 slug: tcloud_kubernetes_nodepools_update
 url: /docs/tcloud/kubernetes/nodepools_update/
-weight: 9963
+weight: 9893
 cascade:
   type: docs
 ---

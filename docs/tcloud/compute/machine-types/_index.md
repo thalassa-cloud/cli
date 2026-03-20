@@ -3,7 +3,7 @@ linkTitle: "tcloud compute machine-types"
 title: "compute machine-types"
 slug: tcloud_compute_machine-types
 url: /docs/tcloud/compute/machine-types/
-weight: 9996
+weight: 9994
 cascade:
   type: docs
 ---

@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes delete"
 title: "kubernetes delete"
 slug: tcloud_kubernetes_delete
 url: /docs/tcloud/kubernetes/delete/
-weight: 9970
+weight: 9900
 cascade:
   type: docs
 ---

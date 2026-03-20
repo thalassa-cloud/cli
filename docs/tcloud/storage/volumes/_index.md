@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes"
 title: "storage volumes"
 slug: tcloud_storage_volumes
 url: /docs/tcloud/storage/volumes/
-weight: 9908
+weight: 9832
 cascade:
   type: docs
 ---

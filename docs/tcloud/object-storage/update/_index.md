@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage update"
 title: "object-storage update"
 slug: tcloud_object-storage_update
 url: /docs/tcloud/object-storage/update/
-weight: 9924
+weight: 9854
 cascade:
   type: docs
 ---

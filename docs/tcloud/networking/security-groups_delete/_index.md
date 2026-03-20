@@ -3,7 +3,7 @@ linkTitle: "tcloud networking security-groups delete"
 title: "networking security-groups delete"
 slug: tcloud_networking_security-groups_delete
 url: /docs/tcloud/networking/security-groups_delete/
-weight: 9947
+weight: 9877
 cascade:
   type: docs
 ---

@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas"
 title: "dbaas"
 slug: tcloud_dbaas
 url: /docs/tcloud/tcloud_dbaas/
-weight: 9975
+weight: 9957
 cascade:
   type: docs
 ---
@@ -45,7 +45,13 @@ tcloud dbaas versions --engine postgres
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud dbaas backup](/docs/tcloud/dbaas/backup/)	 - Manage database backups
+* [tcloud dbaas backup-schedules](/docs/tcloud/dbaas/backup-schedules/)	 - Manage database backup schedules
+* [tcloud dbaas create](/docs/tcloud/dbaas/create/)	 - Create a database cluster
+* [tcloud dbaas delete](/docs/tcloud/dbaas/delete/)	 - Delete database cluster(s)
 * [tcloud dbaas instance-types](/docs/tcloud/dbaas/instance-types/)	 - Get a list of database instance types
 * [tcloud dbaas list](/docs/tcloud/dbaas/list/)	 - Get a list of database clusters
+* [tcloud dbaas update](/docs/tcloud/dbaas/update/)	 - Update a database cluster
 * [tcloud dbaas versions](/docs/tcloud/dbaas/versions/)	 - Get a list of database engine versions
+* [tcloud dbaas view](/docs/tcloud/dbaas/view/)	 - View database cluster details
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools create"
 title: "kubernetes nodepools create"
 slug: tcloud_kubernetes_nodepools_create
 url: /docs/tcloud/kubernetes/nodepools_create/
-weight: 9966
+weight: 9896
 cascade:
   type: docs
 ---

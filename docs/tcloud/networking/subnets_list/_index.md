@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets list"
 title: "networking subnets list"
 slug: tcloud_networking_subnets_list
 url: /docs/tcloud/networking/subnets_list/
-weight: 9941
+weight: 9871
 cascade:
   type: docs
 ---
@@ -22,6 +22,7 @@ tcloud networking subnets list [flags]
       --no-header         Do not print the header
   -l, --selector string   Label selector to filter subnets (format: key1=value1,key2=value2)
       --show-labels       Show labels
+      --vpc string        Filter by VPC
 ```
 
 ### Options inherited from parent commands

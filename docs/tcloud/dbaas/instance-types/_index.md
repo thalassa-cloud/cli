@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas instance-types"
 title: "dbaas instance-types"
 slug: tcloud_dbaas_instance-types
 url: /docs/tcloud/dbaas/instance-types/
-weight: 9978
+weight: 9962
 cascade:
   type: docs
 ---

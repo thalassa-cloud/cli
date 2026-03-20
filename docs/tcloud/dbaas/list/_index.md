@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas list"
 title: "dbaas list"
 slug: tcloud_dbaas_list
 url: /docs/tcloud/dbaas/list/
-weight: 9977
+weight: 9961
 cascade:
   type: docs
 ---
@@ -30,9 +30,14 @@ tcloud dbaas list --exact-time
 ### Options
 
 ```
-      --exact-time   Show exact time instead of relative time
-  -h, --help         help for list
-      --no-header    Do not print the header
+      --engine string     Filter by database engine (e.g., postgres)
+      --exact-time        Show exact time instead of relative time
+  -h, --help              help for list
+      --no-header         Do not print the header
+  -l, --selector string   Label selector to filter clusters (format: key1=value1,key2=value2)
+      --show-labels       Show labels
+      --subnet string     Filter by subnet identity, slug, or name
+      --vpc string        Filter by VPC identity, slug, or name
 ```
 
 ### Options inherited from parent commands

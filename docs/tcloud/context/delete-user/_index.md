@@ -3,7 +3,7 @@ linkTitle: "tcloud context delete-user"
 title: "context delete-user"
 slug: tcloud_context_delete-user
 url: /docs/tcloud/context/delete-user/
-weight: 9985
+weight: 9983
 cascade:
   type: docs
 ---

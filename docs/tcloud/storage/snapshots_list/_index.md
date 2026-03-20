@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshots list"
 title: "storage snapshots list"
 slug: tcloud_storage_snapshots_list
 url: /docs/tcloud/storage/snapshots_list/
-weight: 9916
+weight: 9846
 cascade:
   type: docs
 ---
@@ -20,8 +20,11 @@ tcloud storage snapshots list [flags]
 ```
   -h, --help              help for list
       --no-header         Do not print the header
+      --region string     Region of the snapshot
   -l, --selector string   Label selector to filter snapshots (format: key1=value1,key2=value2)
       --show-labels       Show labels
+      --status string     Status of the snapshot
+      --volume string     Source volume of the snapshot
 ```
 
 ### Options inherited from parent commands

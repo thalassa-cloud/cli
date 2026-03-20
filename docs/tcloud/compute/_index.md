@@ -3,7 +3,7 @@ linkTitle: "tcloud compute"
 title: "compute"
 slug: tcloud_compute
 url: /docs/tcloud/tcloud_compute/
-weight: 9990
+weight: 9988
 cascade:
   type: docs
 ---

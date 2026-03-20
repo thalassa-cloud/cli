@@ -3,7 +3,7 @@ linkTitle: "tcloud regions"
 title: "regions"
 slug: tcloud_regions
 url: /docs/tcloud/tcloud_regions/
-weight: 9919
+weight: 9849
 cascade:
   type: docs
 ---

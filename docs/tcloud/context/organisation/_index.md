@@ -3,7 +3,7 @@ linkTitle: "tcloud context organisation"
 title: "context organisation"
 slug: tcloud_context_organisation
 url: /docs/tcloud/context/organisation/
-weight: 9982
+weight: 9980
 cascade:
   type: docs
 ---
