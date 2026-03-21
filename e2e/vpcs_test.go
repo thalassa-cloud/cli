@@ -45,12 +45,16 @@ func TestVPCsListNoHeader(t *testing.T) {
 
 	result.AssertSuccess(t)
 
-	// With --no-header, output should not contain headers
+	// With --no-header, the first row should be data, not the header line.
+	// Do not assert NotContains(output, "id"): VPC identities like vpc-… often contain "id" as a substring.
 	output := result.Stdout
-	outputLower := strings.ToLower(output)
-	assert.NotContains(t, outputLower, "id", "Output should not contain 'ID' header")
-	assert.NotContains(t, outputLower, "name", "Output should not contain 'Name' header")
-	assert.NotContains(t, outputLower, "status", "Output should not contain 'Status' header")
+	lines := strings.Split(strings.TrimSpace(output), "\n")
+	if len(lines) > 0 {
+		firstLine := strings.TrimSpace(lines[0])
+		if len(firstLine) > 0 {
+			assert.True(t, !strings.HasPrefix(strings.ToUpper(firstLine), "ID"), "First line should be data, not header row")
+		}
+	}
 }
 
 func TestVPCsListShowLabels(t *testing.T) {
