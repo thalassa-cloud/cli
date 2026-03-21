@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Run tests
         run: go test -v -p 1 $(go list ./... | grep -v 'e2e')
-      - uses: goreleaser/goreleaser-action@v5
+      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a # v6.4.0
         with:
           # either 'goreleaser' (default) or 'goreleaser-pro':
           distribution: goreleaser
