@@ -1,3 +1,4 @@
+version: 2
 
 project_name: tcloud
 
@@ -20,10 +21,26 @@ before:
     - ./scripts/shell-completions.sh
 
 archives:
-  - format: tar.gz
+  - formats: [tar.gz]
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
     files:
       - completions/*
+
+dockers_v2:
+  - ids: [tcloud]
+    dockerfile: Dockerfile
+    images:
+      - 'ghcr.io/thalassa-cloud/{{ .ProjectName }}'
+    tags:
+      - 'v{{ .Version }}'
+      - latest
+    labels:
+      org.opencontainers.image.version: '{{ .Version }}'
+      org.opencontainers.image.source: '{{ .GitURL }}'
+      org.opencontainers.image.title: '{{ .ProjectName }}'
+    platforms:
+      - linux/amd64
+      - linux/arm64
 
 release:
   draft: false
