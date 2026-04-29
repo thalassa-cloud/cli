@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/andanhm/go-prettytime v1.1.0
 	github.com/blang/semver/v4 v4.0.0
-	github.com/mattn/go-isatty v0.0.20
+	github.com/mattn/go-isatty v0.0.22
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.10.2
