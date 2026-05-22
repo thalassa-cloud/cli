@@ -2,10 +2,12 @@ package networking
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/cmd/iaas/networking/loadbalancers"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/natgateways"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/routetables"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/securitygroups"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/subnets"
+	"github.com/thalassa-cloud/cli/cmd/iaas/networking/targetgroups"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/vpcpeering"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/vpcs"
 )
@@ -23,6 +25,8 @@ func init() {
 	NetworkingCmd.AddCommand(subnets.SubnetsCmd)
 	NetworkingCmd.AddCommand(routetables.RouteTablesCmd)
 	NetworkingCmd.AddCommand(natgateways.NatGatewaysCmd)
+	NetworkingCmd.AddCommand(loadbalancers.LoadbalancersCmd)
+	NetworkingCmd.AddCommand(targetgroups.TargetGroupsCmd)
 	NetworkingCmd.AddCommand(securitygroups.SecurityGroupsCmd)
 	NetworkingCmd.AddCommand(vpcpeering.VpcPeeringCmd)
 }
