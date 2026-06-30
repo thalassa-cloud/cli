@@ -14,14 +14,15 @@ import (
 )
 
 var (
-	updateClusterName             string
-	updateClusterDescription      string
-	updateClusterInstanceType     string
-	updateClusterStorage          int
-	updateClusterReplicas         int
-	updateClusterLabels           []string
-	updateClusterAnnotations      []string
-	updateClusterDeleteProtection bool
+	updateClusterName              string
+	updateClusterDescription       string
+	updateClusterInstanceType      string
+	updateClusterStorage           int
+	updateClusterReplicas          int
+	updateClusterLabels            []string
+	updateClusterAnnotations       []string
+	updateClusterDeleteProtection  bool
+	updateClusterAutoUpgradePolicy string
 )
 
 // updateCmd represents the update command
@@ -118,6 +119,18 @@ var updateCmd = &cobra.Command{
 			req.DeleteProtection = updateClusterDeleteProtection
 		}
 
+		// Update auto-upgrade policy if provided
+		if cmd.Flags().Changed("auto-upgrade-policy") {
+			policy := dbaas.DbClusterAutoUpgradePolicy(updateClusterAutoUpgradePolicy)
+			if err := validateDbClusterAutoUpgradePolicy(policy); err != nil {
+				return err
+			}
+			req.AutoUpgradePolicy = &policy
+		} else {
+			// existing policy is not updated
+			req.AutoUpgradePolicy = &current.AutoUpgradePolicy
+		}
+
 		cluster, err := client.DBaaS().UpdateDbCluster(cmd.Context(), clusterIdentity, req)
 		if err != nil {
 			return fmt.Errorf("failed to update database cluster: %w", err)
@@ -174,7 +187,32 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateClusterLabels, "labels", []string{}, "Labels in key=value format (can be specified multiple times)")
 	updateCmd.Flags().StringSliceVar(&updateClusterAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	updateCmd.Flags().BoolVar(&updateClusterDeleteProtection, "delete-protection", false, "Enable or disable delete protection")
+	updateCmd.Flags().StringVar(&updateClusterAutoUpgradePolicy, "auto-upgrade-policy", "", "Auto-upgrade policy: none, latest-version, latest-stable, latest-patch, latest-minor, latest-major")
 
 	// Register completions
 	updateCmd.RegisterFlagCompletionFunc("instance-type", completion.CompleteDbInstanceType)
+	updateCmd.RegisterFlagCompletionFunc("auto-upgrade-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(dbaas.DbClusterAutoUpgradePolicyNone),
+			string(dbaas.DbClusterAutoUpgradePolicyLatestVersion),
+			string(dbaas.DbClusterAutoUpgradePolicyLatestStable),
+			string(dbaas.DbClusterAutoUpgradePolicyLatestPatch),
+			string(dbaas.DbClusterAutoUpgradePolicyLatestMinor),
+			string(dbaas.DbClusterAutoUpgradePolicyLatestMajor),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+}
+
+func validateDbClusterAutoUpgradePolicy(policy dbaas.DbClusterAutoUpgradePolicy) error {
+	switch policy {
+	case dbaas.DbClusterAutoUpgradePolicyNone,
+		dbaas.DbClusterAutoUpgradePolicyLatestVersion,
+		dbaas.DbClusterAutoUpgradePolicyLatestStable,
+		dbaas.DbClusterAutoUpgradePolicyLatestPatch,
+		dbaas.DbClusterAutoUpgradePolicyLatestMinor,
+		dbaas.DbClusterAutoUpgradePolicyLatestMajor:
+		return nil
+	default:
+		return fmt.Errorf("invalid auto-upgrade policy %q: must be one of none, latest-version, latest-stable, latest-patch, latest-minor, latest-major", policy)
+	}
 }
