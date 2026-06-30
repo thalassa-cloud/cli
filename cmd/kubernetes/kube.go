@@ -3,7 +3,9 @@ package kubernetes
 import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/connect"
+	"github.com/thalassa-cloud/cli/cmd/kubernetes/iam"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/kubernetesversions"
+	"github.com/thalassa-cloud/cli/cmd/kubernetes/machines"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/nodepools"
 )
 
@@ -17,9 +19,7 @@ var KubernetesCmd = &cobra.Command{
 func init() {
 	KubernetesCmd.AddCommand(kubernetesversions.KubernetesVersionsCmd)
 	KubernetesCmd.AddCommand(nodepools.KubernetesNodePoolsCmd)
+	KubernetesCmd.AddCommand(machines.MachinesCmd)
+	KubernetesCmd.AddCommand(iam.IamCmd)
 	KubernetesCmd.AddCommand(connect.KubernetesConnectCmd)
-	KubernetesCmd.AddCommand(listCmd)
-	KubernetesCmd.AddCommand(createCmd)
-	KubernetesCmd.AddCommand(updateCmd)
-	KubernetesCmd.AddCommand(deleteCmd)
 }
