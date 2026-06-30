@@ -6,9 +6,11 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
+	"github.com/thalassa-cloud/client-go/containerregistry"
 	"github.com/thalassa-cloud/client-go/dbaas"
 	"github.com/thalassa-cloud/client-go/iaas"
 	"github.com/thalassa-cloud/client-go/kubernetes"
+	"github.com/thalassa-cloud/client-go/observability/prometheus"
 	"github.com/thalassa-cloud/client-go/tfs"
 )
 
@@ -543,6 +545,180 @@ func CompleteOrganisation(cmd *cobra.Command, args []string, toComplete string) 
 		if org.Slug != "" && org.Slug != org.Identity {
 			completions = append(completions, org.Slug+"\t"+desc)
 		}
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteLoadbalancerID provides completion for load balancer IDs.
+func CompleteLoadbalancerID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	loadbalancers, err := client.IaaS().ListLoadbalancers(cmd.Context(), &iaas.ListLoadbalancersRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(loadbalancers))
+	for _, lb := range loadbalancers {
+		desc := fmt.Sprintf("%s (%s)", lb.Name, lb.Status)
+		completions = append(completions, lb.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteTargetGroupID provides completion for target group IDs.
+func CompleteTargetGroupID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	targetGroups, err := client.IaaS().ListTargetGroups(cmd.Context(), &iaas.ListTargetGroupsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(targetGroups))
+	for _, tg := range targetGroups {
+		desc := fmt.Sprintf("%s port %d/%s", tg.Name, tg.TargetPort, tg.Protocol)
+		completions = append(completions, tg.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteLoadbalancerListenerID provides completion for load balancer listener IDs.
+// Requires the --loadbalancer flag to be set.
+func CompleteLoadbalancerListenerID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	loadbalancerFlag, err := cmd.Flags().GetString("loadbalancer")
+	if err != nil || loadbalancerFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	listeners, err := client.IaaS().ListListeners(cmd.Context(), &iaas.ListLoadbalancerListenersRequest{
+		Loadbalancer: loadbalancerFlag,
+	})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(listeners))
+	for _, listener := range listeners {
+		desc := fmt.Sprintf("%s port %d/%s", listener.Name, listener.Port, listener.Protocol)
+		completions = append(completions, listener.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteLoadbalancerProtocol provides completion for load balancer protocols.
+func CompleteLoadbalancerProtocol(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	return []string{
+		string(iaas.ProtocolTCP),
+		string(iaas.ProtocolUDP),
+		string(iaas.ProtocolHTTP),
+		string(iaas.ProtocolHTTPS),
+		string(iaas.ProtocolGRPC),
+		string(iaas.ProtocolQUIC),
+	}, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteLoadbalancingPolicy provides completion for target group load balancing policies.
+func CompleteLoadbalancingPolicy(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	return []string{
+		string(iaas.LoadbalancingPolicyRoundRobin),
+		string(iaas.LoadbalancingPolicyRandom),
+		string(iaas.LoadbalancingPolicyMagLev),
+	}, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteContainerRegistryNamespaceID provides completion for container registry namespace IDs.
+func CompleteContainerRegistryNamespaceID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	namespaces, err := client.ContainerRegistry().ListContainerRegistryNamespaces(cmd.Context(), &containerregistry.ListContainerRegistryNamespacesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(namespaces))
+	for _, ns := range namespaces {
+		desc := fmt.Sprintf("%s", ns.Namespace)
+		completions = append(completions, ns.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteContainerRegistryRepositoryID provides completion for container registry repository IDs.
+// Requires the --namespace flag to be set.
+func CompleteContainerRegistryRepositoryID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	namespaceFlag, err := cmd.Flags().GetString("namespace")
+	if err != nil || namespaceFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	repos, err := client.ContainerRegistry().ListContainerRegistryRepositories(cmd.Context(), namespaceFlag, &containerregistry.ListContainerRegistryRepositoriesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(repos))
+	for _, repo := range repos {
+		desc := repo.FullName
+		if desc == "" {
+			desc = repo.Image
+		}
+		completions = append(completions, repo.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompletePrometheusTenantID provides completion for Prometheus tenant IDs.
+func CompletePrometheusTenantID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	tenants, err := client.ObservabilityPrometheus().ListPrometheusTenants(cmd.Context(), &prometheus.ListPrometheusTenantsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(tenants))
+	for _, tenant := range tenants {
+		desc := fmt.Sprintf("%s (%s)", tenant.Name, tenant.Status)
+		completions = append(completions, tenant.Identity+"\t"+desc)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
