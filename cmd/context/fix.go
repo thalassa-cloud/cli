@@ -10,9 +10,9 @@ import (
 )
 
 var fixCmd = &cobra.Command{
-	Use:   "fix",
-	Short: "Fix config file security issues",
-	Long:  "Fix security issues in the CLI config file, such as overly permissive file permissions.",
+	Use:     "fix",
+	Short:   "Fix config file security issues",
+	Long:    "Fix security issues in the CLI config file, such as overly permissive file permissions.",
 	Example: `  tcloud context fix`,
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
