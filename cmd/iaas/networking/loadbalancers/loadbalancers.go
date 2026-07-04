@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	NoHeaderKey        = "no-header"
-	LoadbalancerFlag   = "loadbalancer"
+	NoHeaderKey      = "no-header"
+	LoadbalancerFlag = "loadbalancer"
 )
 
 // LoadbalancersCmd represents the load balancers command.

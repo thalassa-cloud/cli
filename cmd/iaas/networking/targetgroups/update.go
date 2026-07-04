@@ -45,13 +45,13 @@ var updateCmd = &cobra.Command{
 		}
 
 		req := iaas.UpdateTargetGroup{
-			Name:            current.Name,
-			Description:     current.Description,
-			TargetPort:      current.TargetPort,
-			Protocol:        current.Protocol,
-			TargetSelector:  current.TargetSelector,
-			Labels:          current.Labels,
-			Annotations:     current.Annotations,
+			Name:                current.Name,
+			Description:         current.Description,
+			TargetPort:          current.TargetPort,
+			Protocol:            current.Protocol,
+			TargetSelector:      current.TargetSelector,
+			Labels:              current.Labels,
+			Annotations:         current.Annotations,
 			LoadbalancingPolicy: current.LoadbalancingPolicy,
 			EnableProxyProtocol: current.EnableProxyProtocol,
 			HealthCheck:         current.HealthCheck,

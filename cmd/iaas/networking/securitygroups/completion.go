@@ -7,6 +7,6 @@ import (
 // Re-export completion functions for convenience
 var (
 	completeSecurityGroupID = completion.CompleteSecurityGroupID
-	completeVPCID          = completion.CompleteVPCID
-	completeOutputFormat   = completion.CompleteOutputFormat
+	completeVPCID           = completion.CompleteVPCID
+	completeOutputFormat    = completion.CompleteOutputFormat
 )

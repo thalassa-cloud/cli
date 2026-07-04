@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	backupDeleteForce      bool
-	backupDeleteAllFailed  bool
+	backupDeleteForce         bool
+	backupDeleteAllFailed     bool
 	backupDeleteLabelSelector string
 )
 

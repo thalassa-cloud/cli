@@ -182,4 +182,3 @@ func TestNatGatewaysListOutputStructure(t *testing.T) {
 		assert.True(t, hasExpectedColumn, "Header line should contain expected column names")
 	}
 }
-

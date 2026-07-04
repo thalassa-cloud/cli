@@ -15,13 +15,13 @@ import (
 )
 
 var (
-	noHeader        bool
-	ruleResources   []string
-	ruleVerbs       []string
-	ruleAPIGroups   []string
-	ruleResNames    []string
-	ruleNonResURLs  []string
-	ruleNote        string
+	noHeader       bool
+	ruleResources  []string
+	ruleVerbs      []string
+	ruleAPIGroups  []string
+	ruleResNames   []string
+	ruleNonResURLs []string
+	ruleNote       string
 )
 
 var addCmd = &cobra.Command{

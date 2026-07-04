@@ -10,11 +10,11 @@ import (
 )
 
 var (
-	createVisibility         string
-	createRetentionEnabled   bool
-	createDeleteUntagged     bool
-	createRetentionDays      int
-	createRetentionCount     int
+	createVisibility          string
+	createRetentionEnabled    bool
+	createDeleteUntagged      bool
+	createRetentionDays       int
+	createRetentionCount      int
 	createRetentionPolicyFile string
 )
 

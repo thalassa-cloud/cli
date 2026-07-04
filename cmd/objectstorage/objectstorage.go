@@ -13,4 +13,3 @@ var ObjectStorageCmd = &cobra.Command{
 
 func init() {
 }
-

@@ -76,12 +76,12 @@ func TestSecurityGroupsListShowLabels(t *testing.T) {
 	// With --show-labels, output should contain a Labels column
 	output := result.Stdout
 	outputLower := strings.ToLower(output)
-	
+
 	// If there are no security groups, the output will just say "No security groups found"
 	if strings.Contains(outputLower, "no security groups found") {
 		return
 	}
-	
+
 	assert.Contains(t, outputLower, "label", "Output should contain 'Label' column when --show-labels is used")
 }
 
@@ -290,4 +290,3 @@ func TestSecurityGroupsListOutputStructure(t *testing.T) {
 		assert.True(t, hasExpectedColumn, "Header line should contain expected column names")
 	}
 }
-

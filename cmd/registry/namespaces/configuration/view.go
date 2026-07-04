@@ -15,9 +15,9 @@ var (
 )
 
 var viewCmd = &cobra.Command{
-	Use:     "view",
-	Short:   "View namespace configuration",
-	Args:    cobra.NoArgs,
+	Use:   "view",
+	Short: "View namespace configuration",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if namespace == "" {
 			return fmt.Errorf("--namespace is required")

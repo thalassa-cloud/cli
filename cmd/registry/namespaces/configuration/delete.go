@@ -11,9 +11,9 @@ import (
 var deleteForce bool
 
 var deleteCmd = &cobra.Command{
-	Use:     "delete",
-	Short:   "Delete namespace configuration",
-	Args:    cobra.NoArgs,
+	Use:   "delete",
+	Short: "Delete namespace configuration",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if namespace == "" {
 			return fmt.Errorf("--namespace is required")

@@ -13,15 +13,15 @@ import (
 )
 
 var (
-	createName                  string
-	createDescription           string
-	createSubnet                string
-	createInternal              bool
-	createDeleteProtection      bool
-	createLabels                []string
-	createAnnotations           []string
-	createSecurityGroups        []string
-	createWait                  bool
+	createName             string
+	createDescription      string
+	createSubnet           string
+	createInternal         bool
+	createDeleteProtection bool
+	createLabels           []string
+	createAnnotations      []string
+	createSecurityGroups   []string
+	createWait             bool
 )
 
 var createCmd = &cobra.Command{

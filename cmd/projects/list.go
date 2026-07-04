@@ -15,9 +15,9 @@ const (
 )
 
 var (
-	noHeader     bool
-	slugOnly     bool
-	includeRoot  bool
+	noHeader    bool
+	slugOnly    bool
+	includeRoot bool
 )
 
 var listCmd = &cobra.Command{
