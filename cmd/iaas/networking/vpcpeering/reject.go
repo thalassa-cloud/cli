@@ -2,11 +2,13 @@ package vpcpeering
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -39,27 +41,26 @@ var rejectCmd = &cobra.Command{
 		}
 
 		// Ask for confirmation unless --force is provided
-		if !rejectForce {
-			fmt.Printf("Are you sure you want to reject the following VPC peering connection?\n")
-			fmt.Printf("  ID: %s\n", connection.Identity)
-			fmt.Printf("  Name: %s\n", connection.Name)
-			fmt.Printf("  Status: %s\n", connection.Status)
-			if connection.RequesterVpc != nil {
-				fmt.Printf("  Requester VPC: %s (%s)\n", connection.RequesterVpc.Name, connection.RequesterVpc.Identity)
-			}
-			if connection.AccepterVpc != nil {
-				fmt.Printf("  Accepter VPC: %s (%s)\n", connection.AccepterVpc.Name, connection.AccepterVpc.Identity)
-			}
-			if rejectReason != "" {
-				fmt.Printf("  Reason: %s\n", rejectReason)
-			}
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to reject the following VPC peering connection?\n")
+		fmt.Fprintf(&summary, "  ID: %s\n", connection.Identity)
+		fmt.Fprintf(&summary, "  Name: %s\n", connection.Name)
+		fmt.Fprintf(&summary, "  Status: %s\n", connection.Status)
+		if connection.RequesterVpc != nil {
+			fmt.Fprintf(&summary, "  Requester VPC: %s (%s)\n", connection.RequesterVpc.Name, connection.RequesterVpc.Identity)
+		}
+		if connection.AccepterVpc != nil {
+			fmt.Fprintf(&summary, "  Accepter VPC: %s (%s)\n", connection.AccepterVpc.Name, connection.AccepterVpc.Identity)
+		}
+		if rejectReason != "" {
+			fmt.Fprintf(&summary, "  Reason: %s\n", rejectReason)
+		}
+		proceed, err := shared.PromptDestructiveUnlessForce(rejectForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		req := iaas.RejectVpcPeeringConnectionRequest{

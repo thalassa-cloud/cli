@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 )
@@ -94,13 +95,12 @@ Examples:
 		}
 
 		// Confirmation prompt
-		if !deleteNodePoolForce {
-			fmt.Printf("Do you want to delete node pool '%s'? [y/N]: ", nodePool.Name)
-			var response string
-			fmt.Scanln(&response)
-			if strings.ToLower(response) != "y" && strings.ToLower(response) != "yes" {
-				return nil
-			}
+		proceed, err := shared.PromptYesNoUnlessForce(deleteNodePoolForce, fmt.Sprintf("Do you want to delete node pool '%s'? [y/N]: ", nodePool.Name))
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		err = client.Kubernetes().DeleteKubernetesNodePool(ctx, cluster.Identity, nodePool.Identity)
@@ -142,6 +142,6 @@ func init() {
 	deleteCmd.Flags().BoolVar(&deleteNodePoolWait, "wait", false, "Wait for the node pool to be deleted before returning")
 	deleteCmd.Flags().BoolVar(&deleteNodePoolForce, "force", false, "Skip confirmation prompt")
 
-	deleteCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
-	deleteCmd.RegisterFlagCompletionFunc("nodepool", completion.CompleteKubernetesNodePool)
+	_ = deleteCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
+	_ = deleteCmd.RegisterFlagCompletionFunc("nodepool", completion.CompleteKubernetesNodePool)
 }

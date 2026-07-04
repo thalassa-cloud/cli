@@ -2,11 +2,13 @@ package backup
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/labels"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/dbaas"
 	"github.com/thalassa-cloud/client-go/filters"
@@ -109,22 +111,21 @@ var backupDeleteCmd = &cobra.Command{
 		}
 
 		// Ask for confirmation unless --force is provided
-		if !backupDeleteForce {
-			if len(backupsToDelete) == 1 {
-				fmt.Printf("Are you sure you want to delete backup %s?\n", backupsToDelete[0].Identity)
-			} else {
-				fmt.Printf("Are you sure you want to delete the following backup(s)?\n")
-				for _, backup := range backupsToDelete {
-					fmt.Printf("  %s\n", backup.Identity)
-				}
+		var summary strings.Builder
+		if len(backupsToDelete) == 1 {
+			fmt.Fprintf(&summary, "Are you sure you want to delete backup %s?\n", backupsToDelete[0].Identity)
+		} else {
+			fmt.Fprintf(&summary, "Are you sure you want to delete the following backup(s)?\n")
+			for _, backup := range backupsToDelete {
+				fmt.Fprintf(&summary, "  %s\n", backup.Identity)
 			}
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		}
+		proceed, err := shared.PromptDestructiveUnlessForce(backupDeleteForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		// Delete each backup

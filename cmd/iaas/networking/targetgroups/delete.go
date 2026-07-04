@@ -2,10 +2,12 @@ package targetgroups
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/labels"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -56,15 +58,14 @@ var deleteCmd = &cobra.Command{
 			targetGroupsToDelete = append(targetGroupsToDelete, args...)
 		}
 
-		if !deleteForce {
-			fmt.Printf("Are you sure you want to delete %d target group(s)?\n", len(targetGroupsToDelete))
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to delete %d target group(s)?\n", len(targetGroupsToDelete))
+		proceed, err := shared.PromptDestructiveUnlessForce(deleteForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		for _, tgID := range targetGroupsToDelete {

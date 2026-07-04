@@ -2,10 +2,12 @@ package objectstorage
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
 )
@@ -41,21 +43,19 @@ var deleteCmd = &cobra.Command{
 			return fmt.Errorf("failed to get bucket: %w", err)
 		}
 
-		// Ask for confirmation unless --force is provided
-		if !deleteForce {
-			fmt.Printf("Are you sure you want to delete the following bucket?\n")
-			fmt.Printf("  Name: %s\n", bucket.Name)
-			fmt.Printf("  Status: %s\n", bucket.Status)
-			fmt.Printf("  Total Size: %.2f GB\n", bucket.Usage.TotalSizeGB)
-			fmt.Printf("  Total Objects: %d\n", bucket.Usage.TotalObjects)
-			fmt.Printf("\nWARNING: This will permanently delete the bucket and all its contents!\n")
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to delete the following bucket?\n")
+		fmt.Fprintf(&summary, "  Name: %s\n", bucket.Name)
+		fmt.Fprintf(&summary, "  Status: %s\n", bucket.Status)
+		fmt.Fprintf(&summary, "  Total Size: %.2f GB\n", bucket.Usage.TotalSizeGB)
+		fmt.Fprintf(&summary, "  Total Objects: %d\n", bucket.Usage.TotalObjects)
+		fmt.Fprintf(&summary, "\nWARNING: This will permanently delete the bucket and all its contents!\n")
+		proceed, err := shared.PromptDestructiveUnlessForce(deleteForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		err = client.ObjectStorage().DeleteBucket(cmd.Context(), bucketName)
