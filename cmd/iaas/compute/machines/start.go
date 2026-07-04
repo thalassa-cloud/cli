@@ -1,12 +1,10 @@
 package machines
 
 import (
-	"fmt"
-	"time"
+	"context"
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
 )
 
@@ -18,48 +16,16 @@ var startCmd = &cobra.Command{
 	Aliases: []string{"s", "start"},
 	Args:    cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-
-		client, err := thalassaclient.GetThalassaClient()
-		if err != nil {
-			return fmt.Errorf("failed to create client: %w", err)
-		}
-
-		machineIdentity, err := getSelectedMachine(args)
-		if err != nil {
-			return err
-		}
-
-		machine, err := client.IaaS().GetMachine(cmd.Context(), machineIdentity)
-		if err != nil {
-			return err
-		}
-
-		if machine.Status.Status == string(iaas.MachineStateRunning) {
-			fmt.Println("Machine is already running")
-			return nil
-		}
-
-		err = client.IaaS().MachineStart(cmd.Context(), machine.Identity)
-		if err != nil {
-			return err
-		}
-		fmt.Println("Machine is starting...")
-
-		if wait {
-			// wait for machine to be started
-			for {
-				machine, err = client.IaaS().GetMachine(cmd.Context(), machine.Identity)
-				if err != nil {
-					return err
-				}
-				if machine.Status.Status == string(iaas.MachineStateRunning) {
-					break
-				}
-				time.Sleep(1 * time.Second)
-			}
-			fmt.Println("Machine started")
-		}
-		return nil
+		return runMachineStateChange(cmd, args, machineStateChange{
+			alreadyState:    iaas.MachineStateRunning,
+			alreadyMessage:  "Machine is already running",
+			progressMessage: "Machine is starting...",
+			targetState:     iaas.MachineStateRunning,
+			doneMessage:     "Machine started",
+			change: func(ctx context.Context, iaasClient *iaas.Client, identity string) error {
+				return iaasClient.MachineStart(ctx, identity)
+			},
+		})
 	},
 }
 
