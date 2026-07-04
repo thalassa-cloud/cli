@@ -38,13 +38,13 @@ var listContextCmd = &cobra.Command{
 			if showCurrent && name == currentContextName {
 				name = fmt.Sprintf("* %s", name)
 			}
-			body = append(body, []string{name, c.Context.Organisation, c.Context.User, c.Context.API})
+			body = append(body, []string{name, c.Context.Organisation, c.Context.Project, c.Context.User, c.Context.API})
 		}
 
 		if noHeader {
 			table.Print(nil, body)
 		} else {
-			table.Print([]string{"Name", "Organisation", "User", "Endpoint"}, body)
+			table.Print([]string{"Name", "Organisation", "Project", "User", "Endpoint"}, body)
 		}
 		return nil
 	},

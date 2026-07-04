@@ -17,6 +17,7 @@ type Config struct {
 type Context struct {
 	Name         string
 	Organisation string
+	Project      string
 	Servers      Servers
 	Users        Users
 }
@@ -30,6 +31,7 @@ type ContextRef struct {
 	API          string `yaml:"api"`
 	User         string `yaml:"user"`
 	Organisation string `yaml:"organisation"`
+	Project      string `yaml:"project,omitempty"`
 }
 
 type Servers struct {

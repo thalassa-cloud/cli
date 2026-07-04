@@ -46,6 +46,9 @@ var loginCmd = &cobra.Command{
 		if contextstate.Organisation() != "" {
 			opts = append(opts, client.WithOrganisation(contextstate.Organisation()))
 		}
+		if contextstate.Project() != "" {
+			opts = append(opts, client.WithProject(contextstate.Project()))
+		}
 
 		if oidcClientID != "" && oidcClientSecret != "" {
 			return contextstate.LoginWithAPIEndpointOidc(cmd.Context(), oidcClientID, oidcClientSecret, apiURL)

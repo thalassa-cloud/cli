@@ -19,6 +19,7 @@ type TestConfig struct {
 	OIDCClientID        string
 	OIDCClientSecret    string
 	Organisation        string
+	Project             string
 	BinaryPath          string
 }
 
@@ -31,6 +32,7 @@ func LoadTestConfig(t *testing.T) *TestConfig {
 		OIDCClientID:        os.Getenv("TCLOUD_E2E_OIDC_CLIENT_ID"),
 		OIDCClientSecret:    os.Getenv("TCLOUD_E2E_OIDC_CLIENT_SECRET"),
 		Organisation:        os.Getenv("TCLOUD_E2E_ORGANISATION"),
+		Project:             os.Getenv("TCLOUD_E2E_PROJECT"),
 		BinaryPath:          os.Getenv("TCLOUD_E2E_BINARY_PATH"),
 	}
 
@@ -92,6 +94,9 @@ func (c *TestConfig) RunCommand(t *testing.T, args ...string) *CommandResult {
 	}
 	if c.Organisation != "" {
 		cmd.Args = append(cmd.Args, "--organisation", c.Organisation)
+	}
+	if c.Project != "" {
+		cmd.Args = append(cmd.Args, "--project", c.Project)
 	}
 
 	var stdout, stderr bytes.Buffer

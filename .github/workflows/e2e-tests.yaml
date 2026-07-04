@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 env:
   TCLOUD_E2E_ORGANISATION: "o-d5obcgg3fspc73f7vqpg"
@@ -13,6 +17,7 @@ env:
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
+    environment: e2e-tests
     permissions:
       id-token: write
       contents: read

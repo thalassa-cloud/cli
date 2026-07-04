@@ -8,7 +8,7 @@ import (
 var ContextCmd = &cobra.Command{
 	Use:   "context",
 	Short: "Manage context",
-	Long:  "Manage context for the CLI. Contexts are used to manage multiple organisations and APIs.",
+	Long:  "Manage context for the CLI. Contexts are used to manage multiple organisations, projects, and APIs.",
 }
 
 func init() {

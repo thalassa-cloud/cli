@@ -111,7 +111,7 @@ func createNewContext() error {
 		return err
 	}
 
-	defaultContext := newDefaultContext(contextName, contextstate.OrganisationFlag, u.Host)
+	defaultContext := newDefaultContext(contextName, contextstate.OrganisationFlag, contextstate.ProjectFlag, u.Host)
 	err = contextstate.GlobalConfigManager().AddOrMergeContext(defaultContext)
 	if err != nil {
 		return err
@@ -130,10 +130,11 @@ func init() {
 	createCmd.Flags().StringVar(&contextName, "name", "default", "name of the context")
 }
 
-func newDefaultContext(contextName, organisation, apiName string) contextstate.Context {
+func newDefaultContext(contextName, organisation, project, apiName string) contextstate.Context {
 	return contextstate.Context{
 		Name:         contextName,
 		Organisation: organisation,
+		Project:      project,
 		Servers: contextstate.Servers{
 			Name: apiName,
 			API: contextstate.API{

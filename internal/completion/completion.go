@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/projectresolve"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/containerregistry"
 	"github.com/thalassa-cloud/client-go/dbaas"
@@ -544,6 +545,29 @@ func CompleteOrganisation(cmd *cobra.Command, args []string, toComplete string) 
 		completions = append(completions, org.Identity+"\t"+desc)
 		if org.Slug != "" && org.Slug != org.Identity {
 			completions = append(completions, org.Slug+"\t"+desc)
+		}
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteProject provides completion for project identities and slugs.
+func CompleteProject(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	projects, err := client.Projects().ListProjects(cmd.Context(), nil)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := []string{projectresolve.RootRef + "\tOrganisation root (no project)"}
+	for _, project := range projects {
+		desc := project.Name
+		completions = append(completions, project.Identity+"\t"+desc)
+		if project.Slug != "" && project.Slug != project.Identity {
+			completions = append(completions, project.Slug+"\t"+desc)
 		}
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
