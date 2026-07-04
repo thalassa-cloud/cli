@@ -9,7 +9,7 @@ import (
 
 const (
 	NoHeaderKey = "no-header"
-	// ForceKey is the flag name for skipping the interactive prompt on destructive IAM commands.
+	// ForceKey is the flag name for skipping destructive confirmation prompts.
 	ForceKey = "force"
 )
 
@@ -33,6 +33,25 @@ func PromptDestructiveUnlessForce(force bool, summary string) (proceed bool, err
 		return false, nil
 	}
 	return true, nil
+}
+
+// PromptYesNoUnlessForce prompts for y/yes unless force is true.
+// On decline, returns proceed=false and err=nil without printing "Aborted".
+func PromptYesNoUnlessForce(force bool, question string) (proceed bool, err error) {
+	if force {
+		return true, nil
+	}
+	fmt.Print(question)
+	var input string
+	if _, scanErr := fmt.Scanln(&input); scanErr != nil {
+		return false, fmt.Errorf("read confirmation: %w", scanErr)
+	}
+	switch strings.ToLower(strings.TrimSpace(input)) {
+	case "y", "yes":
+		return true, nil
+	default:
+		return false, nil
+	}
 }
 
 func KeyValuePairsToMap(pairs []string) map[string]string {

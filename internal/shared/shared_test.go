@@ -22,25 +22,31 @@ func TestKeyValuePairsToMap(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := KeyValuePairsToMap(tt.pairs)
-			assert.Equal(t, tt.want, got)
+			assert.Equal(t, tt.want, got, "should match")
 		})
 	}
 }
 
 func TestPromptDestructiveUnlessForce_SkipsPromptWhenForce(t *testing.T) {
 	proceed, err := PromptDestructiveUnlessForce(true, "will not print")
-	assert.NoError(t, err)
-	assert.True(t, proceed)
+	assert.NoError(t, err, "should not error")
+	assert.True(t, proceed, "should proceed")
+}
+
+func TestPromptYesNoUnlessForce_SkipsPromptWhenForce(t *testing.T) {
+	proceed, err := PromptYesNoUnlessForce(true, "will not print")
+	assert.NoError(t, err, "should not error")
+	assert.True(t, proceed, "should proceed")
 }
 
 func TestParseAccessCredentialScopes(t *testing.T) {
 	got, err := ParseAccessCredentialScopes([]string{"api:read", "kubernetes"})
-	require.NoError(t, err)
+	require.NoError(t, err, "should not error")
 	assert.Equal(t, []clientiam.AccessCredentialsScope{
 		clientiam.AccessCredentialsScopeAPIRead,
 		clientiam.AccessCredentialsScopeKubernetes,
 	}, got)
 
 	_, err = ParseAccessCredentialScopes([]string{"nope"})
-	require.Error(t, err)
+	require.Error(t, err, "should error")
 }
