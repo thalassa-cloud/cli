@@ -62,12 +62,12 @@ var listCmd = &cobra.Command{
 		body := make([][]string, 0)
 		for _, c := range clusters {
 			// Skip clusters that don't match VPC filter
-			if vpcIdentity != "" && (c.VPC == nil || c.VPC.Identity != vpcIdentity) {
+			if vpcIdentity != "" && (c.VPC == nil || !matchesVpcRef(c.VPC, vpcIdentity)) {
 				continue
 			}
 
 			// Skip clusters that don't match cluster filter
-			if cluster != "" && c.Identity != cluster {
+			if cluster != "" && !matchesClusterRef(&c, cluster) {
 				continue
 			}
 
@@ -108,6 +108,14 @@ var listCmd = &cobra.Command{
 	},
 }
 
+func matchesClusterRef(c *kubernetes.KubernetesCluster, ref string) bool {
+	return c.Identity == ref || c.Name == ref || c.Slug == ref
+}
+
+func matchesVpcRef(v *iaas.Vpc, ref string) bool {
+	return v.Identity == ref || v.Name == ref || v.Slug == ref
+}
+
 // getVpcIdentity retrieves the VPC identity by name, identity, or slug
 func getVpcIdentity(ctx context.Context, client thalassa.Client, vpcIdentifier string) (string, error) {
 	vpcs, err := client.IaaS().ListVpcs(ctx, &iaas.ListVpcsRequest{})
@@ -116,7 +124,7 @@ func getVpcIdentity(ctx context.Context, client thalassa.Client, vpcIdentifier s
 	}
 
 	for _, v := range vpcs {
-		if v.Name == vpcIdentifier || v.Identity == vpcIdentifier || v.Slug == vpcIdentifier {
+		if matchesVpcRef(&v, vpcIdentifier) {
 			return v.Identity, nil
 		}
 	}
