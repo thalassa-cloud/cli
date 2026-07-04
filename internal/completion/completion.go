@@ -688,8 +688,7 @@ func CompleteContainerRegistryNamespaceID(cmd *cobra.Command, args []string, toC
 
 	completions := make([]string, 0, len(namespaces))
 	for _, ns := range namespaces {
-		desc := fmt.Sprintf("%s", ns.Namespace)
-		completions = append(completions, ns.Identity+"\t"+desc)
+		completions = append(completions, ns.Identity+"\t"+ns.Namespace)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }

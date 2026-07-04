@@ -147,7 +147,7 @@ func splitTimeRange(start, end time.Time, splitPeriod string) [][]time.Time {
 }
 
 // exportTimeRange exports audit logs for a specific time range
-func exportTimeRange(ctx context.Context, client thalassa.Client, start, end time.Time, filter *audit.AuditLogFilter, chunkIndex int, totalChunks int, outputFile string, writeToStdout bool) ([]audit.AuditLog, error) {
+func exportTimeRange(ctx context.Context, client thalassa.Client, start, end time.Time, filter *audit.AuditLogFilter, chunkIndex int, totalChunks int, writeToStdout bool) ([]audit.AuditLog, error) {
 	if !writeToStdout && totalChunks > 1 {
 		fmt.Printf("Exporting chunk %d/%d: %s to %s...\n", chunkIndex+1, totalChunks, start.Format(time.RFC3339), end.Format(time.RFC3339))
 	}
@@ -217,7 +217,7 @@ func writeExport(exportData map[string]interface{}, outputPath string, writeToSt
 		if err != nil {
 			return fmt.Errorf("failed to create output file: %w", err)
 		}
-		defer file.Close()
+		defer func() { _ = file.Close() }()
 	}
 
 	encoder := json.NewEncoder(file)
@@ -386,7 +386,7 @@ Examples:
 			chunkCtx, cancel := context.WithTimeout(cmd.Context(), timeoutDuration)
 
 			// Fetch logs for this chunk
-			chunkLogs, err := exportTimeRange(chunkCtx, client, chunkStart, chunkEnd, filter, i, len(chunks), outputFile, writeToStdout)
+			chunkLogs, err := exportTimeRange(chunkCtx, client, chunkStart, chunkEnd, filter, i, len(chunks), writeToStdout)
 
 			// Always cancel the context when done with this chunk
 			cancel()
