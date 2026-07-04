@@ -3,9 +3,13 @@ package contextstate
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 
 	"gopkg.in/yaml.v3"
+
+	"github.com/thalassa-cloud/cli/internal/config/securefile"
+	"github.com/thalassa-cloud/cli/internal/credentials"
 )
 
 type configFileContextManager struct {
@@ -62,6 +66,12 @@ func (c *configFileContextManager) Set(name string) error {
 
 // Load loads the configuration from the file.
 func (c *configFileContextManager) Load() error {
+	if _, err := os.Stat(c.filename); err == nil {
+		warnPermissiveConfigPermissions(c.filename)
+	} else if !errors.Is(err, fs.ErrNotExist) {
+		return err
+	}
+
 	yamlFile, err := os.ReadFile(c.filename)
 	if err != nil {
 		return err
@@ -70,6 +80,14 @@ func (c *configFileContextManager) Load() error {
 	err = yaml.Unmarshal(yamlFile, &c.config)
 	if err != nil {
 		return err
+	}
+
+	migrated, err := c.syncCredentialsAfterLoad()
+	if err != nil {
+		return err
+	}
+	if migrated {
+		return c.Save()
 	}
 	return nil
 }
@@ -95,16 +113,25 @@ func (c *configFileContextManager) AddOrMergeContext(context Context) error {
 func (c *configFileContextManager) Save() error {
 	c.config.ConfigVersion = "v1"
 
-	data, err := yaml.Marshal(c.config)
+	configToSave, err := c.prepareConfigForSave()
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(c.filename, data, 0600)
+
+	data, err := yaml.Marshal(configToSave)
+	if err != nil {
+		return err
+	}
+	return securefile.Write(c.filename, data)
 }
 
 // Config returns the current configuration.
 func (c *configFileContextManager) Config() Config {
 	return c.config
+}
+
+func (c *configFileContextManager) SanitizedConfig() Config {
+	return c.config.Sanitized()
 }
 
 // RemoveContext removes a context from the configuration.
@@ -123,6 +150,12 @@ func (c *configFileContextManager) RemoveContextUser(name string) error {
 		}
 	}
 	fmt.Println("Removing user", name)
+	user, ok := c.getUser(name)
+	if ok {
+		if err := c.deleteUserCredentials(user); err != nil {
+			return err
+		}
+	}
 	c.deleteUser(name)
 	return c.Save()
 }
@@ -138,6 +171,105 @@ func (c *configFileContextManager) RemoveContextServer(name string) error {
 	fmt.Println("Removing server", name)
 	c.removeAPI(name)
 	return c.Save()
+}
+
+func (c *configFileContextManager) syncCredentialsAfterLoad() (bool, error) {
+	preference := credentials.PreferredStore()
+	migrated := false
+
+	for i := range c.config.Users {
+		user := &c.config.Users[i]
+		if user.User.HasSecrets() && credentials.UseKeychain(preference, user.CredentialStore) {
+			store := credentials.ResolveStore(credentials.StoreKeychain)
+			if err := store.Set(user.Name, user.User.Secrets()); err != nil {
+				if preference == credentials.StoreKeychain {
+					return false, fmt.Errorf("store credentials in keychain: %w", err)
+				}
+				user.CredentialStore = credentials.StoreFile
+				continue
+			}
+			user.CredentialStore = credentials.StoreKeychain
+			migrated = true
+			continue
+		}
+
+		if user.CredentialStore != credentials.StoreKeychain {
+			continue
+		}
+
+		store := credentials.ResolveStore(credentials.StoreKeychain)
+		secrets, err := store.Get(user.Name)
+		if err != nil {
+			if errors.Is(err, credentials.ErrNotAvailable) || preference == credentials.StoreFile {
+				user.CredentialStore = credentials.StoreFile
+				continue
+			}
+			return false, fmt.Errorf("load credentials for user %q from keychain: %w", user.Name, err)
+		}
+		user.User.ApplySecrets(secrets)
+	}
+
+	return migrated, nil
+}
+
+func (c *configFileContextManager) prepareConfigForSave() (Config, error) {
+	preference := credentials.PreferredStore()
+	configToSave := c.config.copyForSave()
+
+	for i := range c.config.Users {
+		inMemoryUser := c.config.Users[i]
+		userToSave := &configToSave.Users[i]
+
+		useKeychain := credentials.UseKeychain(preference, inMemoryUser.CredentialStore)
+		if useKeychain {
+			store := credentials.ResolveStore(credentials.StoreKeychain)
+			if err := store.Set(inMemoryUser.Name, inMemoryUser.User.Secrets()); err != nil {
+				if preference == credentials.StoreKeychain {
+					return Config{}, fmt.Errorf("store credentials in keychain: %w", err)
+				}
+				userToSave.CredentialStore = credentials.StoreFile
+				c.config.Users[i].CredentialStore = credentials.StoreFile
+				continue
+			}
+			userToSave.CredentialStore = credentials.StoreKeychain
+			userToSave.User.ClearSecrets()
+			c.config.Users[i].CredentialStore = credentials.StoreKeychain
+			continue
+		}
+
+		userToSave.CredentialStore = credentials.StoreFile
+		c.config.Users[i].CredentialStore = credentials.StoreFile
+	}
+
+	return configToSave, nil
+}
+
+func (c *configFileContextManager) deleteUserCredentials(user Users) error {
+	if user.CredentialStore != credentials.StoreKeychain {
+		return nil
+	}
+	store := credentials.ResolveStore(credentials.StoreKeychain)
+	return store.Delete(user.Name)
+}
+
+func (c *configFileContextManager) FixPermissions() error {
+	if _, err := os.Stat(c.filename); err != nil {
+		return err
+	}
+	return securefile.EnsurePermissions(c.filename)
+}
+
+func warnPermissiveConfigPermissions(filename string) {
+	mode, permissive, err := securefile.CheckPermissions(filename)
+	if err != nil || !permissive {
+		return
+	}
+	fmt.Fprintf(
+		os.Stderr,
+		"warning: config file %s has permissive permissions (%#o); run 'tcloud context fix' to restrict access\n",
+		filename,
+		mode,
+	)
 }
 
 // -----------

@@ -1,6 +1,10 @@
 package contextstate
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/thalassa-cloud/cli/internal/credentials"
+)
 
 var (
 	ErrContextNotFound = errors.New("context not found")
@@ -44,8 +48,9 @@ type API struct {
 }
 
 type Users struct {
-	Name string `yaml:"name"`
-	User User   `yaml:"user"`
+	Name            string `yaml:"name"`
+	CredentialStore string `yaml:"credentialStore,omitempty"`
+	User            User   `yaml:"user"`
 }
 
 type User struct {
@@ -53,4 +58,45 @@ type User struct {
 	AccessToken  string `yaml:"accessToken,omitempty"`
 	ClientID     string `yaml:"clientID,omitempty"`
 	ClientSecret string `yaml:"clientSecret,omitempty"`
+}
+
+func (u User) Secrets() credentials.Secrets {
+	return credentials.Secrets{
+		Token:        u.Token,
+		AccessToken:  u.AccessToken,
+		ClientID:     u.ClientID,
+		ClientSecret: u.ClientSecret,
+	}
+}
+
+func (u *User) ApplySecrets(secrets credentials.Secrets) {
+	u.Token = secrets.Token
+	u.AccessToken = secrets.AccessToken
+	u.ClientID = secrets.ClientID
+	u.ClientSecret = secrets.ClientSecret
+}
+
+func (u *User) ClearSecrets() {
+	u.ApplySecrets(credentials.Secrets{})
+}
+
+func (u User) HasSecrets() bool {
+	return !u.Secrets().Empty()
+}
+
+// Sanitized returns a copy of the config with sensitive fields redacted.
+func (c Config) Sanitized() Config {
+	sanitized := c.copyForSave()
+	for i := range sanitized.Users {
+		sanitized.Users[i].User.ClearSecrets()
+	}
+	return sanitized
+}
+
+func (c Config) copyForSave() Config {
+	copied := c
+	copied.Contexts = append([]ContextReference(nil), c.Contexts...)
+	copied.Servers = append([]Servers(nil), c.Servers...)
+	copied.Users = append([]Users(nil), c.Users...)
+	return copied
 }
