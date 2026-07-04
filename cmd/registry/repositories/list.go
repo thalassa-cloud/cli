@@ -83,8 +83,8 @@ func init() {
 	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show exact time instead of relative time")
 	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector (format: key1=value1,key2=value2)")
 
-	listCmd.MarkFlagRequired(NamespaceFlag)
-	listCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
+	_ = listCmd.MarkFlagRequired(NamespaceFlag)
+	_ = listCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
 }
 
 func formatSizeMB(bytes int64) string {

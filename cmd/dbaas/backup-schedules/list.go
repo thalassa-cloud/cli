@@ -139,5 +139,5 @@ func init() {
 	backupScheduleListCmd.Flags().StringVar(&backupScheduleListClusterFilter, "cluster", "", "Filter by database cluster identity, slug, or name")
 
 	// Register completions
-	backupScheduleListCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteDbClusterID)
+	_ = backupScheduleListCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteDbClusterID)
 }

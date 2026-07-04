@@ -127,6 +127,6 @@ func init() {
 	listCmd.Flags().StringVar(&cluster, ClusterFlag, "", "Cluster identity, name, or slug")
 	listCmd.Flags().StringVar(&nodePool, NodePoolFlag, "", "Filter by node pool identity, name, or slug")
 	_ = listCmd.MarkFlagRequired(ClusterFlag)
-	listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
-	listCmd.RegisterFlagCompletionFunc(NodePoolFlag, completion.CompleteKubernetesNodePool)
+	_ = listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
+	_ = listCmd.RegisterFlagCompletionFunc(NodePoolFlag, completion.CompleteKubernetesNodePool)
 }

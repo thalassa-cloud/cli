@@ -73,7 +73,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createLabels, "labels", []string{}, "Labels in key=value format")
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
-	createCmd.MarkFlagRequired("namespace")
-	createCmd.MarkFlagRequired("region")
-	createCmd.RegisterFlagCompletionFunc("region", completeRegion)
+	_ = createCmd.MarkFlagRequired("namespace")
+	_ = createCmd.MarkFlagRequired("region")
+	_ = createCmd.RegisterFlagCompletionFunc("region", completeRegion)
 }

@@ -137,6 +137,6 @@ func init() {
 	listCmd.Flags().StringVar(&vpc, VpcFlag, "", "VPC ID")
 
 	// Register completions
-	listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
-	listCmd.RegisterFlagCompletionFunc(VpcFlag, completion.CompleteVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
+	_ = listCmd.RegisterFlagCompletionFunc(VpcFlag, completion.CompleteVPCID)
 }

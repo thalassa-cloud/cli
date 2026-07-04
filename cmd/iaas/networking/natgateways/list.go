@@ -86,7 +86,7 @@ var listCmd = &cobra.Command{
 			row := []string{
 				ngw.Identity,
 				ngw.Name,
-				string(ngw.Status),
+				ngw.Status,
 				ngw.Vpc.Name,
 				regionName,
 				ngw.EndpointIP,
@@ -132,6 +132,6 @@ func init() {
 	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector to filter NAT gateways (format: key1=value1,key2=value2)")
 
 	// Add completion
-	listCmd.RegisterFlagCompletionFunc("region", completeRegion)
-	listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc("region", completeRegion)
+	_ = listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
 }

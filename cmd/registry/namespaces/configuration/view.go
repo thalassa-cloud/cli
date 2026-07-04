@@ -57,6 +57,6 @@ func init() {
 	ConfigurationCmd.AddCommand(viewCmd)
 	viewCmd.Flags().StringVar(&namespace, NamespaceFlag, "", "Namespace identity")
 	viewCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format (yaml)")
-	viewCmd.MarkFlagRequired(NamespaceFlag)
-	viewCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
+	_ = viewCmd.MarkFlagRequired(NamespaceFlag)
+	_ = viewCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
 }

@@ -100,12 +100,12 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createLabels, "labels", []string{}, "Labels in key=value format")
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
-	createCmd.MarkFlagRequired("name")
-	createCmd.MarkFlagRequired("vpc")
-	createCmd.MarkFlagRequired("port")
-	createCmd.MarkFlagRequired("protocol")
+	_ = createCmd.MarkFlagRequired("name")
+	_ = createCmd.MarkFlagRequired("vpc")
+	_ = createCmd.MarkFlagRequired("port")
+	_ = createCmd.MarkFlagRequired("protocol")
 
-	createCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
-	createCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
-	createCmd.RegisterFlagCompletionFunc("loadbalancing-policy", completeLoadbalancingPolicy)
+	_ = createCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
+	_ = createCmd.RegisterFlagCompletionFunc("loadbalancing-policy", completeLoadbalancingPolicy)
 }

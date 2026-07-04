@@ -168,11 +168,11 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createAnnotations, CreateFlagAnnotations, []string{}, "Annotations in key=value format")
 
 	// Register completions
-	createCmd.RegisterFlagCompletionFunc("requester-vpc", completion.CompleteVPCID)
-	createCmd.RegisterFlagCompletionFunc("accepter-vpc", completion.CompleteVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("requester-vpc", completion.CompleteVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("accepter-vpc", completion.CompleteVPCID)
 
-	createCmd.MarkFlagRequired(CreateFlagName)
-	createCmd.MarkFlagRequired(CreateFlagRequesterVpc)
-	createCmd.MarkFlagRequired(CreateFlagAccepterVpc)
-	createCmd.MarkFlagRequired(CreateFlagAccepterOrganisation)
+	_ = createCmd.MarkFlagRequired(CreateFlagName)
+	_ = createCmd.MarkFlagRequired(CreateFlagRequesterVpc)
+	_ = createCmd.MarkFlagRequired(CreateFlagAccepterVpc)
+	_ = createCmd.MarkFlagRequired(CreateFlagAccepterOrganisation)
 }

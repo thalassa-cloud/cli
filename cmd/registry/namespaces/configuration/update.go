@@ -81,6 +81,6 @@ func init() {
 	updateCmd.Flags().IntVar(&updateRetentionCount, "retention-count", 0, "Retain this many recent tags")
 	updateCmd.Flags().StringVar(&updateRetentionPolicyFile, "retention-policy-file", "", "Path to JSON file with full retention policy")
 
-	updateCmd.MarkFlagRequired(NamespaceFlag)
-	updateCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
+	_ = updateCmd.MarkFlagRequired(NamespaceFlag)
+	_ = updateCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
 }

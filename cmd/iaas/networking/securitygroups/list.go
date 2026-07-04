@@ -122,5 +122,5 @@ func init() {
 	listCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "Filter by VPC")
 
 	// Add completion
-	listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
 }

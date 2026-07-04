@@ -171,6 +171,6 @@ func init() {
 	listCmd.Flags().StringVar(&listSubnetFilter, "subnet", "", "Filter by subnet identity, slug, or name")
 
 	// Register completions
-	listCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
-	listCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
+	_ = listCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
 }

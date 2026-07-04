@@ -83,6 +83,6 @@ func init() {
 	viewCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format (yaml)")
 
 	// Add completion
-	viewCmd.RegisterFlagCompletionFunc("output", completeOutputFormat)
+	_ = viewCmd.RegisterFlagCompletionFunc("output", completeOutputFormat)
 	viewCmd.ValidArgsFunction = completeNatGatewayID
 }

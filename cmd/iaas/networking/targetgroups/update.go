@@ -115,6 +115,6 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
 	updateCmd.ValidArgsFunction = completeTargetGroupID
-	updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
-	updateCmd.RegisterFlagCompletionFunc("loadbalancing-policy", completeLoadbalancingPolicy)
+	_ = updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
+	_ = updateCmd.RegisterFlagCompletionFunc("loadbalancing-policy", completeLoadbalancingPolicy)
 }

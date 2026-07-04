@@ -105,6 +105,6 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateSecurityGroups, "security-groups", []string{}, "Security group identities to attach")
 
 	updateCmd.ValidArgsFunction = completeLoadbalancerID
-	updateCmd.RegisterFlagCompletionFunc("subnet", completeSubnetID)
-	updateCmd.RegisterFlagCompletionFunc("security-groups", completeSecurityGroupID)
+	_ = updateCmd.RegisterFlagCompletionFunc("subnet", completeSubnetID)
+	_ = updateCmd.RegisterFlagCompletionFunc("security-groups", completeSecurityGroupID)
 }

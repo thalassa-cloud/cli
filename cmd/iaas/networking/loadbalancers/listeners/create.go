@@ -95,13 +95,13 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createLabels, "labels", []string{}, "Labels in key=value format")
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
-	createCmd.MarkFlagRequired(LoadbalancerFlag)
-	createCmd.MarkFlagRequired("name")
-	createCmd.MarkFlagRequired("port")
-	createCmd.MarkFlagRequired("protocol")
-	createCmd.MarkFlagRequired("target-group")
+	_ = createCmd.MarkFlagRequired(LoadbalancerFlag)
+	_ = createCmd.MarkFlagRequired("name")
+	_ = createCmd.MarkFlagRequired("port")
+	_ = createCmd.MarkFlagRequired("protocol")
+	_ = createCmd.MarkFlagRequired("target-group")
 
-	createCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
-	createCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
-	createCmd.RegisterFlagCompletionFunc("target-group", completeTargetGroupID)
+	_ = createCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
+	_ = createCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
+	_ = createCmd.RegisterFlagCompletionFunc("target-group", completeTargetGroupID)
 }

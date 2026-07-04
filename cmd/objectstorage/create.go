@@ -182,6 +182,6 @@ func init() {
 	createCmd.Flags().BoolVarP(&createWait, "wait", "w", false, "Wait for the bucket to be ready")
 	createCmd.Flags().StringVar(&createTimeout, "timeout", "", "Timeout for waiting (e.g., 5m, 10m, 1h, default: 10m)")
 
-	createCmd.MarkFlagRequired(CreateFlagName)
-	createCmd.MarkFlagRequired(CreateFlagRegion)
+	_ = createCmd.MarkFlagRequired(CreateFlagName)
+	_ = createCmd.MarkFlagRequired(CreateFlagRegion)
 }

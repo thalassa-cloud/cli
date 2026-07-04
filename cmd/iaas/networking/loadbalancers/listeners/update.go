@@ -123,9 +123,9 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateLabels, "labels", []string{}, "Labels in key=value format")
 	updateCmd.Flags().StringSliceVar(&updateAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
-	updateCmd.MarkFlagRequired(LoadbalancerFlag)
+	_ = updateCmd.MarkFlagRequired(LoadbalancerFlag)
 	updateCmd.ValidArgsFunction = completeLoadbalancerListenerID
-	updateCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
-	updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
-	updateCmd.RegisterFlagCompletionFunc("target-group", completeTargetGroupID)
+	_ = updateCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
+	_ = updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
+	_ = updateCmd.RegisterFlagCompletionFunc("target-group", completeTargetGroupID)
 }

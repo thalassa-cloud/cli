@@ -261,5 +261,5 @@ func init() {
 	backupListCmd.Flags().StringSliceVar(&backupListStatusFilter, "status", []string{}, "Filter by backup status (can be specified multiple times, e.g., --status ready --status failed)")
 
 	// Register completions
-	backupListCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteDbClusterID)
+	_ = backupListCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteDbClusterID)
 }

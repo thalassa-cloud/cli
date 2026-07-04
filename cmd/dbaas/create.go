@@ -237,9 +237,9 @@ func init() {
 	createCmd.Flags().StringVar(&createClusterDbBackupObjectStorageId, "backup-object-storage-id", "", "Backup object storage ID (enables backup storage, requires --with-backup-bucket=false)")
 
 	// Register completions
-	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
-	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
-	createCmd.RegisterFlagCompletionFunc("engine-version", completion.CompleteDbEngineVersion)
+	_ = createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
+	_ = createCmd.RegisterFlagCompletionFunc("engine-version", completion.CompleteDbEngineVersion)
 
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("engine")

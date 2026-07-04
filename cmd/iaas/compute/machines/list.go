@@ -176,6 +176,6 @@ func init() {
 	getCmd.Flags().StringVar(&listStatusFilter, "status", "", "Status of the machine")
 
 	// Register completions
-	getCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
-	getCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = getCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = getCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }

@@ -108,6 +108,6 @@ func init() {
 	listCmd.Flags().BoolVar(&showLabels, "show-labels", false, "Show labels")
 	listCmd.Flags().StringVarP(&listLabelSelector, "selector", "l", "", "Label selector (format: key1=value1,key2=value2)")
 
-	listCmd.MarkFlagRequired(LoadbalancerFlag)
-	listCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
+	_ = listCmd.MarkFlagRequired(LoadbalancerFlag)
+	_ = listCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
 }

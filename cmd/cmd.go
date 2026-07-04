@@ -58,8 +58,8 @@ func init() {
 	RootCmd.PersistentFlags().BoolVar(&contextstate.DebugFlag, "debug", false, "Debug mode")
 
 	// Register completions
-	RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
-	RootCmd.RegisterFlagCompletionFunc("project", completion.CompleteProject)
+	_ = RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
+	_ = RootCmd.RegisterFlagCompletionFunc("project", completion.CompleteProject)
 
 	RootCmd.AddCommand(api.ApiCmd)
 	RootCmd.AddCommand(context.ContextCmd)

@@ -115,5 +115,5 @@ func init() {
 	getCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "Filter by VPC")
 
 	// Add completion
-	getCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = getCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }
