@@ -58,7 +58,7 @@ Requires client-go with RawRequest support.`,
 		if err != nil {
 			return fmt.Errorf("request failed: %w", err)
 		}
-		defer resp.RawResponse.Body.Close()
+		defer func() { _ = resp.RawResponse.Body.Close() }()
 
 		if rawShowHeaders {
 			for k, v := range resp.RawResponse.Header {
