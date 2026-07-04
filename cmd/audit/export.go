@@ -198,7 +198,7 @@ func exportTimeRange(ctx context.Context, client thalassa.Client, start, end tim
 }
 
 // writeExport writes the export data to a file
-func writeExport(exportData map[string]interface{}, outputPath string, writeToStdout bool) error {
+func writeExport(exportData map[string]any, outputPath string, writeToStdout bool) error {
 	var file *os.File
 	var err error
 
@@ -435,9 +435,9 @@ Examples:
 			}
 
 			// Prepare export data with metadata
-			exportData := map[string]interface{}{
+			exportData := map[string]any{
 				"exportedAt": time.Now().Format(time.RFC3339),
-				"timeRange": map[string]interface{}{
+				"timeRange": map[string]any{
 					"type":  rangeType,
 					"start": chunkStart.Format(time.RFC3339),
 					"end":   chunkEnd.Format(time.RFC3339),
@@ -447,7 +447,7 @@ Examples:
 			}
 
 			if len(chunks) > 1 {
-				exportData["chunk"] = map[string]interface{}{
+				exportData["chunk"] = map[string]any{
 					"index": i + 1,
 					"total": len(chunks),
 				}
@@ -455,18 +455,18 @@ Examples:
 
 			// Add custom range dates if applicable
 			if rangeType == "custom" {
-				exportData["timeRange"].(map[string]interface{})["startDate"] = startDate
-				exportData["timeRange"].(map[string]interface{})["endDate"] = endDate
+				exportData["timeRange"].(map[string]any)["startDate"] = startDate
+				exportData["timeRange"].(map[string]any)["endDate"] = endDate
 			}
 
 			// Add duration if using --since
 			if rangeType == "duration" {
-				exportData["timeRange"].(map[string]interface{})["since"] = sinceDuration
+				exportData["timeRange"].(map[string]any)["since"] = sinceDuration
 			}
 
 			// Add filter metadata if filters were applied
 			if hasFilters {
-				filterMetadata := map[string]interface{}{}
+				filterMetadata := map[string]any{}
 				if searchText != "" {
 					filterMetadata["searchText"] = searchText
 				}

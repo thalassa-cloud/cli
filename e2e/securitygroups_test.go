@@ -185,10 +185,10 @@ func TestSecurityGroupsCreateAndDelete(t *testing.T) {
 	// The output format is: "Security group created successfully\nID: <identity>\nName: <name>\nStatus: <status>"
 	output := createResult.Stdout
 	sgIdentity := ""
-	lines := strings.Split(output, "\n")
-	for _, line := range lines {
-		if strings.HasPrefix(line, "ID: ") {
-			sgIdentity = strings.TrimPrefix(line, "ID: ")
+	lines := strings.SplitSeq(output, "\n")
+	for line := range lines {
+		if after, ok := strings.CutPrefix(line, "ID: "); ok {
+			sgIdentity = after
 			break
 		}
 	}

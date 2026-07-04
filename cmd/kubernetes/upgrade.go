@@ -12,8 +12,6 @@ import (
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 
-	"k8s.io/utils/ptr"
-
 	"github.com/blang/semver/v4"
 )
 
@@ -130,7 +128,7 @@ var KubernetesUpgradeCmd = &cobra.Command{
 
 			// Create update request with the version slug
 			updateRequest := kubernetes.UpdateKubernetesCluster{
-				KubernetesVersionIdentity: ptr.To(upgradeToVersion.Identity),
+				KubernetesVersionIdentity: new(upgradeToVersion.Identity),
 			}
 			// Call the API to upgrade the cluster
 			_, err = client.Kubernetes().UpdateKubernetesCluster(cmd.Context(), cluster.Identity, updateRequest)

@@ -2,6 +2,7 @@ package completion
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -251,13 +252,7 @@ func CompleteDbBackupID(cmd *cobra.Command, args []string, toComplete string) ([
 	var completions []string
 	for _, backup := range backups {
 		// Skip backups that are already in args to avoid duplicates
-		alreadyAdded := false
-		for _, arg := range args {
-			if arg == backup.Identity {
-				alreadyAdded = true
-				break
-			}
-		}
+		alreadyAdded := slices.Contains(args, backup.Identity)
 		if !alreadyAdded {
 			completions = append(completions, backup.Identity)
 		}

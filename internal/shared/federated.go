@@ -30,7 +30,7 @@ func ParseAccessCredentialScopes(ss []string) ([]clientiam.AccessCredentialsScop
 	return out, nil
 }
 
-func ParseConditionsJSON(s, path string) (map[string]interface{}, error) {
+func ParseConditionsJSON(s, path string) (map[string]any, error) {
 	raw := s
 	if path != "" {
 		b, err := os.ReadFile(path)
@@ -42,7 +42,7 @@ func ParseConditionsJSON(s, path string) (map[string]interface{}, error) {
 	if strings.TrimSpace(raw) == "" {
 		return nil, nil
 	}
-	var m map[string]interface{}
+	var m map[string]any
 	if err := json.Unmarshal([]byte(raw), &m); err != nil {
 		return nil, fmt.Errorf("parse conditions JSON: %w", err)
 	}

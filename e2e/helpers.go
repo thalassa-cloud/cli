@@ -113,7 +113,7 @@ func (c *TestConfig) RunCommand(t *testing.T, args ...string) *CommandResult {
 		"--client-id":     true,
 		"--client-secret": true,
 	}
-	for i := 0; i < len(maskedArgs); i++ {
+	for i := range maskedArgs {
 		if secretFlags[maskedArgs[i]] {
 			// Mask the argument that follows the secret flag
 			if i+1 < len(maskedArgs) {
