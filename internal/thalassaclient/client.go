@@ -1,10 +1,12 @@
 package thalassaclient
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/projectresolve"
 	"github.com/thalassa-cloud/cli/internal/version"
 	"github.com/thalassa-cloud/client-go/pkg/client"
 	"github.com/thalassa-cloud/client-go/thalassa"
@@ -13,6 +15,7 @@ import (
 func GetThalassaClient() (thalassa.Client, error) {
 	endpoint := contextstate.Server()
 	org := contextstate.Organisation()
+	projectRef := contextstate.Project()
 
 	opts := []client.Option{
 		client.WithBaseURL(endpoint),
@@ -39,6 +42,18 @@ func GetThalassaClient() (thalassa.Client, error) {
 		opts = append(opts, client.WithAuthPersonalToken(token))
 	} else {
 		return nil, errors.New("no authentication method provided")
+	}
+
+	if projectRef != "" {
+		tempClient, err := thalassa.NewClient(opts...)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create client: %w", err)
+		}
+		projectIdentity, err := projectresolve.ResolveProjectIdentity(context.Background(), tempClient.Projects(), projectRef)
+		if err != nil {
+			return nil, err
+		}
+		opts = append(opts, client.WithProject(projectIdentity))
 	}
 
 	client, err := thalassa.NewClient(opts...)

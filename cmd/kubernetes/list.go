@@ -88,5 +88,5 @@ func init() {
 	// flags
 	listCmd.Flags().StringVar(&vpc, VpcFlag, "", "VPC ID")
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
-	listCmd.RegisterFlagCompletionFunc(VpcFlag, completion.CompleteVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc(VpcFlag, completion.CompleteVPCID)
 }

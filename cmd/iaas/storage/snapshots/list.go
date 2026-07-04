@@ -122,6 +122,6 @@ func init() {
 	listCmd.Flags().StringVar(&listVolumeFilter, "volume", "", "Source volume of the snapshot")
 
 	// Register completions
-	listCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
-	listCmd.RegisterFlagCompletionFunc("volume", completion.CompleteVolumeID)
+	_ = listCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = listCmd.RegisterFlagCompletionFunc("volume", completion.CompleteVolumeID)
 }

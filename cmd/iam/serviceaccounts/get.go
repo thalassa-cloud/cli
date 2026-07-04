@@ -5,9 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/cmd/iam/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )

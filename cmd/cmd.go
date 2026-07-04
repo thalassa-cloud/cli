@@ -19,6 +19,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/me"
 	"github.com/thalassa-cloud/cli/cmd/objectstorage"
 	"github.com/thalassa-cloud/cli/cmd/oidc"
+	"github.com/thalassa-cloud/cli/cmd/projects"
 	"github.com/thalassa-cloud/cli/cmd/quotas"
 	"github.com/thalassa-cloud/cli/cmd/registry"
 	"github.com/thalassa-cloud/cli/cmd/version"
@@ -47,6 +48,7 @@ func handleExecutionError(err error) {
 
 func init() {
 	RootCmd.PersistentFlags().StringVarP(&contextstate.OrganisationFlag, "organisation", "O", "", "Organisation slug or identity (overrides context)")
+	RootCmd.PersistentFlags().StringVarP(&contextstate.ProjectFlag, "project", "P", "", "Project identity (overrides context; slug is resolved to identity; use \"root\" for organisation scope)")
 	RootCmd.PersistentFlags().StringVarP(&contextstate.ContextFlag, "context", "c", "", "Context name")
 	RootCmd.PersistentFlags().StringVar(&contextstate.EndpointFlag, "api", "", "API endpoint (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.AccessTokenFlag, "access-token", "", "Access Token authentication (overrides context)")
@@ -56,7 +58,8 @@ func init() {
 	RootCmd.PersistentFlags().BoolVar(&contextstate.DebugFlag, "debug", false, "Debug mode")
 
 	// Register completions
-	RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
+	_ = RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
+	_ = RootCmd.RegisterFlagCompletionFunc("project", completion.CompleteProject)
 
 	RootCmd.AddCommand(api.ApiCmd)
 	RootCmd.AddCommand(context.ContextCmd)
@@ -73,6 +76,7 @@ func init() {
 	RootCmd.AddCommand(dbaas.DbaasCmd)
 	RootCmd.AddCommand(me.MeCmd)
 	RootCmd.AddCommand(iam.IamCmd)
+	RootCmd.AddCommand(projects.ProjectsCmd)
 	RootCmd.AddCommand(audit.AuditCmd)
 	RootCmd.AddCommand(registry.RegistryCmd)
 	RootCmd.AddCommand(oidc.OidcCmd)

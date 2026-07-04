@@ -11,18 +11,18 @@ import (
 )
 
 var (
-	updateVisibility         string
-	updateRetentionEnabled   bool
-	updateDeleteUntagged     bool
-	updateRetentionDays      int
-	updateRetentionCount     int
+	updateVisibility          string
+	updateRetentionEnabled    bool
+	updateDeleteUntagged      bool
+	updateRetentionDays       int
+	updateRetentionCount      int
 	updateRetentionPolicyFile string
 )
 
 var updateCmd = &cobra.Command{
-	Use:     "update",
-	Short:   "Update namespace configuration",
-	Args:    cobra.NoArgs,
+	Use:   "update",
+	Short: "Update namespace configuration",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if namespace == "" {
 			return fmt.Errorf("--namespace is required")
@@ -81,6 +81,6 @@ func init() {
 	updateCmd.Flags().IntVar(&updateRetentionCount, "retention-count", 0, "Retain this many recent tags")
 	updateCmd.Flags().StringVar(&updateRetentionPolicyFile, "retention-policy-file", "", "Path to JSON file with full retention policy")
 
-	updateCmd.MarkFlagRequired(NamespaceFlag)
-	updateCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
+	_ = updateCmd.MarkFlagRequired(NamespaceFlag)
+	_ = updateCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
 }

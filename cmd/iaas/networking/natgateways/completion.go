@@ -9,6 +9,5 @@ var (
 	completeNatGatewayID = completion.CompleteNatGatewayID
 	completeVPCID        = completion.CompleteVPCID
 	completeRegion       = completion.CompleteRegion
-	completeSubnetID     = completion.CompleteSubnetID
 	completeOutputFormat = completion.CompleteOutputFormat
 )

@@ -57,5 +57,5 @@ func init() {
 	setAttachmentsCmd.Flags().StringSliceVar(&setAttachmentEndpoints, "endpoint", []string{}, "Endpoint identities to attach")
 
 	setAttachmentsCmd.ValidArgsFunction = completeTargetGroupID
-	setAttachmentsCmd.RegisterFlagCompletionFunc("server", completeMachineID)
+	_ = setAttachmentsCmd.RegisterFlagCompletionFunc("server", completeMachineID)
 }

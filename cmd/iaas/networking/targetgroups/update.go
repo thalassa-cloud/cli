@@ -45,13 +45,13 @@ var updateCmd = &cobra.Command{
 		}
 
 		req := iaas.UpdateTargetGroup{
-			Name:            current.Name,
-			Description:     current.Description,
-			TargetPort:      current.TargetPort,
-			Protocol:        current.Protocol,
-			TargetSelector:  current.TargetSelector,
-			Labels:          current.Labels,
-			Annotations:     current.Annotations,
+			Name:                current.Name,
+			Description:         current.Description,
+			TargetPort:          current.TargetPort,
+			Protocol:            current.Protocol,
+			TargetSelector:      current.TargetSelector,
+			Labels:              current.Labels,
+			Annotations:         current.Annotations,
 			LoadbalancingPolicy: current.LoadbalancingPolicy,
 			EnableProxyProtocol: current.EnableProxyProtocol,
 			HealthCheck:         current.HealthCheck,
@@ -115,6 +115,6 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
 	updateCmd.ValidArgsFunction = completeTargetGroupID
-	updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
-	updateCmd.RegisterFlagCompletionFunc("loadbalancing-policy", completeLoadbalancingPolicy)
+	_ = updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
+	_ = updateCmd.RegisterFlagCompletionFunc("loadbalancing-policy", completeLoadbalancingPolicy)
 }

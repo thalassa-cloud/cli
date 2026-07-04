@@ -13,15 +13,15 @@ import (
 )
 
 var (
-	createName                  string
-	createDescription           string
-	createSubnet                string
-	createInternal              bool
-	createDeleteProtection      bool
-	createLabels                []string
-	createAnnotations           []string
-	createSecurityGroups        []string
-	createWait                  bool
+	createName             string
+	createDescription      string
+	createSubnet           string
+	createInternal         bool
+	createDeleteProtection bool
+	createLabels           []string
+	createAnnotations      []string
+	createSecurityGroups   []string
+	createWait             bool
 )
 
 var createCmd = &cobra.Command{
@@ -99,9 +99,9 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createSecurityGroups, "security-groups", []string{}, "Security group identities to attach")
 	createCmd.Flags().BoolVar(&createWait, "wait", false, "Wait for the load balancer to be ready")
 
-	createCmd.MarkFlagRequired("name")
-	createCmd.MarkFlagRequired("subnet")
+	_ = createCmd.MarkFlagRequired("name")
+	_ = createCmd.MarkFlagRequired("subnet")
 
-	createCmd.RegisterFlagCompletionFunc("subnet", completeSubnetID)
-	createCmd.RegisterFlagCompletionFunc("security-groups", completeSecurityGroupID)
+	_ = createCmd.RegisterFlagCompletionFunc("subnet", completeSubnetID)
+	_ = createCmd.RegisterFlagCompletionFunc("security-groups", completeSecurityGroupID)
 }

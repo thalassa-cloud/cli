@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/labels"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/filters"
@@ -98,18 +99,17 @@ var resizeCmd = &cobra.Command{
 		}
 
 		// Ask for confirmation unless --force is provided
-		if !resizeForce {
-			fmt.Printf("Are you sure you want to resize the following volume(s) to %dGB?\n", resizeSize)
-			for _, volume := range volumesToResize {
-				fmt.Printf("  %s (%s) - current size: %dGB\n", volume.Name, volume.Identity, volume.Size)
-			}
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to resize the following volume(s) to %dGB?\n", resizeSize)
+		for _, volume := range volumesToResize {
+			fmt.Fprintf(&summary, "  %s (%s) - current size: %dGB\n", volume.Name, volume.Identity, volume.Size)
+		}
+		proceed, err := shared.PromptDestructiveUnlessForce(resizeForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		// Resize each volume

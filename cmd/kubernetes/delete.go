@@ -3,10 +3,10 @@ package kubernetes
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
@@ -73,13 +73,12 @@ Examples:
 		}
 
 		// Confirmation prompt
-		if !deleteClusterForce {
-			fmt.Printf("Do you want to delete cluster '%s'? [y/N]: ", cluster.Name)
-			var response string
-			fmt.Scanln(&response)
-			if strings.ToLower(response) != "y" && strings.ToLower(response) != "yes" {
-				return nil
-			}
+		proceed, err := shared.PromptYesNoUnlessForce(deleteClusterForce, fmt.Sprintf("Do you want to delete cluster '%s'? [y/N]: ", cluster.Name))
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		err = client.Kubernetes().DeleteKubernetesCluster(ctx, cluster.Identity)

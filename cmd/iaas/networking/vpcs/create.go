@@ -28,7 +28,7 @@ const (
 
 var (
 	createVpcValues = iaas.CreateVpc{}
-	createVpcWait  bool
+	createVpcWait   bool
 )
 
 // getCmd represents the get command

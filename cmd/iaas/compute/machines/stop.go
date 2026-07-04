@@ -1,12 +1,10 @@
 package machines
 
 import (
-	"fmt"
-	"time"
+	"context"
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
 )
 
@@ -22,48 +20,16 @@ var stopCmd = &cobra.Command{
 	Aliases: []string{"s", "stop"},
 	Args:    cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-
-		client, err := thalassaclient.GetThalassaClient()
-		if err != nil {
-			return fmt.Errorf("failed to create client: %w", err)
-		}
-
-		machineIdentity, err := getSelectedMachine(args)
-		if err != nil {
-			return err
-		}
-
-		machine, err := client.IaaS().GetMachine(cmd.Context(), machineIdentity)
-		if err != nil {
-			return err
-		}
-
-		if machine.Status.Status == string(iaas.MachineStateStopped) {
-			fmt.Println("Machine is already stopped")
-			return nil
-		}
-
-		err = client.IaaS().MachineStop(cmd.Context(), machine.Identity)
-		if err != nil {
-			return err
-		}
-		fmt.Println("Machine is stopping...")
-
-		if wait {
-			// wait for machine to be stopped
-			for {
-				machine, err = client.IaaS().GetMachine(cmd.Context(), machine.Identity)
-				if err != nil {
-					return err
-				}
-				if machine.Status.Status == string(iaas.MachineStateStopped) {
-					break
-				}
-				time.Sleep(1 * time.Second)
-			}
-			fmt.Println("Machine stopped")
-		}
-		return nil
+		return runMachineStateChange(cmd, args, machineStateChange{
+			alreadyState:    iaas.MachineStateStopped,
+			alreadyMessage:  "Machine is already stopped",
+			progressMessage: "Machine is stopping...",
+			targetState:     iaas.MachineStateStopped,
+			doneMessage:     "Machine stopped",
+			change: func(ctx context.Context, iaasClient *iaas.Client, identity string) error {
+				return iaasClient.MachineStop(ctx, identity)
+			},
+		})
 	},
 }
 

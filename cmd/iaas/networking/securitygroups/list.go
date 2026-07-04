@@ -20,10 +20,10 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime    bool
-	showLabels       bool
+	showExactTime     bool
+	showLabels        bool
 	listLabelSelector string
-	listVpcFilter    string
+	listVpcFilter     string
 )
 
 // listCmd represents the list command
@@ -122,5 +122,5 @@ func init() {
 	listCmd.Flags().StringVar(&listVpcFilter, "vpc", "", "Filter by VPC")
 
 	// Add completion
-	listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
 }

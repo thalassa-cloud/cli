@@ -6,22 +6,22 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/cmd/kubernetes/iam/shared"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/kuberesolve"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 )
 
 var (
-	noHeader        bool
-	ruleResources   []string
-	ruleVerbs       []string
-	ruleAPIGroups   []string
-	ruleResNames    []string
-	ruleNonResURLs  []string
-	ruleNote        string
+	noHeader       bool
+	ruleResources  []string
+	ruleVerbs      []string
+	ruleAPIGroups  []string
+	ruleResNames   []string
+	ruleNonResURLs []string
+	ruleNote       string
 )
 
 var addCmd = &cobra.Command{

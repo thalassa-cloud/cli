@@ -19,8 +19,8 @@ const NoHeaderKey = "no-header"
 var noHeader bool
 
 var (
-	showExactTime    bool
-	showLabels       bool
+	showExactTime     bool
+	showLabels        bool
 	listLabelSelector string
 )
 

@@ -118,5 +118,5 @@ func init() {
 	createCmd.Flags().BoolVar(&createSubnetWait, "wait", false, "Wait for the subnet to be ready before returning")
 
 	// Register completions
-	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }

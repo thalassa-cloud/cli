@@ -128,6 +128,6 @@ func init() {
 	listCmd.Flags().StringVar(&listStatusFilter, "status", "", "Status of the TFS instance")
 
 	// Register completions
-	listCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
-	listCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = listCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = listCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 }

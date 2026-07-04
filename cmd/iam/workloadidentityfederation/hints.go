@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func printBootstrapHints(opts BootstrapOptions, res *BootstrapResult, apiBase string, organisation string) {
+func printBootstrapHints(opts BootstrapOptions, res *BootstrapResult, apiBase string) {
 	tokenURL := apiBase + "/oidc/token"
 	primaryAud := opts.TrustedAudiences[0]
 	if len(opts.TrustedAudiences) > 1 {

@@ -63,8 +63,8 @@ func main() {
 		}
 
 		weight--
-		return fmt.Sprintf(defaultFmTemplate, strings.Replace(base, "_", " ", -1),
-			strings.Replace(displayName, "_", " ", -1), base, url, weight)
+		return fmt.Sprintf(defaultFmTemplate, strings.ReplaceAll(base, "_", " "),
+			strings.ReplaceAll(displayName, "_", " "), base, url, weight)
 	}
 
 	// Generates URLs for cross-references between doc pages
@@ -182,13 +182,13 @@ func moveFile(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	defer sourceFile.Close()
+	defer func() { _ = sourceFile.Close() }()
 
 	destFile, err := os.Create(dst)
 	if err != nil {
 		return err
 	}
-	defer destFile.Close()
+	defer func() { _ = destFile.Close() }()
 
 	_, err = io.Copy(destFile, sourceFile)
 	if err != nil {

@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/mitchellh/go-homedir"
+
+	"github.com/thalassa-cloud/cli/internal/projectresolve"
 )
 
 const (
@@ -23,6 +25,7 @@ const (
 	ThalassaOIDCClientIDEnvVar        = "THALASSA_CLIENT_ID"
 	ThalassaOIDCClientSecretEnvVar    = "THALASSA_CLIENT_SECRET"
 	ThalassaOrganisationIDEnvVar      = "THALASSA_ORGANISATION_ID"
+	ThalassaProjectIDEnvVar           = "THALASSA_PROJECT_ID"
 
 	ThalassaAPIEndpointEnvVar = "THALASSA_API_ENDPOINT"
 )
@@ -30,6 +33,7 @@ const (
 var (
 	globalConfigManager     ConfigManager
 	OrganisationFlag        string
+	ProjectFlag             string
 	EndpointFlag            string
 	PersonalAccessTokenFlag string
 
@@ -142,6 +146,21 @@ func Organisation() string {
 		return ""
 	}
 	return currentcontext.Organisation
+}
+
+func Project() string {
+	if ProjectFlag != "" {
+		return projectresolve.NormalizeProjectRef(ProjectFlag)
+	}
+	if project := os.Getenv(ThalassaProjectIDEnvVar); project != "" {
+		return projectresolve.NormalizeProjectRef(project)
+	}
+
+	currentcontext, err := globalConfigManager.Get()
+	if err != nil {
+		return ""
+	}
+	return currentcontext.Project
 }
 
 func Server() string {

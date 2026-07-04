@@ -44,6 +44,7 @@ func (c *configFileContextManager) Get() (Context, error) {
 	return Context{
 		Name:         contextRef.Name,
 		Organisation: contextRef.Context.Organisation,
+		Project:      contextRef.Context.Project,
 		Servers:      api,
 		Users:        user,
 	}, nil
@@ -83,6 +84,7 @@ func (c *configFileContextManager) AddOrMergeContext(context Context) error {
 			API:          context.Servers.Name,
 			User:         context.Users.Name,
 			Organisation: context.Organisation,
+			Project:      context.Project,
 		},
 	}
 	c.replaceContext(contextRef)

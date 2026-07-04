@@ -76,12 +76,12 @@ func TestSecurityGroupsListShowLabels(t *testing.T) {
 	// With --show-labels, output should contain a Labels column
 	output := result.Stdout
 	outputLower := strings.ToLower(output)
-	
+
 	// If there are no security groups, the output will just say "No security groups found"
 	if strings.Contains(outputLower, "no security groups found") {
 		return
 	}
-	
+
 	assert.Contains(t, outputLower, "label", "Output should contain 'Label' column when --show-labels is used")
 }
 
@@ -185,10 +185,10 @@ func TestSecurityGroupsCreateAndDelete(t *testing.T) {
 	// The output format is: "Security group created successfully\nID: <identity>\nName: <name>\nStatus: <status>"
 	output := createResult.Stdout
 	sgIdentity := ""
-	lines := strings.Split(output, "\n")
-	for _, line := range lines {
-		if strings.HasPrefix(line, "ID: ") {
-			sgIdentity = strings.TrimPrefix(line, "ID: ")
+	lines := strings.SplitSeq(output, "\n")
+	for line := range lines {
+		if after, ok := strings.CutPrefix(line, "ID: "); ok {
+			sgIdentity = after
 			break
 		}
 	}
@@ -290,4 +290,3 @@ func TestSecurityGroupsListOutputStructure(t *testing.T) {
 		assert.True(t, hasExpectedColumn, "Header line should contain expected column names")
 	}
 }
-

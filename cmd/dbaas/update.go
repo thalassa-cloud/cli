@@ -190,8 +190,8 @@ func init() {
 	updateCmd.Flags().StringVar(&updateClusterAutoUpgradePolicy, "auto-upgrade-policy", "", "Auto-upgrade policy: none, latest-version, latest-stable, latest-patch, latest-minor, latest-major")
 
 	// Register completions
-	updateCmd.RegisterFlagCompletionFunc("instance-type", completion.CompleteDbInstanceType)
-	updateCmd.RegisterFlagCompletionFunc("auto-upgrade-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("instance-type", completion.CompleteDbInstanceType)
+	_ = updateCmd.RegisterFlagCompletionFunc("auto-upgrade-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{
 			string(dbaas.DbClusterAutoUpgradePolicyNone),
 			string(dbaas.DbClusterAutoUpgradePolicyLatestVersion),

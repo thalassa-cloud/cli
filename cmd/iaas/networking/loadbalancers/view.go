@@ -88,6 +88,6 @@ func outputLoadbalancerYAML(lb iaas.VpcLoadbalancer) error {
 func init() {
 	LoadbalancersCmd.AddCommand(viewCmd)
 	viewCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format (yaml)")
-	viewCmd.RegisterFlagCompletionFunc("output", completeOutputFormat)
+	_ = viewCmd.RegisterFlagCompletionFunc("output", completeOutputFormat)
 	viewCmd.ValidArgsFunction = completeLoadbalancerID
 }

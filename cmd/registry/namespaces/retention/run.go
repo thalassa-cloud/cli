@@ -38,6 +38,6 @@ var runCmd = &cobra.Command{
 func init() {
 	RetentionCmd.AddCommand(runCmd)
 	runCmd.Flags().StringVar(&namespace, NamespaceFlag, "", "Namespace identity")
-	runCmd.MarkFlagRequired(NamespaceFlag)
-	runCmd.RegisterFlagCompletionFunc(NamespaceFlag, completion.CompleteContainerRegistryNamespaceID)
+	_ = runCmd.MarkFlagRequired(NamespaceFlag)
+	_ = runCmd.RegisterFlagCompletionFunc(NamespaceFlag, completion.CompleteContainerRegistryNamespaceID)
 }

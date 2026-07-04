@@ -64,9 +64,9 @@ func init() {
 	createCmd.Flags().StringVar(&vpcIdentity, "vpc", "", "VPC identity where the security group will be created")
 	createCmd.Flags().BoolVar(&allowSameGroupTraffic, "allow-same-group", false, "Allow traffic between instances in the same security group")
 
-	createCmd.MarkFlagRequired("name")
-	createCmd.MarkFlagRequired("vpc")
+	_ = createCmd.MarkFlagRequired("name")
+	_ = createCmd.MarkFlagRequired("vpc")
 
 	// Add completion
-	createCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("vpc", completeVPCID)
 }

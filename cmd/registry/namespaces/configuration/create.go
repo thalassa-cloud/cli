@@ -10,11 +10,11 @@ import (
 )
 
 var (
-	createVisibility         string
-	createRetentionEnabled   bool
-	createDeleteUntagged     bool
-	createRetentionDays      int
-	createRetentionCount     int
+	createVisibility          string
+	createRetentionEnabled    bool
+	createDeleteUntagged      bool
+	createRetentionDays       int
+	createRetentionCount      int
 	createRetentionPolicyFile string
 )
 
@@ -63,6 +63,6 @@ func init() {
 	createCmd.Flags().IntVar(&createRetentionCount, "retention-count", 0, "Retain this many recent tags (simple single-rule policy)")
 	createCmd.Flags().StringVar(&createRetentionPolicyFile, "retention-policy-file", "", "Path to JSON file with full retention policy")
 
-	createCmd.MarkFlagRequired(NamespaceFlag)
-	createCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
+	_ = createCmd.MarkFlagRequired(NamespaceFlag)
+	_ = createCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
 }

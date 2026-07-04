@@ -15,10 +15,6 @@ const NoHeaderKey = "no-header"
 
 var noHeader bool
 
-var (
-	showExactTime bool
-)
-
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:     "list",

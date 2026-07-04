@@ -7,8 +7,8 @@ import "strings"
 // The function handles whitespace trimming and validates that each pair has both key and value.
 func ParseLabelSelector(selector string) map[string]string {
 	labels := make(map[string]string)
-	pairs := strings.Split(selector, ",")
-	for _, pair := range pairs {
+	pairs := strings.SplitSeq(selector, ",")
+	for pair := range pairs {
 		pair = strings.TrimSpace(pair)
 		parts := strings.SplitN(pair, "=", 2)
 		if len(parts) == 2 {

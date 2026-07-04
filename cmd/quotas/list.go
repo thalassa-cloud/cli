@@ -14,8 +14,8 @@ import (
 const NoHeaderKey = "no-header"
 
 var (
-	noHeader              bool
-	showIncreaseRequests  bool
+	noHeader             bool
+	showIncreaseRequests bool
 )
 
 var listCmd = &cobra.Command{

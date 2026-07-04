@@ -173,8 +173,8 @@ func init() {
 	createCmd.Flags().BoolVar(&createTfsWait, "wait", false, "Wait for the TFS instance to be available before returning")
 
 	// Register completions
-	createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
-	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
+	_ = createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
+	_ = createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
 
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("region")

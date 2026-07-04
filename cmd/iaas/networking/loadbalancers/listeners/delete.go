@@ -2,9 +2,11 @@ package listeners
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
 )
@@ -28,15 +30,14 @@ var deleteCmd = &cobra.Command{
 			return fmt.Errorf("failed to create client: %w", err)
 		}
 
-		if !deleteForce {
-			fmt.Printf("Are you sure you want to delete %d listener(s) from load balancer %s?\n", len(args), loadbalancer)
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to delete %d listener(s) from load balancer %s?\n", len(args), loadbalancer)
+		proceed, err := shared.PromptDestructiveUnlessForce(deleteForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		for _, listenerID := range args {
@@ -61,7 +62,7 @@ func init() {
 	deleteCmd.Flags().StringVar(&loadbalancer, LoadbalancerFlag, "", "Load balancer identity")
 	deleteCmd.Flags().BoolVar(&deleteForce, "force", false, "Skip confirmation")
 
-	deleteCmd.MarkFlagRequired(LoadbalancerFlag)
+	_ = deleteCmd.MarkFlagRequired(LoadbalancerFlag)
 	deleteCmd.ValidArgsFunction = completeLoadbalancerListenerID
-	deleteCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
+	_ = deleteCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
 }

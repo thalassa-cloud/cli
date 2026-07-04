@@ -223,10 +223,10 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createNodePoolSecurityGroups, "security-groups", []string{}, "Security group identities to attach to node pool machines")
 	createCmd.Flags().BoolVar(&createNodePoolWait, "wait", false, "Wait for the node pool to be ready before returning")
 
-	createCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteKubernetesCluster)
-	createCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)
-	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
-	createCmd.RegisterFlagCompletionFunc("upgrade-strategy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteKubernetesCluster)
+	_ = createCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)
+	_ = createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
+	_ = createCmd.RegisterFlagCompletionFunc("upgrade-strategy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"manual", "auto", "always", "on-delete", "inplace", "never"}, cobra.ShellCompDirectiveNoFileComp
 	})
 }

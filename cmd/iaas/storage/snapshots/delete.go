@@ -2,11 +2,13 @@ package snapshots
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/labels"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/filters"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -76,18 +78,17 @@ var deleteCmd = &cobra.Command{
 		}
 
 		// Ask for confirmation unless --force is provided
-		if !force {
-			fmt.Printf("Are you sure you want to delete the following snapshot(s)?\n")
-			for _, snapshot := range snapshotsToDelete {
-				fmt.Printf("  %s (%s)\n", snapshot.Name, snapshot.Identity)
-			}
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to delete the following snapshot(s)?\n")
+		for _, snapshot := range snapshotsToDelete {
+			fmt.Fprintf(&summary, "  %s (%s)\n", snapshot.Name, snapshot.Identity)
+		}
+		proceed, err := shared.PromptDestructiveUnlessForce(force, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		// Delete each snapshot

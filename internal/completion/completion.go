@@ -2,9 +2,11 @@ package completion
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/thalassa-cloud/cli/internal/projectresolve"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/containerregistry"
 	"github.com/thalassa-cloud/client-go/dbaas"
@@ -250,13 +252,7 @@ func CompleteDbBackupID(cmd *cobra.Command, args []string, toComplete string) ([
 	var completions []string
 	for _, backup := range backups {
 		// Skip backups that are already in args to avoid duplicates
-		alreadyAdded := false
-		for _, arg := range args {
-			if arg == backup.Identity {
-				alreadyAdded = true
-				break
-			}
-		}
+		alreadyAdded := slices.Contains(args, backup.Identity)
 		if !alreadyAdded {
 			completions = append(completions, backup.Identity)
 		}
@@ -549,6 +545,29 @@ func CompleteOrganisation(cmd *cobra.Command, args []string, toComplete string) 
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
+// CompleteProject provides completion for project identities and slugs.
+func CompleteProject(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	projects, err := client.Projects().ListProjects(cmd.Context(), nil)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := []string{projectresolve.RootRef + "\tOrganisation root (no project)"}
+	for _, project := range projects {
+		desc := project.Name
+		completions = append(completions, project.Identity+"\t"+desc)
+		if project.Slug != "" && project.Slug != project.Identity {
+			completions = append(completions, project.Slug+"\t"+desc)
+		}
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
 // CompleteLoadbalancerID provides completion for load balancer IDs.
 func CompleteLoadbalancerID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 {
@@ -664,8 +683,7 @@ func CompleteContainerRegistryNamespaceID(cmd *cobra.Command, args []string, toC
 
 	completions := make([]string, 0, len(namespaces))
 	for _, ns := range namespaces {
-		desc := fmt.Sprintf("%s", ns.Namespace)
-		completions = append(completions, ns.Identity+"\t"+desc)
+		completions = append(completions, ns.Identity+"\t"+ns.Namespace)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }

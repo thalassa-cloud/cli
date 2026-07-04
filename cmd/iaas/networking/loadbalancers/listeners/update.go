@@ -51,14 +51,14 @@ var updateCmd = &cobra.Command{
 		}
 
 		req := iaas.UpdateListener{
-			Name:            current.Name,
-			Description:     current.Description,
-			Port:            current.Port,
-			Protocol:        current.Protocol,
-			AllowedSources:  current.AllowedSources,
-			Labels:          current.Labels,
-			Annotations:     current.Annotations,
-			MaxConnections:  current.MaxConnections,
+			Name:                  current.Name,
+			Description:           current.Description,
+			Port:                  current.Port,
+			Protocol:              current.Protocol,
+			AllowedSources:        current.AllowedSources,
+			Labels:                current.Labels,
+			Annotations:           current.Annotations,
+			MaxConnections:        current.MaxConnections,
 			ConnectionIdleTimeout: current.ConnectionIdleTimeout,
 		}
 		if current.TargetGroup != nil {
@@ -123,9 +123,9 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateLabels, "labels", []string{}, "Labels in key=value format")
 	updateCmd.Flags().StringSliceVar(&updateAnnotations, "annotations", []string{}, "Annotations in key=value format")
 
-	updateCmd.MarkFlagRequired(LoadbalancerFlag)
+	_ = updateCmd.MarkFlagRequired(LoadbalancerFlag)
 	updateCmd.ValidArgsFunction = completeLoadbalancerListenerID
-	updateCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
-	updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
-	updateCmd.RegisterFlagCompletionFunc("target-group", completeTargetGroupID)
+	_ = updateCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
+	_ = updateCmd.RegisterFlagCompletionFunc("protocol", completeLoadbalancerProtocol)
+	_ = updateCmd.RegisterFlagCompletionFunc("target-group", completeTargetGroupID)
 }

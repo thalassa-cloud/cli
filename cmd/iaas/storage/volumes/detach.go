@@ -2,10 +2,12 @@ package volumes
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
 	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
@@ -46,19 +48,18 @@ var detachCmd = &cobra.Command{
 			volumesToDetach = append(volumesToDetach, volume)
 		}
 
-		if !ConfirmDetach {
-			// ask for confirmation before deleting
-			fmt.Printf("Are you sure you want to detach the following volumes?\n")
-			for _, volume := range volumesToDetach {
-				fmt.Printf("  %s (%s)\n", volume.Name, volume.Identity)
-			}
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		// ask for confirmation before deleting
+		fmt.Fprintf(&summary, "Are you sure you want to detach the following volumes?\n")
+		for _, volume := range volumesToDetach {
+			fmt.Fprintf(&summary, "  %s (%s)\n", volume.Name, volume.Identity)
+		}
+		proceed, err := shared.PromptDestructiveUnlessForce(ConfirmDetach, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		for _, volume := range volumesToDetach {

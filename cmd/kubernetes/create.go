@@ -399,7 +399,7 @@ Examples:
 				}
 			}
 
-			if err := createNodePool(ctx, client, cluster, clusterName); err != nil {
+			if err := createNodePool(ctx, client, cluster); err != nil {
 				return fmt.Errorf("failed to create node pool: %w", err)
 			}
 		}
@@ -408,7 +408,7 @@ Examples:
 	},
 }
 
-func createNodePool(ctx context.Context, client thalassa.Client, cluster *kubernetes.KubernetesCluster, clusterName string) error {
+func createNodePool(ctx context.Context, client thalassa.Client, cluster *kubernetes.KubernetesCluster) error {
 	// Resolve machine type
 	resolvedMachineType, err := nodepools.ResolveMachineType(ctx, client, createNodePoolMachineType)
 	if err != nil {
@@ -542,7 +542,8 @@ func init() {
 	createCmd.Flags().IntVar(&createNodePoolMinNodes, "min-nodes", 1, "Minimum number of nodes (required when autoscaling is enabled)")
 	createCmd.Flags().IntVar(&createNodePoolMaxNodes, "max-nodes", 3, "Maximum number of nodes (required when autoscaling is enabled)")
 	createCmd.Flags().StringVar(&createNodePoolSubnet, "node-pool-subnet", "", "Subnet for the node pool (defaults to cluster subnet)")
-	createCmd.Flags().StringSliceVar(&createNodePoolAZs, "availability-zone", []string{}, "Availability zone for the node pool (can be specified multiple times to create node pools in multiple AZs). If not specified, a random AZ from the cluster's region will be selected.")
+	createCmd.Flags().StringSliceVar(&createNodePoolAZs, "availability-zone", []string{},
+		"Availability zone for the node pool (can be specified multiple times to create node pools in multiple AZs). If not specified, a random AZ from the cluster's region will be selected.")
 	createCmd.Flags().BoolVar(&createNodePoolEnableAH, "enable-autohealing", false, "Enable autohealing for the node pool")
 	createCmd.Flags().StringVar(&createNodePoolUpgradeStrat, "upgrade-strategy", "auto", "Upgrade strategy: manual, auto, always, on-delete, inplace, or never")
 	createCmd.Flags().StringSliceVar(&createNodePoolLabels, "node-labels", []string{}, "Node labels in key=value format (applied to Kubernetes nodes)")
@@ -551,35 +552,35 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createNodePoolSecurityGroups, "security-groups", []string{}, "Security group identities to attach to node pool machines")
 
 	// Register completions
-	createCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegionEnhanced)
-	createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
-	createCmd.RegisterFlagCompletionFunc("cluster-version", completion.CompleteKubernetesVersion)
-	createCmd.RegisterFlagCompletionFunc("cluster-type", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegionEnhanced)
+	_ = createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
+	_ = createCmd.RegisterFlagCompletionFunc("cluster-version", completion.CompleteKubernetesVersion)
+	_ = createCmd.RegisterFlagCompletionFunc("cluster-type", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"managed", "hosted-control-plane"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("cni", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("cni", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"cilium", "custom"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)
-	createCmd.RegisterFlagCompletionFunc("upgrade-strategy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)
+	_ = createCmd.RegisterFlagCompletionFunc("upgrade-strategy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"manual", "auto", "always", "on-delete", "inplace", "never"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("maintenance-day", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("maintenance-day", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"0", "sunday", "1", "monday", "2", "tuesday", "3", "wednesday", "4", "thursday", "5", "friday", "6", "saturday"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("kube-proxy-mode", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("kube-proxy-mode", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"iptables", "ipvs"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("kube-proxy-deployment", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("kube-proxy-deployment", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"disabled", "managed", "custom"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("pod-security-standards", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("pod-security-standards", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"baseline", "restricted", "privileged"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("audit-log-profile", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("audit-log-profile", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"none", "basic", "metadata"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	createCmd.RegisterFlagCompletionFunc("default-network-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = createCmd.RegisterFlagCompletionFunc("default-network-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"allow-all", "deny-all", "none"}, cobra.ShellCompDirectiveNoFileComp
 	})
 }

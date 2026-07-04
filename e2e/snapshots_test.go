@@ -141,8 +141,8 @@ func TestSnapshotsCreateAndDelete(t *testing.T) {
 	// The output format is: "Snapshot created successfully: <name> (<identity>)"
 	output := createResult.Stdout
 	snapshotIdentity := ""
-	lines := strings.Split(output, "\n")
-	for _, line := range lines {
+	lines := strings.SplitSeq(output, "\n")
+	for line := range lines {
 		if strings.Contains(line, "Snapshot created successfully") {
 			// Extract identity from line like "Snapshot created successfully: test-snapshot (s-xxx)"
 			parts := strings.Split(line, "(")
@@ -250,4 +250,3 @@ func TestSnapshotsListOutputStructure(t *testing.T) {
 		assert.True(t, hasExpectedColumn, "Header line should contain expected column names")
 	}
 }
-

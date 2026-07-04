@@ -12,14 +12,14 @@ import (
 
 var (
 	updateDescription string
-	updateLabels        []string
-	updateAnnotations   []string
+	updateLabels      []string
+	updateAnnotations []string
 )
 
 var updateCmd = &cobra.Command{
-	Use:     "update NAMESPACE",
-	Short:   "Update a container registry namespace",
-	Args:    cobra.ExactArgs(1),
+	Use:   "update NAMESPACE",
+	Short: "Update a container registry namespace",
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {

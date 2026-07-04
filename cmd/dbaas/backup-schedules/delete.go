@@ -2,10 +2,12 @@ package backupschedules
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
 )
@@ -45,15 +47,14 @@ var backupScheduleDeleteCmd = &cobra.Command{
 		}
 
 		// Ask for confirmation unless --force is provided
-		if !backupScheduleDeleteForce {
-			fmt.Printf("Are you sure you want to delete backup schedule %s (%s)?\n", scheduleName, scheduleIdentity)
-			var confirm string
-			fmt.Printf("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to delete backup schedule %s (%s)?\n", scheduleName, scheduleIdentity)
+		proceed, err := shared.PromptDestructiveUnlessForce(backupScheduleDeleteForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		err = client.DBaaS().DeleteDbBackupSchedule(cmd.Context(), clusterIdentity, scheduleIdentity)

@@ -2,10 +2,12 @@ package namespaces
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/labels"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/containerregistry"
 	"github.com/thalassa-cloud/client-go/filters"
@@ -63,15 +65,14 @@ var deleteCmd = &cobra.Command{
 			return nil
 		}
 
-		if !deleteForce {
-			fmt.Printf("Are you sure you want to delete %d namespace(s)?\n", len(toDelete))
-			var confirm string
-			fmt.Print("Enter 'yes' to confirm: ")
-			fmt.Scanln(&confirm)
-			if confirm != "yes" {
-				fmt.Println("Aborted")
-				return nil
-			}
+		var summary strings.Builder
+		fmt.Fprintf(&summary, "Are you sure you want to delete %d namespace(s)?\n", len(toDelete))
+		proceed, err := shared.PromptDestructiveUnlessForce(deleteForce, summary.String())
+		if err != nil {
+			return err
+		}
+		if !proceed {
+			return nil
 		}
 
 		for _, ns := range toDelete {

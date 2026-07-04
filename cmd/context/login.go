@@ -2,13 +2,11 @@ package context
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
-	"github.com/thalassa-cloud/client-go/pkg/client"
 )
 
 // createCmd represents the create command
@@ -29,24 +27,6 @@ var loginCmd = &cobra.Command{
 		oidcClientID := contextstate.ClientIdOrFlag()
 		oidcClientSecret := contextstate.ClientSecretOrFlag()
 
-		tokenURL := fmt.Sprintf("%s/oidc/token", apiURL)
-
-		opts := []client.Option{}
-		if oidcClientID != "" && oidcClientSecret != "" {
-			opts = append(opts, client.WithAuthOIDC(oidcClientID, oidcClientSecret, tokenURL))
-		} else if accessToken != "" {
-			opts = append(opts, client.WithToken(accessToken))
-		} else if token != "" {
-			opts = append(opts, client.WithAuthPersonalToken(token))
-		}
-		if len(opts) == 0 {
-			return errors.New("no authentication method provided")
-		}
-		opts = append(opts, client.WithBaseURL(apiURL))
-		if contextstate.Organisation() != "" {
-			opts = append(opts, client.WithOrganisation(contextstate.Organisation()))
-		}
-
 		if oidcClientID != "" && oidcClientSecret != "" {
 			return contextstate.LoginWithAPIEndpointOidc(cmd.Context(), oidcClientID, oidcClientSecret, apiURL)
 		}
@@ -55,6 +35,9 @@ var loginCmd = &cobra.Command{
 				return errors.New("access token is a personal access token, use 'tcloud context login --token <token>' to login with a personal access token")
 			}
 			return contextstate.LoginWithAccessToken(cmd.Context(), accessToken, apiURL)
+		}
+		if token == "" {
+			return errors.New("no authentication method provided")
 		}
 		return contextstate.LoginWithAPIEndpoint(cmd.Context(), token, apiURL)
 	},

@@ -65,5 +65,5 @@ var versionsCmd = &cobra.Command{
 func init() {
 	DbaasCmd.AddCommand(versionsCmd)
 	versionsCmd.Flags().StringVar(&engineType, "engine", "", "Database engine type (e.g., postgres)")
-	versionsCmd.MarkFlagRequired("engine")
+	_ = versionsCmd.MarkFlagRequired("engine")
 }

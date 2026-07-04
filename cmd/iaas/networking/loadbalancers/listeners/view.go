@@ -76,8 +76,8 @@ func init() {
 	viewCmd.Flags().StringVar(&loadbalancer, LoadbalancerFlag, "", "Load balancer identity")
 	viewCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format (yaml)")
 
-	viewCmd.MarkFlagRequired(LoadbalancerFlag)
-	viewCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
-	viewCmd.RegisterFlagCompletionFunc("output", completeOutputFormat)
+	_ = viewCmd.MarkFlagRequired(LoadbalancerFlag)
+	_ = viewCmd.RegisterFlagCompletionFunc(LoadbalancerFlag, completeLoadbalancerID)
+	_ = viewCmd.RegisterFlagCompletionFunc("output", completeOutputFormat)
 	viewCmd.ValidArgsFunction = completeLoadbalancerListenerID
 }

@@ -118,7 +118,7 @@ var KubernetesConnectCmd = &cobra.Command{
 				fmt.Println("Error creating temp file:", err)
 				return
 			}
-			defer os.Remove(tmpFile.Name()) // clean up
+			defer func() { _ = os.Remove(tmpFile.Name()) }() // clean up
 
 			// Set secure permissions on the temp file
 			if err := tmpFile.Chmod(0600); err != nil {
@@ -174,9 +174,7 @@ var KubernetesConnectCmd = &cobra.Command{
 			subcmd.Stdout = os.Stdout
 			subcmd.Stderr = os.Stderr
 
-			if err := subcmd.Run(); err != nil {
-				// ignore the error for now
-			}
+			_ = subcmd.Run()
 
 			// Step 4: remove the file when the shell exits
 			if err := os.Unsetenv("KUBECONFIG"); err != nil {

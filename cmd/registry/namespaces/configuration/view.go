@@ -15,9 +15,9 @@ var (
 )
 
 var viewCmd = &cobra.Command{
-	Use:     "view",
-	Short:   "View namespace configuration",
-	Args:    cobra.NoArgs,
+	Use:   "view",
+	Short: "View namespace configuration",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if namespace == "" {
 			return fmt.Errorf("--namespace is required")
@@ -57,6 +57,6 @@ func init() {
 	ConfigurationCmd.AddCommand(viewCmd)
 	viewCmd.Flags().StringVar(&namespace, NamespaceFlag, "", "Namespace identity")
 	viewCmd.Flags().StringVarP(&outputFormat, "output", "o", "", "Output format (yaml)")
-	viewCmd.MarkFlagRequired(NamespaceFlag)
-	viewCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
+	_ = viewCmd.MarkFlagRequired(NamespaceFlag)
+	_ = viewCmd.RegisterFlagCompletionFunc(NamespaceFlag, completeNamespaceID)
 }

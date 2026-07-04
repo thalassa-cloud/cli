@@ -259,23 +259,23 @@ func init() {
 	updateUpgradeScheduleStart = updateCmd.Flags().String("maintenance-start", "", "Maintenance start time: HH:MM format (e.g., '02:00' or '14:30')")
 	updateCmd.Flags().BoolVar(&updateWait, "wait", false, "Wait for the cluster update to complete")
 
-	updateCmd.RegisterFlagCompletionFunc("cluster-version", completion.CompleteKubernetesVersion)
-	updateCmd.RegisterFlagCompletionFunc("kube-proxy-mode", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("cluster-version", completion.CompleteKubernetesVersion)
+	_ = updateCmd.RegisterFlagCompletionFunc("kube-proxy-mode", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"iptables", "ipvs"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	updateCmd.RegisterFlagCompletionFunc("kube-proxy-deployment", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("kube-proxy-deployment", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"disabled", "managed", "custom"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	updateCmd.RegisterFlagCompletionFunc("pod-security-standards", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("pod-security-standards", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"baseline", "restricted", "privileged"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	updateCmd.RegisterFlagCompletionFunc("audit-log-profile", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("audit-log-profile", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"none", "basic", "metadata"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	updateCmd.RegisterFlagCompletionFunc("default-network-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("default-network-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"allow-all", "deny-all", "none"}, cobra.ShellCompDirectiveNoFileComp
 	})
-	updateCmd.RegisterFlagCompletionFunc("maintenance-day", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = updateCmd.RegisterFlagCompletionFunc("maintenance-day", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"0", "sunday", "1", "monday", "2", "tuesday", "3", "wednesday", "4", "thursday", "5", "friday", "6", "saturday"}, cobra.ShellCompDirectiveNoFileComp
 	})
 }

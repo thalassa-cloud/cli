@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/thalassa-cloud/cli/cmd/iam/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
 
@@ -75,7 +75,7 @@ func executeBootstrap(cmd *cobra.Command, opts BootstrapOptions) error {
 
 	printBootstrapOutcome(opts.VCS, res, flagDryRun)
 	if !flagNoHints && !flagDryRun {
-		printBootstrapHints(opts, res, apiBase, strings.TrimSpace(contextstate.Organisation()))
+		printBootstrapHints(opts, res, apiBase)
 	} else if flagDryRun && !flagNoHints {
 		fmt.Println("\n(dry-run: hints omitted; run without --dry-run after applying changes)")
 	}
