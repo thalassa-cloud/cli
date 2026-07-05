@@ -112,21 +112,8 @@ Examples:
 			ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
 			defer cancel()
 
-			for {
-				select {
-				case <-ctxWithTimeout.Done():
-					return fmt.Errorf("timeout waiting for node pool to be deleted")
-				default:
-				}
-
-				// Try to get the node pool - if it doesn't exist, it's deleted
-				_, err := client.Kubernetes().GetKubernetesNodePool(ctxWithTimeout, cluster.Identity, nodePool.Identity)
-				if err != nil {
-					// Node pool not found means it's deleted
-					return nil
-				}
-
-				time.Sleep(5 * time.Second)
+			if err := client.Kubernetes().WaitUntilKubernetesNodePoolDeleted(ctxWithTimeout, cluster.Identity, nodePool.Identity); err != nil {
+				return fmt.Errorf("failed to wait for node pool to be deleted: %w", err)
 			}
 		}
 
