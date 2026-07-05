@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v golangci-lint >/dev/null 2>&1; then
+	echo "pre-commit: golangci-lint not found; install it from https://golangci-lint.run/welcome/install/" >&2
+	exit 1
+fi
+
+mapfile -t staged_go_files < <(git diff --cached --name-only --diff-filter=ACM | grep '\.go$' || true)
+if ((${#staged_go_files[@]} == 0)); then
+	exit 0
+fi
+
+echo "pre-commit: go fmt"
+go fmt "${staged_go_files[@]}"
+git add -- "${staged_go_files[@]}"
+
+echo "pre-commit: golangci-lint run"
+golangci-lint run ./...
