@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"time"
 )
 
 func Login(ctx context.Context, token string) error {
@@ -103,6 +104,7 @@ func Logout() error {
 	context.Users.User.AccessToken = ""
 	context.Users.User.ClientID = ""
 	context.Users.User.ClientSecret = ""
+	context.Users.User.SetBrowserTokens("", "", time.Time{})
 	if err := CombineConfigContext(context); err != nil {
 		return err
 	}

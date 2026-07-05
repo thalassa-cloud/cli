@@ -31,6 +31,10 @@ func GetThalassaClient() (thalassa.Client, error) {
 }
 
 func GetThalassaClientWithScope(scope Scope) (thalassa.Client, error) {
+	if err := contextstate.EnsureFreshAccessToken(context.Background()); err != nil {
+		return nil, err
+	}
+
 	endpoint := contextstate.Server()
 	org := scope.Organisation
 	if org == "" {

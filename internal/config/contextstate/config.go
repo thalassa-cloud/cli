@@ -200,8 +200,10 @@ func (c *configFileContextManager) syncCredentialsAfterLoad() (bool, error) {
 		store := credentials.ResolveStore(credentials.StoreKeychain)
 		secrets, err := store.Get(user.Name)
 		if err != nil {
-			if errors.Is(err, credentials.ErrNotAvailable) || preference == credentials.StoreFile {
-				user.CredentialStore = credentials.StoreFile
+			if credentials.IsNotFound(err) || errors.Is(err, credentials.ErrNotAvailable) || preference == credentials.StoreFile {
+				if credentials.IsNotFound(err) {
+					user.CredentialStore = credentials.StoreFile
+				}
 				continue
 			}
 			return false, fmt.Errorf("load credentials for user %q from keychain: %w", user.Name, err)

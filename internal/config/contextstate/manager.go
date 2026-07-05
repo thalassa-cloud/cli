@@ -44,6 +44,8 @@ var (
 	OidcClientIDFlag     string
 	OidcClientSecretFlag string
 
+	BrowserLoginFlag bool
+
 	DebugFlag   bool
 	ContextFlag string
 )
@@ -211,7 +213,12 @@ func AccessToken() string {
 	if accessToken := os.Getenv(ThalassaAccessTokenEnvVar); accessToken != "" {
 		return accessToken
 	}
-	return ""
+
+	currentcontext, err := globalConfigManager.Get()
+	if err != nil {
+		return ""
+	}
+	return currentcontext.Users.User.AccessToken
 }
 
 func PersonalAccessToken() string {
