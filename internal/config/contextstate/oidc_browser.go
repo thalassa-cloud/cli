@@ -79,7 +79,7 @@ func loginWithBrowserTokens(tokens browseroidc.TokenPair, apiEndpoint string) er
 func EnsureFreshAccessToken(ctx context.Context) error {
 	currentContext, err := GetContextConfiguration()
 	if err != nil {
-		return err
+		return nil
 	}
 
 	user := currentContext.Users.User
