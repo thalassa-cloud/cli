@@ -9,23 +9,25 @@ import (
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 )
 
-// createCmd represents the create command
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Login to Thalassa Cloud",
-	Long:  "Login to Thalassa Cloud using a personal access token, access token, or OIDC client id and secret, using the current context. Overrides the current context if --name is set.",
+	Long:  "Login to Thalassa Cloud using browser OIDC (default when no credentials are provided), a personal access token, access token, or OIDC client credentials for the current context.",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		token := contextstate.PersonalAccessToken()
-		accessToken := contextstate.AccessToken()
 		apiURL := contextstate.Server()
-
 		if apiURL == "" {
 			return errors.New("api endpoint is required")
 		}
 
+		token := contextstate.PersonalAccessToken()
+		accessToken := contextstate.AccessToken()
 		oidcClientID := contextstate.ClientIdOrFlag()
 		oidcClientSecret := contextstate.ClientSecretOrFlag()
+
+		if contextstate.BrowserLoginFlag || (token == "" && oidcClientID == "" && oidcClientSecret == "" && accessToken == "") {
+			return contextstate.LoginWithBrowserOIDC(cmd.Context(), apiURL, contextName)
+		}
 
 		if oidcClientID != "" && oidcClientSecret != "" {
 			return contextstate.LoginWithAPIEndpointOidc(cmd.Context(), oidcClientID, oidcClientSecret, apiURL)
@@ -36,9 +38,6 @@ var loginCmd = &cobra.Command{
 			}
 			return contextstate.LoginWithAccessToken(cmd.Context(), accessToken, apiURL)
 		}
-		if token == "" {
-			return errors.New("no authentication method provided")
-		}
 		return contextstate.LoginWithAPIEndpoint(cmd.Context(), token, apiURL)
 	},
 }
@@ -47,4 +46,5 @@ func init() {
 	ContextCmd.AddCommand(loginCmd)
 
 	loginCmd.Flags().StringVar(&contextName, "name", "default", "name of the context")
+	loginCmd.Flags().BoolVar(&contextstate.BrowserLoginFlag, "browser", false, "log in through the browser using OIDC (default when no other credentials are provided)")
 }

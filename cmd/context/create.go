@@ -42,11 +42,13 @@ var createCmd = &cobra.Command{
 		oidcClientID := contextstate.ClientIdOrFlag()
 		oidcClientSecret := contextstate.ClientSecretOrFlag()
 		accessToken := contextstate.AccessToken()
-		if token == "" && oidcClientID == "" && oidcClientSecret == "" && accessToken == "" {
-			return errors.New("no token or oidc client id and secret set")
-		}
+		useBrowserLogin := contextstate.BrowserLoginFlag || (token == "" && oidcClientID == "" && oidcClientSecret == "" && accessToken == "")
 
-		if accessToken != "" {
+		if useBrowserLogin {
+			if err := contextstate.LoginWithBrowserOIDC(ctx, apiURL, contextName); err != nil {
+				return fmt.Errorf("failed to login with browser: %w", err)
+			}
+		} else if accessToken != "" {
 			if strings.HasPrefix(accessToken, "tc_pat_") {
 				return errors.New("access token is a personal access token, use 'tcloud context login --token <token>' to login with a personal access token")
 			}
@@ -128,6 +130,7 @@ func init() {
 
 	createCmd.Flags().BoolVar(&createContext, "create-context", true, "creates a context")
 	createCmd.Flags().StringVar(&contextName, "name", "default", "name of the context")
+	createCmd.Flags().BoolVar(&contextstate.BrowserLoginFlag, "browser", false, "log in through the browser using OIDC (default when no other credentials are provided)")
 }
 
 func newDefaultContext(contextName, organisation, project, apiName string) contextstate.Context {

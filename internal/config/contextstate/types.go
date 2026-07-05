@@ -2,6 +2,7 @@ package contextstate
 
 import (
 	"errors"
+	"time"
 
 	"github.com/thalassa-cloud/cli/internal/credentials"
 )
@@ -58,22 +59,57 @@ type User struct {
 	AccessToken  string `yaml:"accessToken,omitempty"`
 	ClientID     string `yaml:"clientID,omitempty"`
 	ClientSecret string `yaml:"clientSecret,omitempty"`
+
+	refreshToken      string    `yaml:"-"`
+	accessTokenExpiry time.Time `yaml:"-"`
 }
 
 func (u User) Secrets() credentials.Secrets {
-	return credentials.Secrets{
+	secrets := credentials.Secrets{
 		Token:        u.Token,
 		AccessToken:  u.AccessToken,
+		RefreshToken: u.refreshToken,
 		ClientID:     u.ClientID,
 		ClientSecret: u.ClientSecret,
 	}
+	if !u.accessTokenExpiry.IsZero() {
+		secrets.AccessTokenExpiry = u.accessTokenExpiry.UTC().Format(time.RFC3339)
+	}
+	return secrets
 }
 
 func (u *User) ApplySecrets(secrets credentials.Secrets) {
 	u.Token = secrets.Token
 	u.AccessToken = secrets.AccessToken
+	u.refreshToken = secrets.RefreshToken
 	u.ClientID = secrets.ClientID
 	u.ClientSecret = secrets.ClientSecret
+	u.accessTokenExpiry = time.Time{}
+	if secrets.AccessTokenExpiry != "" {
+		if parsed, err := time.Parse(time.RFC3339, secrets.AccessTokenExpiry); err == nil {
+			u.accessTokenExpiry = parsed
+		}
+	}
+}
+
+func (u *User) SetBrowserTokens(accessToken, refreshToken string, expiry time.Time) {
+	u.Token = ""
+	u.AccessToken = accessToken
+	u.refreshToken = refreshToken
+	u.accessTokenExpiry = expiry
+	u.ClientID = ""
+	u.ClientSecret = ""
+}
+
+func (u User) RefreshToken() string {
+	return u.refreshToken
+}
+
+func (u User) AccessTokenExpired(now time.Time, skew time.Duration) bool {
+	if u.accessTokenExpiry.IsZero() {
+		return false
+	}
+	return !u.accessTokenExpiry.After(now.Add(skew))
 }
 
 func (u *User) ClearSecrets() {

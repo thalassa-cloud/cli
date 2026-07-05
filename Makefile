@@ -45,7 +45,10 @@ test-e2e: build ## Run E2E tests (requires TCLOUD_E2E_* environment variables)
 docs:
 	go run tools/docs.go
 
+install-hooks: ## Install git pre-commit hooks (go fmt, golangci-lint)
+	@./scripts/install-githooks.sh
+
 clean:
 	-rm -f bin/${BINARY}-* bin/${BINARY}
 
-.PHONY: link linux darwin windows test test-e2e fmt clean docs
+.PHONY: link linux darwin windows test test-e2e fmt clean docs install-hooks
