@@ -9,13 +9,23 @@ import (
 	"github.com/thalassa-cloud/cli/internal/config/securefile"
 )
 
+var migrateCredentials bool
+
 var fixCmd = &cobra.Command{
-	Use:     "fix",
-	Short:   "Fix config file security issues",
-	Long:    "Fix security issues in the CLI config file, such as overly permissive file permissions.",
-	Example: `  tcloud context fix`,
-	Args:    cobra.NoArgs,
+	Use:   "fix",
+	Short: "Fix config file security issues",
+	Long:  "Fix security issues in the CLI config file, such as overly permissive file permissions or migrating credentials to the keychain.",
+	Example: `  tcloud context fix
+  tcloud context fix --migrate-credentials`,
+	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if migrateCredentials {
+			if err := contextstate.MigrateCredentialsToKeychain(); err != nil {
+				return err
+			}
+			fmt.Println("Migrated credentials from the config file to the keychain.")
+		}
+
 		filename := contextstate.ConfigFilename()
 		mode, permissive, err := securefile.CheckPermissions(filename)
 		if err != nil {
@@ -36,4 +46,5 @@ var fixCmd = &cobra.Command{
 
 func init() {
 	ContextCmd.AddCommand(fixCmd)
+	fixCmd.Flags().BoolVar(&migrateCredentials, "migrate-credentials", false, "move plaintext credentials from the config file into the keychain")
 }

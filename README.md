@@ -79,6 +79,30 @@ Existing plaintext credentials in `~/.tcloud` are migrated to the keychain autom
 
 To inspect or remove keychain entries on macOS, open **Keychain Access** and search for `Thalassa Cloud CLI`.
 
+## Config file permissions
+
+The CLI stores settings in `~/.tcloud`. On load, the CLI warns if that file is world-readable. Fix permissions with:
+
+```bash
+tcloud context fix
+```
+
+This restricts `~/.tcloud` to owner-only access (`0600`).
+
+### Migrating credentials to the keychain
+
+New logins store secrets in the OS credential store (macOS Keychain, Windows Credential Manager, or Linux Secret Service) when available. Existing configs with plaintext tokens in `~/.tcloud` are left unchanged until manually running the `fix` command.
+
+To move existing plaintext credentials into the keychain:
+
+```bash
+tcloud context fix --migrate-credentials
+```
+
+Use `tcloud context view` to inspect your config with secrets redacted.
+
+Control credential storage with `THALASSA_CREDENTIAL_STORE` (`auto`, `keychain`, or `file`).
+
 ## Development
 
 ### Prerequisites

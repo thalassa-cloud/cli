@@ -93,6 +93,9 @@ type ConfigManager interface {
 
 	// FixPermissions restricts the config file to owner-only access.
 	FixPermissions() error
+
+	// MigrateCredentialsToKeychain moves plaintext credentials from the config file into the keychain.
+	MigrateCredentialsToKeychain() error
 }
 
 func Init() {
@@ -136,6 +139,10 @@ func FixConfigPermissions() error {
 		return err
 	}
 	return globalConfigManager.FixPermissions()
+}
+
+func MigrateCredentialsToKeychain() error {
+	return globalConfigManager.MigrateCredentialsToKeychain()
 }
 
 func GetContextConfiguration() (Context, error) {

@@ -69,6 +69,7 @@ func loginWithBrowserTokens(tokens browseroidc.TokenPair, apiEndpoint string) er
 
 	currentContext.Users.User.SetBrowserTokens(tokens.AccessToken, tokens.RefreshToken, tokens.Expiry)
 	currentContext.Servers.API.Server = u.String()
+	ApplyPreferredCredentialStoreForNewLogin(&currentContext.Users)
 	if err := CombineConfigContext(currentContext); err != nil {
 		return err
 	}

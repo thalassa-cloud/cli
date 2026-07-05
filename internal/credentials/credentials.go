@@ -84,7 +84,7 @@ func UseKeychain(preference, userStore string) bool {
 		if userStore == StoreFile {
 			return false
 		}
-		return keyringStore{}.Available()
+		return false
 	}
 }
 

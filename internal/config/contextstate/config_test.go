@@ -14,10 +14,9 @@ import (
 	"github.com/thalassa-cloud/cli/internal/credentials"
 )
 
-func TestConfigManagerMigratesPlaintextCredentialsToKeychain(t *testing.T) {
+func TestConfigManagerMigrateCredentialsToKeychain(t *testing.T) {
 	keyring.MockInit()
 	t.Cleanup(credentials.ResetKeyring)
-	t.Setenv(credentials.ThalassaCredentialStoreEnvVar, credentials.StoreKeychain)
 
 	dir := t.TempDir()
 	path := filepath.Join(dir, ".tcloud")
@@ -42,11 +41,17 @@ users:
 	manager := contextstate.NewConfigFileContextManager(path)
 	require.NoError(t, manager.Load())
 
+	onDisk, err := os.ReadFile(path)
+	require.NoError(t, err)
+	assert.Contains(t, string(onDisk), "tc_pat_secret")
+
+	require.NoError(t, manager.MigrateCredentialsToKeychain())
+
 	ctx, err := manager.Get()
 	require.NoError(t, err)
 	assert.Equal(t, "tc_pat_secret", ctx.Users.User.Token)
 
-	onDisk, err := os.ReadFile(path)
+	onDisk, err = os.ReadFile(path)
 	require.NoError(t, err)
 	assert.NotContains(t, string(onDisk), "tc_pat_secret")
 
@@ -72,6 +77,37 @@ users:
 	got, err := store.Get("default")
 	require.NoError(t, err)
 	assert.Equal(t, "tc_pat_secret", got.Token)
+}
+
+func TestConfigManagerLoadDoesNotMigratePlaintextCredentials(t *testing.T) {
+	keyring.MockInit()
+	t.Cleanup(credentials.ResetKeyring)
+
+	dir := t.TempDir()
+	path := filepath.Join(dir, ".tcloud")
+	require.NoError(t, os.WriteFile(path, []byte(`configVersion: v1
+current-context: default
+contexts:
+  - name: default
+    context:
+      api: api.thalassa.cloud
+      user: default
+servers:
+  - name: api.thalassa.cloud
+    api:
+      server: https://api.thalassa.cloud
+users:
+  - name: default
+    user:
+      token: tc_pat_secret
+`), 0o644))
+
+	manager := contextstate.NewConfigFileContextManager(path)
+	require.NoError(t, manager.Load())
+
+	onDisk, err := os.ReadFile(path)
+	require.NoError(t, err)
+	assert.Contains(t, string(onDisk), "tc_pat_secret")
 }
 
 func TestConfigManagerSanitizedConfigRedactsSecrets(t *testing.T) {

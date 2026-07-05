@@ -37,9 +37,11 @@ func TestKeyringStoreRoundTrip(t *testing.T) {
 func TestUseKeychainRespectsPreference(t *testing.T) {
 	t.Setenv(credentials.ThalassaCredentialStoreEnvVar, credentials.StoreFile)
 	assert.False(t, credentials.UseKeychain(credentials.PreferredStore(), credentials.StoreKeychain))
+	assert.False(t, credentials.UseKeychain(credentials.PreferredStore(), ""))
 
 	t.Setenv(credentials.ThalassaCredentialStoreEnvVar, credentials.StoreKeychain)
 	assert.True(t, credentials.UseKeychain(credentials.PreferredStore(), credentials.StoreFile))
+	assert.True(t, credentials.UseKeychain(credentials.PreferredStore(), ""))
 }
 
 func TestSecretsEmpty(t *testing.T) {
