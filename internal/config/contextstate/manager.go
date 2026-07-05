@@ -28,8 +28,8 @@ const (
 	ThalassaOrganisationIDEnvVar      = "THALASSA_ORGANISATION_ID"
 	ThalassaProjectIDEnvVar           = "THALASSA_PROJECT_ID"
 
-	ThalassaAPIEndpointEnvVar         = "THALASSA_API_ENDPOINT"
-	ThalassaCredentialStoreEnvVar     = credentials.ThalassaCredentialStoreEnvVar
+	ThalassaAPIEndpointEnvVar     = "THALASSA_API_ENDPOINT"
+	ThalassaCredentialStoreEnvVar = credentials.ThalassaCredentialStoreEnvVar
 )
 
 var (
