@@ -53,6 +53,9 @@ func BrowserLogin(ctx context.Context, opts BrowserLoginOptions) (TokenPair, err
 	if redirectURLString == "" {
 		listener, redirectURLString, err = listenOnCallbackPorts(CallbackPorts)
 	} else {
+		if err := validateLoopbackRedirectURL(redirectURLString); err != nil {
+			return TokenPair{}, err
+		}
 		redirectURL, parseErr := url.Parse(redirectURLString)
 		if parseErr != nil {
 			return TokenPair{}, fmt.Errorf("parse redirect url: %w", parseErr)
@@ -75,9 +78,18 @@ func BrowserLogin(ctx context.Context, opts BrowserLoginOptions) (TokenPair, err
 	}
 	verifier := oauth2.GenerateVerifier()
 
+	authEndpoint, err := authURL()
+	if err != nil {
+		return TokenPair{}, err
+	}
+	tokenEndpoint, err := tokenURL()
+	if err != nil {
+		return TokenPair{}, err
+	}
+
 	conf := oauth2.Config{
 		ClientID:    ClientID,
-		Endpoint:    oauth2.Endpoint{AuthURL: authURL(), TokenURL: tokenURL()},
+		Endpoint:    oauth2.Endpoint{AuthURL: authEndpoint, TokenURL: tokenEndpoint},
 		RedirectURL: redirectURLString,
 		Scopes:      []string{"openid", "offline_access", "profile", "email"},
 	}
@@ -86,9 +98,18 @@ func BrowserLogin(ctx context.Context, opts BrowserLoginOptions) (TokenPair, err
 	errCh := make(chan error, 1)
 
 	mux := http.NewServeMux()
-	server := &http.Server{Handler: mux}
+	server := &http.Server{
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+	}
 
 	mux.HandleFunc(redirectURL.Path, func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
 		if queryState := r.URL.Query().Get("state"); queryState != state {
 			errCh <- ErrStateMismatch
 			http.Error(w, "invalid login state", http.StatusBadRequest)
@@ -160,9 +181,14 @@ func RefreshAccessToken(ctx context.Context, refreshToken string) (TokenPair, er
 		return TokenPair{}, errors.New("refresh token is required")
 	}
 
+	tokenEndpoint, err := tokenURL()
+	if err != nil {
+		return TokenPair{}, err
+	}
+
 	conf := oauth2.Config{
 		ClientID: ClientID,
-		Endpoint: oauth2.Endpoint{AuthURL: authURL(), TokenURL: tokenURL()},
+		Endpoint: oauth2.Endpoint{TokenURL: tokenEndpoint},
 	}
 	tokenSource := conf.TokenSource(ctx, &oauth2.Token{RefreshToken: refreshToken})
 	token, err := tokenSource.Token()
