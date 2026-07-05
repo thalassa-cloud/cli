@@ -13,6 +13,7 @@ func Login(ctx context.Context, token string) error {
 		return err
 	}
 	context.Users.User.Token = token
+	ApplyPreferredCredentialStoreForNewLogin(&context.Users)
 	if err := CombineConfigContext(context); err != nil {
 		return err
 	}
@@ -36,6 +37,7 @@ func LoginWithAPIEndpointOidc(ctx context.Context, clientID, clientSecret, apiEn
 	context.Users.User.AccessToken = ""
 
 	context.Servers.API.Server = u.String()
+	ApplyPreferredCredentialStoreForNewLogin(&context.Users)
 	if err := CombineConfigContext(context); err != nil {
 		return err
 	}
@@ -58,6 +60,7 @@ func LoginWithAccessToken(ctx context.Context, accessToken, apiEndpoint string) 
 	context.Users.User.ClientID = ""
 	context.Users.User.ClientSecret = ""
 	context.Servers.API.Server = u.String()
+	ApplyPreferredCredentialStoreForNewLogin(&context.Users)
 	if err := CombineConfigContext(context); err != nil {
 		return err
 	}
@@ -81,6 +84,7 @@ func LoginWithAPIEndpoint(ctx context.Context, token, apiEndpoint string) error 
 	context.Users.User.AccessToken = ""
 
 	context.Servers.API.Server = u.String()
+	ApplyPreferredCredentialStoreForNewLogin(&context.Users)
 	if err := CombineConfigContext(context); err != nil {
 		return err
 	}

@@ -92,6 +92,17 @@ func (c *configFileContextManager) Load() error {
 	return nil
 }
 
+func (c *configFileContextManager) MigrateCredentialsToKeychain() error {
+	migrated, err := c.migratePlaintextCredentialsToKeychain()
+	if err != nil {
+		return err
+	}
+	if !migrated {
+		return nil
+	}
+	return c.Save()
+}
+
 // AddOrMergeContext adds or merges the given context.
 func (c *configFileContextManager) AddOrMergeContext(context Context) error {
 	c.setUser(context.Users)
@@ -173,24 +184,13 @@ func (c *configFileContextManager) RemoveContextServer(name string) error {
 	return c.Save()
 }
 
-func (c *configFileContextManager) syncCredentialsAfterLoad() (bool, error) {
+func (c *configFileContextManager) syncCredentialsAfterLoad() (bool, error) { //nolint:unparam
 	preference := credentials.PreferredStore()
-	migrated := false
 
 	for i := range c.config.Users {
 		user := &c.config.Users[i]
-		if user.User.HasSecrets() && credentials.UseKeychain(preference, user.CredentialStore) {
-			store := credentials.ResolveStore(credentials.StoreKeychain)
-			if err := store.Set(user.Name, user.User.Secrets()); err != nil {
-				if preference == credentials.StoreKeychain {
-					return false, fmt.Errorf("store credentials in keychain: %w", err)
-				}
-				user.CredentialStore = credentials.StoreFile
-				continue
-			}
-			user.CredentialStore = credentials.StoreKeychain
-			migrated = true
-			continue
+		if user.CredentialStore == "" && user.User.HasSecrets() {
+			user.CredentialStore = credentials.StoreFile
 		}
 
 		if user.CredentialStore != credentials.StoreKeychain {
@@ -211,6 +211,30 @@ func (c *configFileContextManager) syncCredentialsAfterLoad() (bool, error) {
 		user.User.ApplySecrets(secrets)
 	}
 
+	return false, nil
+}
+
+func (c *configFileContextManager) migratePlaintextCredentialsToKeychain() (bool, error) {
+	store := credentials.ResolveStore(credentials.StoreKeychain)
+	if !store.Available() {
+		return false, fmt.Errorf("keychain credential store is not available")
+	}
+
+	migrated := false
+	for i := range c.config.Users {
+		user := &c.config.Users[i]
+		if user.CredentialStore == credentials.StoreKeychain {
+			continue
+		}
+		if !user.User.HasSecrets() {
+			continue
+		}
+		if err := store.Set(user.Name, user.User.Secrets()); err != nil {
+			return false, fmt.Errorf("store credentials for user %q in keychain: %w", user.Name, err)
+		}
+		user.CredentialStore = credentials.StoreKeychain
+		migrated = true
+	}
 	return migrated, nil
 }
 
