@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	deleteNodePoolCluster string
-	deleteNodePoolId      string
-	deleteNodePoolWait    bool
-	deleteNodePoolForce   bool
+	deleteNodePoolCluster     string
+	deleteNodePoolId          string
+	deleteNodePoolWait        bool
+	deleteNodePoolWaitTimeout time.Duration
+	deleteNodePoolForce       bool
 )
 
 var deleteCmd = &cobra.Command{
@@ -35,6 +36,9 @@ Examples:
 
   # Delete a node pool and wait for completion
   tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --wait
+
+  # Delete a node pool and wait up to 45 minutes
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --wait --wait-timeout 45m
 
   # Delete a node pool without confirmation
   tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --force`,
@@ -109,7 +113,10 @@ Examples:
 		}
 
 		if deleteNodePoolWait {
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+			if deleteNodePoolWaitTimeout <= 0 {
+				return fmt.Errorf("--wait-timeout must be greater than 0")
+			}
+			ctxWithTimeout, cancel := context.WithTimeout(ctx, deleteNodePoolWaitTimeout)
 			defer cancel()
 
 			if err := client.Kubernetes().WaitUntilKubernetesNodePoolDeleted(ctxWithTimeout, cluster.Identity, nodePool.Identity); err != nil {
@@ -127,6 +134,7 @@ func init() {
 	deleteCmd.Flags().StringVar(&deleteNodePoolCluster, "cluster", "", "Cluster identity, name, or slug (required)")
 	deleteCmd.Flags().StringVar(&deleteNodePoolId, "nodepool", "", "Node pool name, identity, or slug (required)")
 	deleteCmd.Flags().BoolVar(&deleteNodePoolWait, "wait", false, "Wait for the node pool to be deleted before returning")
+	deleteCmd.Flags().DurationVar(&deleteNodePoolWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the node pool to be deleted")
 	deleteCmd.Flags().BoolVar(&deleteNodePoolForce, "force", false, "Skip confirmation prompt")
 
 	_ = deleteCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
