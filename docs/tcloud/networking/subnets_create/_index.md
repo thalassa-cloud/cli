@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets create"
 title: "networking subnets create"
 slug: tcloud_networking_subnets_create
 url: /docs/tcloud/networking/subnets_create/
-weight: 9873
+weight: 9848
 cascade:
   type: docs
 ---
@@ -37,6 +37,7 @@ tcloud networking subnets create [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles rules delete"
 title: "iam roles rules delete"
 slug: tcloud_iam_roles_rules_delete
 url: /docs/tcloud/iam/roles_rules_delete/
-weight: 9929
+weight: 9927
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud iam roles rules delete <role> <rule> [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

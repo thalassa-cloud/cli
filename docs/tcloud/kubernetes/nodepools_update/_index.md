@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools update"
 title: "kubernetes nodepools update"
 slug: tcloud_kubernetes_nodepools_update
 url: /docs/tcloud/kubernetes/nodepools_update/
-weight: 9893
+weight: 9879
 cascade:
   type: docs
 ---
@@ -65,6 +65,7 @@ tcloud kubernetes nodepools update [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage update"
 title: "object-storage update"
 slug: tcloud_object-storage_update
 url: /docs/tcloud/object-storage/update/
-weight: 9854
+weight: 9820
 cascade:
   type: docs
 ---
@@ -38,6 +38,7 @@ tcloud object-storage update [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

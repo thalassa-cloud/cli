@@ -3,7 +3,7 @@ linkTitle: "tcloud iam workload-identity-federation bootstrap gitlab"
 title: "iam workload-identity-federation bootstrap gitlab"
 slug: tcloud_iam_workload-identity-federation_bootstrap_gitlab
 url: /docs/tcloud/iam/workload-identity-federation_bootstrap_gitlab/
-weight: 9909
+weight: 9907
 cascade:
   type: docs
 ---
@@ -58,6 +58,7 @@ tcloud iam workload-identity-federation bootstrap gitlab [flags]
       --name string                   Base name for the Thalassa service account and federated identity (federated identity becomes <name>-fi; default: wif-<platform>-<key>)
       --no-hints                      Do not print platform hints after bootstrap
   -O, --organisation string           Organisation slug or identity (overrides context)
+  -P, --project string                Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --provider-description string   Optional description when creating the federated identity provider
       --provider-name string          Optional display name when creating the federated identity provider
       --role string                   Organisation role identity, slug, or name (required)

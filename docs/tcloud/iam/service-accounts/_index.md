@@ -3,7 +3,7 @@ linkTitle: "tcloud iam service-accounts"
 title: "iam service-accounts"
 slug: tcloud_iam_service-accounts
 url: /docs/tcloud/iam/service-accounts/
-weight: 9921
+weight: 9919
 cascade:
   type: docs
 ---
@@ -27,6 +27,7 @@ Organisation service accounts
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

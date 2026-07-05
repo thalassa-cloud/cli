@@ -3,7 +3,7 @@ linkTitle: "tcloud storage tfs"
 title: "storage tfs"
 slug: tcloud_storage_tfs
 url: /docs/tcloud/storage/tfs/
-weight: 9839
+weight: 9780
 cascade:
   type: docs
 ---
@@ -27,6 +27,7 @@ Manage TFS (Thalassa File System) instances
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

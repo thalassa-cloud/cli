@@ -3,7 +3,7 @@ linkTitle: "tcloud networking routetables list"
 title: "networking routetables list"
 slug: tcloud_networking_routetables_list
 url: /docs/tcloud/networking/routetables_list/
-weight: 9880
+weight: 9855
 cascade:
   type: docs
 ---
@@ -34,6 +34,7 @@ tcloud networking routetables list [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

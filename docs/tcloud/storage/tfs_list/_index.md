@@ -3,7 +3,7 @@ linkTitle: "tcloud storage tfs list"
 title: "storage tfs list"
 slug: tcloud_storage_tfs_list
 url: /docs/tcloud/storage/tfs_list/
-weight: 9842
+weight: 9783
 cascade:
   type: docs
 ---
@@ -38,6 +38,7 @@ tcloud storage tfs list [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

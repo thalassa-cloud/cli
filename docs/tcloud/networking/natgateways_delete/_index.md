@@ -3,7 +3,7 @@ linkTitle: "tcloud networking natgateways delete"
 title: "networking natgateways delete"
 slug: tcloud_networking_natgateways_delete
 url: /docs/tcloud/networking/natgateways_delete/
-weight: 9884
+weight: 9859
 cascade:
   type: docs
 ---
@@ -46,6 +46,7 @@ tcloud networking natgateways delete --selector environment=test --force
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud oidc token-exchange"
 title: "oidc token-exchange"
 slug: tcloud_oidc_token-exchange
 url: /docs/tcloud/oidc/token-exchange/
-weight: 9852
+weight: 9818
 cascade:
   type: docs
 ---
@@ -39,6 +39,7 @@ tcloud oidc token-exchange [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage list"
 title: "object-storage list"
 slug: tcloud_object-storage_list
 url: /docs/tcloud/object-storage/list/
-weight: 9855
+weight: 9821
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud object-storage list [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

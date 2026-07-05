@@ -3,7 +3,7 @@ linkTitle: "tcloud iam members"
 title: "iam members"
 slug: tcloud_iam_members
 url: /docs/tcloud/iam/members/
-weight: 9939
+weight: 9937
 cascade:
   type: docs
 ---
@@ -27,6 +27,7 @@ Organisation members (owners and members)
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

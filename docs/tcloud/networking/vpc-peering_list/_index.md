@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpc-peering list"
 title: "networking vpc-peering list"
 slug: tcloud_networking_vpc-peering_list
 url: /docs/tcloud/networking/vpc-peering_list/
-weight: 9866
+weight: 9832
 cascade:
   type: docs
 ---
@@ -34,6 +34,7 @@ tcloud networking vpc-peering list [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

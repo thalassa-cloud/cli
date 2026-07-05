@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identity-providers delete"
 title: "iam federated-identity-providers delete"
 slug: tcloud_iam_federated-identity-providers_delete
 url: /docs/tcloud/iam/federated-identity-providers_delete/
-weight: 9949
+weight: 9947
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud iam federated-identity-providers delete <identity> [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

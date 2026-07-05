@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes list"
 title: "kubernetes list"
 slug: tcloud_kubernetes_list
 url: /docs/tcloud/kubernetes/list/
-weight: 9897
+weight: 9885
 cascade:
   type: docs
 ---
@@ -37,6 +37,7 @@ tcloud kubernetes list [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

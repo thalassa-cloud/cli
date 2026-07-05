@@ -3,7 +3,7 @@ linkTitle: "tcloud networking"
 title: "networking"
 slug: tcloud_networking
 url: /docs/tcloud/tcloud_networking/
-weight: 9858
+weight: 9824
 cascade:
   type: docs
 ---
@@ -31,16 +31,19 @@ Manage networking resources in the Thalassa Cloud Platform
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud networking loadbalancers](/docs/tcloud/networking/loadbalancers/)	 - Manage load balancers
 * [tcloud networking natgateways](/docs/tcloud/networking/natgateways/)	 - Manage NAT gateways
 * [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage routetables
 * [tcloud networking security-groups](/docs/tcloud/networking/security-groups/)	 - Manage security groups
 * [tcloud networking subnets](/docs/tcloud/networking/subnets/)	 - Manage subnets
+* [tcloud networking target-groups](/docs/tcloud/networking/target-groups/)	 - Manage load balancer target groups
 * [tcloud networking vpc-peering](/docs/tcloud/networking/vpc-peering/)	 - Manage VPC peering connections
 * [tcloud networking vpcs](/docs/tcloud/networking/vpcs/)	 - Manage VPCs
 

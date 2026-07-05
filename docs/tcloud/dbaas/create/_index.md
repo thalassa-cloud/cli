@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas create"
 title: "dbaas create"
 slug: tcloud_dbaas_create
 url: /docs/tcloud/dbaas/create/
-weight: 9964
+weight: 9962
 cascade:
   type: docs
 ---
@@ -52,6 +52,7 @@ tcloud dbaas create [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

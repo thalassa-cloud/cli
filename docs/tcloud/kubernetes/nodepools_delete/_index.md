@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools delete"
 title: "kubernetes nodepools delete"
 slug: tcloud_kubernetes_nodepools_delete
 url: /docs/tcloud/kubernetes/nodepools_delete/
-weight: 9895
+weight: 9881
 cascade:
   type: docs
 ---
@@ -52,6 +52,7 @@ tcloud kubernetes nodepools delete [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

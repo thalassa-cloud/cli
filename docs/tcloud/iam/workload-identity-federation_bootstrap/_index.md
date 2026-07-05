@@ -3,7 +3,7 @@ linkTitle: "tcloud iam workload-identity-federation bootstrap"
 title: "iam workload-identity-federation bootstrap"
 slug: tcloud_iam_workload-identity-federation_bootstrap
 url: /docs/tcloud/iam/workload-identity-federation_bootstrap/
-weight: 9907
+weight: 9905
 cascade:
   type: docs
 ---
@@ -48,6 +48,7 @@ Subcommands:
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

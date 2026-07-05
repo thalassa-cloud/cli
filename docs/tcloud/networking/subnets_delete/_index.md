@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets delete"
 title: "networking subnets delete"
 slug: tcloud_networking_subnets_delete
 url: /docs/tcloud/networking/subnets_delete/
-weight: 9872
+weight: 9847
 cascade:
   type: docs
 ---
@@ -46,6 +46,7 @@ tcloud networking subnets delete --selector environment=test --force
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

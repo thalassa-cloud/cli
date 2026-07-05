@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes create"
 title: "kubernetes create"
 slug: tcloud_kubernetes_create
 url: /docs/tcloud/kubernetes/create/
-weight: 9902
+weight: 9901
 cascade:
   type: docs
 ---
@@ -91,6 +91,7 @@ tcloud kubernetes create [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

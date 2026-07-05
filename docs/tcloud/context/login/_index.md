@@ -3,7 +3,7 @@ linkTitle: "tcloud context login"
 title: "context login"
 slug: tcloud_context_login
 url: /docs/tcloud/context/login/
-weight: 9981
+weight: 9980
 cascade:
   type: docs
 ---
@@ -13,7 +13,7 @@ Login to Thalassa Cloud
 
 ### Synopsis
 
-Login to Thalassa Cloud using a personal access token, access token, or OIDC client id and secret, using the current context. Overrides the current context if --name is set.
+Login to Thalassa Cloud using browser OIDC (default when no credentials are provided), a personal access token, access token, or OIDC client credentials for the current context.
 
 ```
 tcloud context login [flags]
@@ -22,6 +22,7 @@ tcloud context login [flags]
 ### Options
 
 ```
+      --browser       log in through the browser using OIDC (default when no other credentials are provided)
   -h, --help          help for login
       --name string   name of the context (default "default")
 ```
@@ -36,6 +37,7 @@ tcloud context login [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas list"
 title: "dbaas list"
 slug: tcloud_dbaas_list
 url: /docs/tcloud/dbaas/list/
-weight: 9961
+weight: 9959
 cascade:
   type: docs
 ---
@@ -50,6 +50,7 @@ tcloud dbaas list --exact-time
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 
