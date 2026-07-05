@@ -1,7 +1,6 @@
 package vpcs
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -28,9 +27,10 @@ const (
 )
 
 var (
-	createVpcValues = iaas.CreateVpc{}
-	createVpcWait   bool
-	createVpcLabels []string
+	createVpcValues      = iaas.CreateVpc{}
+	createVpcWait        bool
+	createVpcWaitTimeout time.Duration
+	createVpcLabels      []string
 )
 
 // getCmd represents the get command
@@ -73,7 +73,10 @@ var createCmd = &cobra.Command{
 		}
 
 		if createVpcWait {
-			ctxWithTimeout, cancel := context.WithTimeout(cmd.Context(), 10*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(cmd.Context(), createVpcWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			fmt.Println("Waiting for VPC to be ready...")
@@ -126,5 +129,6 @@ func init() {
 	createCmd.Flags().StringVar(&createVpcValues.CloudRegionIdentity, CreateFlagRegion, "", "Region of the vpc")
 	createCmd.Flags().StringSliceVar(&createVpcValues.VpcCidrs, CreateFlagCIDRs, []string{"10.0.0.0/16"}, "CIDRs of the vpc")
 	createCmd.Flags().BoolVar(&createVpcWait, "wait", false, "Wait for the VPC to be ready before returning")
+	createCmd.Flags().DurationVar(&createVpcWaitTimeout, "wait-timeout", 10*time.Minute, "Maximum time to wait for the VPC to be ready")
 	createCmd.Flags().StringSliceVar(&createVpcLabels, CreateFlagLabels, []string{}, "Labels in key=value format (can be specified multiple times)")
 }

@@ -3,10 +3,12 @@ package volumes
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -22,6 +24,7 @@ var (
 	createVolumeAnnotations      []string
 	createVolumeDeleteProtection bool
 	createVolumeWait             bool
+	createVolumeWaitTimeout      time.Duration
 )
 
 // createCmd represents the create command
@@ -103,8 +106,12 @@ var createCmd = &cobra.Command{
 		}
 
 		if createVolumeWait {
-			// Wait for volume to be available
-			err = client.IaaS().WaitUntilVolumeIsAvailable(cmd.Context(), volume.Identity)
+			waitCtx, cancel, err := shared.WaitContext(cmd.Context(), createVolumeWaitTimeout)
+			if err != nil {
+				return err
+			}
+			defer cancel()
+			err = client.IaaS().WaitUntilVolumeIsAvailable(waitCtx, volume.Identity)
 			if err != nil {
 				return fmt.Errorf("failed to wait for volume to be available: %w", err)
 			}
@@ -154,6 +161,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createVolumeAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	createCmd.Flags().BoolVar(&createVolumeDeleteProtection, "delete-protection", false, "Enable delete protection")
 	createCmd.Flags().BoolVar(&createVolumeWait, "wait", false, "Wait for the volume to be available before returning")
+	createCmd.Flags().DurationVar(&createVolumeWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the volume to be available")
 
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("region")

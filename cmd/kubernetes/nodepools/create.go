@@ -1,7 +1,6 @@
 package nodepools
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/fzf"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
@@ -33,6 +33,7 @@ var (
 	createNodePoolTaints         []string
 	createNodePoolSecurityGroups []string
 	createNodePoolWait           bool
+	createNodePoolWaitTimeout    time.Duration
 )
 
 var createCmd = &cobra.Command{
@@ -169,7 +170,10 @@ Examples:
 			}
 
 			if createNodePoolWait {
-				ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+				ctxWithTimeout, cancel, err := shared.WaitContext(ctx, createNodePoolWaitTimeout)
+				if err != nil {
+					return err
+				}
 				defer cancel()
 
 				_, err = client.Kubernetes().WaitUntilKubernetesNodePoolReady(ctxWithTimeout, cluster.Identity, nodePool.Identity)
@@ -222,6 +226,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createNodePoolTaints, "node-taints", []string{}, "Node taints in key=value:effect or key:effect format (e.g., 'dedicated=gpu:NoSchedule')")
 	createCmd.Flags().StringSliceVar(&createNodePoolSecurityGroups, "security-groups", []string{}, "Security group identities to attach to node pool machines")
 	createCmd.Flags().BoolVar(&createNodePoolWait, "wait", false, "Wait for the node pool to be ready before returning")
+	createCmd.Flags().DurationVar(&createNodePoolWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the node pool to be ready")
 
 	_ = createCmd.RegisterFlagCompletionFunc("cluster", completion.CompleteKubernetesCluster)
 	_ = createCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)

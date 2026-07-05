@@ -1,7 +1,6 @@
 package nodepools
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -9,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
@@ -27,6 +27,7 @@ var (
 	updateNodePoolTaints         []string
 	updateNodePoolSecurityGroups []string
 	updateNodePoolWait           bool
+	updateNodePoolWaitTimeout    time.Duration
 )
 
 var updateCmd = &cobra.Command{
@@ -243,7 +244,10 @@ to manage labels and annotations separately.`,
 		}
 
 		if updateNodePoolWait {
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(ctx, updateNodePoolWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			_, err = client.Kubernetes().WaitUntilKubernetesNodePoolReady(ctxWithTimeout, cluster.Identity, updatedNodePool.Identity)
@@ -290,6 +294,7 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateNodePoolTaints, "node-taints", []string{}, "Node taints in key=value:effect or key:effect format (e.g., 'dedicated=gpu:NoSchedule'). Replaces existing taints.")
 	updateCmd.Flags().StringSliceVar(&updateNodePoolSecurityGroups, "security-groups", []string{}, "Security group identities to attach to node pool machines")
 	updateCmd.Flags().BoolVar(&updateNodePoolWait, "wait", false, "Wait for the node pool update to complete")
+	updateCmd.Flags().DurationVar(&updateNodePoolWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the node pool update to complete")
 
 	_ = updateCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
 	_ = updateCmd.RegisterFlagCompletionFunc("machine-type", completion.CompleteMachineType)

@@ -1,7 +1,6 @@
 package nodepools
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -113,10 +112,10 @@ Examples:
 		}
 
 		if deleteNodePoolWait {
-			if deleteNodePoolWaitTimeout <= 0 {
-				return fmt.Errorf("--wait-timeout must be greater than 0")
+			ctxWithTimeout, cancel, err := shared.WaitContext(ctx, deleteNodePoolWaitTimeout)
+			if err != nil {
+				return err
 			}
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, deleteNodePoolWaitTimeout)
 			defer cancel()
 
 			if err := client.Kubernetes().WaitUntilKubernetesNodePoolDeleted(ctxWithTimeout, cluster.Identity, nodePool.Identity); err != nil {

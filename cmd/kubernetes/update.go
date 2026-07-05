@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -9,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
@@ -27,6 +27,7 @@ var (
 	updateUpgradeScheduleDay    *string
 	updateUpgradeScheduleStart  *string
 	updateWait                  bool
+	updateWaitTimeout           time.Duration
 )
 
 var updateCmd = &cobra.Command{
@@ -208,7 +209,10 @@ to manage labels and annotations separately.`,
 		}
 
 		if updateWait {
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(ctx, updateWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			_, err = client.Kubernetes().WaitUntilKubernetesClusterReady(ctxWithTimeout, updatedCluster.Identity)
@@ -258,6 +262,7 @@ func init() {
 	updateUpgradeScheduleDay = updateCmd.Flags().String("maintenance-day", "", "Maintenance day: 0-6, Sunday-Saturday, or day name")
 	updateUpgradeScheduleStart = updateCmd.Flags().String("maintenance-start", "", "Maintenance start time: HH:MM format (e.g., '02:00' or '14:30')")
 	updateCmd.Flags().BoolVar(&updateWait, "wait", false, "Wait for the cluster update to complete")
+	updateCmd.Flags().DurationVar(&updateWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the cluster update to complete")
 
 	_ = updateCmd.RegisterFlagCompletionFunc("cluster-version", completion.CompleteKubernetesVersion)
 	_ = updateCmd.RegisterFlagCompletionFunc("kube-proxy-mode", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

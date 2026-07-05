@@ -1,7 +1,6 @@
 package subnets
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -27,9 +26,10 @@ const (
 )
 
 var (
-	createSubnetValues = iaas.CreateSubnet{}
-	createSubnetWait   bool
-	createSubnetLabels []string
+	createSubnetValues      = iaas.CreateSubnet{}
+	createSubnetWait        bool
+	createSubnetWaitTimeout time.Duration
+	createSubnetLabels      []string
 )
 
 // getCmd represents the get command
@@ -66,7 +66,10 @@ var createCmd = &cobra.Command{
 		}
 
 		if createSubnetWait {
-			ctxWithTimeout, cancel := context.WithTimeout(cmd.Context(), 10*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(cmd.Context(), createSubnetWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			fmt.Println("Waiting for subnet to be ready...")
@@ -119,6 +122,7 @@ func init() {
 	createCmd.Flags().StringVar(&createSubnetValues.VpcIdentity, CreateFlagVpc, "", "VPC of the subnet")
 	createCmd.Flags().StringVar(&createSubnetValues.Cidr, CreateFlagCIDR, "", "CIDR of the subnet")
 	createCmd.Flags().BoolVar(&createSubnetWait, "wait", false, "Wait for the subnet to be ready before returning")
+	createCmd.Flags().DurationVar(&createSubnetWaitTimeout, "wait-timeout", 10*time.Minute, "Maximum time to wait for the subnet to be ready")
 	createCmd.Flags().StringSliceVar(&createSubnetLabels, CreateFlagLabels, []string{}, "Labels in key=value format (can be specified multiple times)")
 
 	// Register completions

@@ -1,13 +1,13 @@
 package loadbalancers
 
 import (
-	"context"
 	"fmt"
 	"time"
 
 	"github.com/spf13/cobra"
 
 	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
 )
@@ -22,6 +22,7 @@ var (
 	createAnnotations      []string
 	createSecurityGroups   []string
 	createWait             bool
+	createWaitTimeout      time.Duration
 )
 
 var createCmd = &cobra.Command{
@@ -65,7 +66,10 @@ var createCmd = &cobra.Command{
 		}
 
 		if createWait {
-			ctxWithTimeout, cancel := context.WithTimeout(cmd.Context(), 10*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(cmd.Context(), createWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 			fmt.Println("Waiting for load balancer to be ready...")
 			if err := client.IaaS().WaitUntilLoadbalancerIsReady(ctxWithTimeout, lb.Identity); err != nil {
@@ -98,6 +102,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", []string{}, "Annotations in key=value format")
 	createCmd.Flags().StringSliceVar(&createSecurityGroups, "security-groups", []string{}, "Security group identities to attach")
 	createCmd.Flags().BoolVar(&createWait, "wait", false, "Wait for the load balancer to be ready")
+	createCmd.Flags().DurationVar(&createWaitTimeout, "wait-timeout", 10*time.Minute, "Maximum time to wait for the load balancer to be ready")
 
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("subnet")

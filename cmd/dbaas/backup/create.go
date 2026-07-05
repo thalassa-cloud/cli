@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/dbaas"
@@ -21,6 +22,7 @@ var (
 	backupCreateAnnotations     []string
 	backupCreateRetentionPolicy string
 	backupCreateWait            bool
+	backupCreateWaitTimeout     time.Duration
 )
 
 // backupCreateCmd represents the backup create command
@@ -83,26 +85,26 @@ var backupCreateCmd = &cobra.Command{
 		}
 
 		if backupCreateWait {
-			// Poll until backup is completed
+			waitCtx, cancel, err := shared.WaitContext(cmd.Context(), backupCreateWaitTimeout)
+			if err != nil {
+				return err
+			}
+			defer cancel()
 			for {
-				backup, err = client.DBaaS().GetDbBackup(cmd.Context(), backup.Identity)
+				backup, err = client.DBaaS().GetDbBackup(waitCtx, backup.Identity)
 				if err != nil {
 					return fmt.Errorf("failed to get backup: %w", err)
 				}
-				// Check if backup is completed (has StoppedAt timestamp)
 				if backup.StoppedAt != nil {
 					break
 				}
-				// Check for failed status
 				if backup.Status == dbaas.ObjectStatusFailed {
 					return fmt.Errorf("backup creation failed: %s", backup.StatusMessage)
 				}
-				// Simple polling with sleep
 				select {
-				case <-cmd.Context().Done():
-					return cmd.Context().Err()
+				case <-waitCtx.Done():
+					return waitCtx.Err()
 				case <-time.After(5 * time.Second):
-					// Continue polling
 				}
 			}
 		}
@@ -148,6 +150,7 @@ func init() {
 	backupCreateCmd.Flags().StringSliceVar(&backupCreateAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	backupCreateCmd.Flags().StringVar(&backupCreateRetentionPolicy, "retention-policy", "", "Retention policy for the backup")
 	backupCreateCmd.Flags().BoolVar(&backupCreateWait, "wait", false, "Wait for the backup to be completed before returning")
+	backupCreateCmd.Flags().DurationVar(&backupCreateWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the backup to be completed")
 
 	_ = backupCreateCmd.MarkFlagRequired("name")
 }

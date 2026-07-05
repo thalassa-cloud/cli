@@ -3,6 +3,7 @@ package snapshots
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -17,6 +18,7 @@ import (
 
 var (
 	wait          bool
+	waitTimeout   time.Duration
 	force         bool
 	labelSelector string
 )
@@ -100,7 +102,12 @@ var deleteCmd = &cobra.Command{
 			}
 
 			if wait {
-				if err := client.IaaS().WaitUntilSnapshotIsDeleted(cmd.Context(), snapshot.Identity); err != nil {
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), waitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
+				if err := client.IaaS().WaitUntilSnapshotIsDeleted(waitCtx, snapshot.Identity); err != nil {
 					return fmt.Errorf("failed to wait for snapshot to be deleted: %w", err)
 				}
 			}
@@ -113,6 +120,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 	deleteCmd.Flags().BoolVar(&wait, "wait", false, "Wait for the snapshot(s) to be deleted")
+	deleteCmd.Flags().DurationVar(&waitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the snapshot(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&force, "force", false, "Force the deletion and skip the confirmation")
 	deleteCmd.Flags().StringVarP(&labelSelector, "selector", "l", "", "Label selector to filter snapshots (format: key1=value1,key2=value2)")
 

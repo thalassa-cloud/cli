@@ -3,11 +3,13 @@ package tfs
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -22,6 +24,7 @@ var (
 	createTfsAnnotations      []string
 	createTfsDeleteProtection bool
 	createTfsWait             bool
+	createTfsWaitTimeout      time.Duration
 	createTfsSizeGb           int
 
 	createTfsVpc    string
@@ -121,8 +124,12 @@ var createCmd = &cobra.Command{
 		}
 
 		if createTfsWait {
-			// Wait for instance to be available
-			err = client.Tfs().WaitUntilTfsInstanceIsAvailable(cmd.Context(), instance.Identity)
+			waitCtx, cancel, err := shared.WaitContext(cmd.Context(), createTfsWaitTimeout)
+			if err != nil {
+				return err
+			}
+			defer cancel()
+			err = client.Tfs().WaitUntilTfsInstanceIsAvailable(waitCtx, instance.Identity)
 			if err != nil {
 				return fmt.Errorf("failed to wait for TFS instance to be available: %w", err)
 			}
@@ -171,6 +178,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createTfsAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	createCmd.Flags().BoolVar(&createTfsDeleteProtection, "delete-protection", false, "Enable delete protection")
 	createCmd.Flags().BoolVar(&createTfsWait, "wait", false, "Wait for the TFS instance to be available before returning")
+	createCmd.Flags().DurationVar(&createTfsWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the TFS instance to be available")
 
 	// Register completions
 	_ = createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)

@@ -18,6 +18,7 @@ import (
 
 var (
 	deleteWait          bool
+	deleteWaitTimeout   time.Duration
 	deleteForce         bool
 	deleteLabelSelector string
 )
@@ -101,22 +102,23 @@ var deleteCmd = &cobra.Command{
 			}
 
 			if deleteWait {
-				// Poll until cluster is deleted
-				// Note: WaitUntilDbClusterIsDeleted may not be available, so we poll manually
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), deleteWaitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
 				for {
-					_, err := client.DBaaS().GetDbCluster(cmd.Context(), cluster.Identity)
+					_, err := client.DBaaS().GetDbCluster(waitCtx, cluster.Identity)
 					if err != nil {
 						if tcclient.IsNotFound(err) {
 							break
 						}
 						return fmt.Errorf("failed to check cluster deletion status: %w", err)
 					}
-					// Simple polling with sleep
 					select {
-					case <-cmd.Context().Done():
-						return cmd.Context().Err()
+					case <-waitCtx.Done():
+						return waitCtx.Err()
 					case <-time.After(5 * time.Second):
-						// Continue polling
 					}
 				}
 			}
@@ -129,6 +131,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 	deleteCmd.Flags().BoolVar(&deleteWait, "wait", false, "Wait for the database cluster(s) to be deleted")
+	deleteCmd.Flags().DurationVar(&deleteWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the database cluster(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&deleteForce, "force", false, "Force the deletion and skip the confirmation")
 	deleteCmd.Flags().StringVarP(&deleteLabelSelector, "selector", "l", "", "Label selector to filter clusters (format: key1=value1,key2=value2)")
 

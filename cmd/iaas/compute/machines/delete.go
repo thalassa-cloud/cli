@@ -3,6 +3,7 @@ package machines
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -15,9 +16,10 @@ import (
 )
 
 var (
-	deleteWait    bool
-	force         bool
-	labelSelector string
+	deleteWait        bool
+	deleteWaitTimeout time.Duration
+	force             bool
+	labelSelector     string
 )
 
 // deleteCmd represents the delete command
@@ -109,7 +111,12 @@ var deleteCmd = &cobra.Command{
 			}
 
 			if deleteWait {
-				if err := client.IaaS().WaitUntilMachineDeleted(cmd.Context(), machine.Identity); err != nil {
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), deleteWaitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
+				if err := client.IaaS().WaitUntilMachineDeleted(waitCtx, machine.Identity); err != nil {
 					return fmt.Errorf("failed to wait for machine to be deleted: %w", err)
 				}
 			}
@@ -124,6 +131,7 @@ func init() {
 	MachinesCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().BoolVarP(&deleteWait, "wait", "w", false, "Wait for the machine(s) to be deleted")
+	deleteCmd.Flags().DurationVar(&deleteWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the machine(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&force, "force", false, "Force the deletion and skip the confirmation")
 	deleteCmd.Flags().StringVarP(&labelSelector, "selector", "l", "", "Label selector to filter machines (format: key1=value1,key2=value2)")
 }

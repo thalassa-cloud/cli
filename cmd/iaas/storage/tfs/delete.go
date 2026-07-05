@@ -3,6 +3,7 @@ package tfs
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -17,6 +18,7 @@ import (
 
 var (
 	deleteWait          bool
+	deleteWaitTimeout   time.Duration
 	deleteForce         bool
 	deleteLabelSelector string
 )
@@ -100,7 +102,12 @@ var deleteCmd = &cobra.Command{
 			}
 
 			if deleteWait {
-				if err := client.Tfs().WaitUntilTfsInstanceIsDeleted(cmd.Context(), instance.Identity); err != nil {
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), deleteWaitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
+				if err := client.Tfs().WaitUntilTfsInstanceIsDeleted(waitCtx, instance.Identity); err != nil {
 					return fmt.Errorf("failed to wait for TFS instance to be deleted: %w", err)
 				}
 			}
@@ -113,6 +120,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 	deleteCmd.Flags().BoolVar(&deleteWait, "wait", false, "Wait for the TFS instance(s) to be deleted")
+	deleteCmd.Flags().DurationVar(&deleteWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the TFS instance(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&deleteForce, "force", false, "Force the deletion and skip the confirmation")
 	deleteCmd.Flags().StringVarP(&deleteLabelSelector, "selector", "l", "", "Label selector to filter TFS instances (format: key1=value1,key2=value2)")
 

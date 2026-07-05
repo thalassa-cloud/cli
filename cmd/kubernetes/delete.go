@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"context"
 	"fmt"
 	"time"
 
@@ -13,8 +12,9 @@ import (
 )
 
 var (
-	deleteClusterWait  bool
-	deleteClusterForce bool
+	deleteClusterWait        bool
+	deleteClusterWaitTimeout time.Duration
+	deleteClusterForce       bool
 )
 
 var deleteCmd = &cobra.Command{
@@ -87,7 +87,10 @@ Examples:
 		}
 
 		if deleteClusterWait {
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, 30*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(ctx, deleteClusterWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			for {
@@ -119,5 +122,6 @@ func init() {
 	KubernetesCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().BoolVar(&deleteClusterWait, "wait", false, "Wait for the cluster to be deleted before returning")
+	deleteCmd.Flags().DurationVar(&deleteClusterWaitTimeout, "wait-timeout", 30*time.Minute, "Maximum time to wait for the cluster to be deleted")
 	deleteCmd.Flags().BoolVar(&deleteClusterForce, "force", false, "Skip confirmation prompt")
 }

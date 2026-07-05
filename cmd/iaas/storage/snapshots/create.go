@@ -3,10 +3,12 @@ package snapshots
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
 	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
@@ -19,7 +21,8 @@ var (
 	createAnnotations      []string
 	createDeleteProtection bool
 
-	waitForReady bool
+	waitForReady        bool
+	waitForReadyTimeout time.Duration
 )
 
 // createCmd represents the create command
@@ -87,7 +90,12 @@ var createCmd = &cobra.Command{
 
 		if waitForReady {
 			fmt.Println("Waiting for snapshot to be ready...")
-			err = client.IaaS().WaitUntilSnapshotIsAvailable(cmd.Context(), snapshot.Identity)
+			waitCtx, cancel, err := shared.WaitContext(cmd.Context(), waitForReadyTimeout)
+			if err != nil {
+				return err
+			}
+			defer cancel()
+			err = client.IaaS().WaitUntilSnapshotIsAvailable(waitCtx, snapshot.Identity)
 			if err != nil {
 				return fmt.Errorf("failed to wait for snapshot to be ready: %w", err)
 			}
@@ -105,6 +113,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	createCmd.Flags().BoolVar(&createDeleteProtection, "delete-protection", false, "Enable delete protection for the snapshot")
 	createCmd.Flags().BoolVar(&waitForReady, "wait", false, "Wait for the snapshot to be ready for use")
+	createCmd.Flags().DurationVar(&waitForReadyTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the snapshot to be ready")
 
 	_ = createCmd.RegisterFlagCompletionFunc("volume", completion.CompleteVolumeID)
 }

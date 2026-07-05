@@ -12,6 +12,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/fzf"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -30,6 +31,7 @@ var (
 	createNetworkingServiceCIDR string
 	createNetworkingPodCIDR     string
 	createWait                  bool
+	createWaitTimeout           time.Duration
 	createDisablePublicEndpoint bool
 	createLabels                []string
 	createAnnotations           []string
@@ -350,7 +352,10 @@ Examples:
 		}
 
 		if createWait {
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(ctx, createWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			_, err = client.Kubernetes().WaitUntilKubernetesClusterReady(ctxWithTimeout, cluster.Identity)
@@ -385,7 +390,10 @@ Examples:
 		if createNodePoolMachineType != "" {
 			// Ensure cluster is ready before creating node pool
 			if !createWait {
-				ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+				ctxWithTimeout, cancel, err := shared.WaitContext(ctx, createWaitTimeout)
+				if err != nil {
+					return err
+				}
 				defer cancel()
 
 				_, err = client.Kubernetes().WaitUntilKubernetesClusterReady(ctxWithTimeout, cluster.Identity)
@@ -472,7 +480,10 @@ func createNodePool(ctx context.Context, client thalassa.Client, cluster *kubern
 		}
 
 		if createWait {
-			ctxWithTimeout, cancel := context.WithTimeout(ctx, 20*time.Minute)
+			ctxWithTimeout, cancel, err := shared.WaitContext(ctx, createWaitTimeout)
+			if err != nil {
+				return err
+			}
 			defer cancel()
 
 			_, err = client.Kubernetes().WaitUntilKubernetesNodePoolReady(ctxWithTimeout, cluster.Identity, nodePool.Identity)
@@ -525,6 +536,7 @@ func init() {
 	createCmd.Flags().StringVar(&createNetworkingServiceCIDR, "service-cidr", "172.16.0.0/18", "Service CIDR")
 	createCmd.Flags().StringVar(&createNetworkingPodCIDR, "pod-cidr", "192.168.0.0/16", "Pod CIDR")
 	createCmd.Flags().BoolVar(&createWait, "wait", false, "Wait for the cluster to be ready before returning")
+	createCmd.Flags().DurationVar(&createWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for resources to be ready")
 	createCmd.Flags().BoolVar(&createDisablePublicEndpoint, "disable-public-endpoint", false, "Disable public API server endpoint")
 	createCmd.Flags().StringSliceVar(&createLabels, "labels", []string{}, "Labels in key=value format (can be specified multiple times)")
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")

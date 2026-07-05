@@ -3,6 +3,7 @@ package vpcs
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -16,6 +17,7 @@ import (
 
 var (
 	wait          bool
+	waitTimeout   time.Duration
 	force         bool
 	labelSelector string
 )
@@ -99,7 +101,12 @@ var deleteCmd = &cobra.Command{
 			}
 
 			if wait {
-				if err := client.IaaS().WaitUntilVpcIsDeleted(cmd.Context(), vpc.Identity); err != nil {
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), waitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
+				if err := client.IaaS().WaitUntilVpcIsDeleted(waitCtx, vpc.Identity); err != nil {
 					return fmt.Errorf("failed to wait for VPC to be deleted: %w", err)
 				}
 			}
@@ -114,6 +121,7 @@ func init() {
 	VpcsCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().BoolVar(&wait, "wait", false, "Wait for the VPC(s) to be deleted")
+	deleteCmd.Flags().DurationVar(&waitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the VPC(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&force, "force", false, "Force the deletion and skip the confirmation")
 	deleteCmd.Flags().StringVarP(&labelSelector, "selector", "l", "", "Label selector to filter VPCs (format: key1=value1,key2=value2)")
 }

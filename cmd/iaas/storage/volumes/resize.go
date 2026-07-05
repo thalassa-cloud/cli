@@ -21,6 +21,7 @@ import (
 var (
 	resizeSize          int
 	resizeWait          bool
+	resizeWaitTimeout   time.Duration
 	resizeForce         bool
 	resizeLabelSelector string
 )
@@ -129,10 +130,14 @@ var resizeCmd = &cobra.Command{
 			}
 
 			if resizeWait {
-				timeout := time.After(10 * time.Minute)
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), resizeWaitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
 				tick := time.Tick(2 * time.Second)
 				for {
-					updatedVolume, err = client.IaaS().GetVolume(cmd.Context(), volume.Identity)
+					updatedVolume, err = client.IaaS().GetVolume(waitCtx, volume.Identity)
 					if err != nil {
 						return fmt.Errorf("failed to get volume: %w", err)
 					}
@@ -140,7 +145,7 @@ var resizeCmd = &cobra.Command{
 						break
 					}
 					select {
-					case <-timeout:
+					case <-waitCtx.Done():
 						return fmt.Errorf("timeout waiting for volume %s to be in ready state", volume.Identity)
 					case <-tick:
 						// continue looping
@@ -179,6 +184,7 @@ func init() {
 
 	resizeCmd.Flags().IntVar(&resizeSize, "size", 0, "New size in GB (required)")
 	resizeCmd.Flags().BoolVar(&resizeWait, "wait", false, "Wait for the resize operation to complete")
+	resizeCmd.Flags().DurationVar(&resizeWaitTimeout, "wait-timeout", 10*time.Minute, "Maximum time to wait for the resize operation to complete")
 	resizeCmd.Flags().BoolVar(&resizeForce, "force", false, "Force the resize and skip the confirmation")
 	resizeCmd.Flags().StringVarP(&resizeLabelSelector, "selector", "l", "", "Label selector to filter volumes (format: key1=value1,key2=value2)")
 	_ = resizeCmd.MarkFlagRequired("size")

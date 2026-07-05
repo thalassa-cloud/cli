@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/dbaas"
@@ -31,6 +32,7 @@ var (
 	createClusterAnnotations                          []string
 	createClusterDeleteProtection                     bool
 	createClusterWait                                 bool
+	createClusterWaitTimeout                          time.Duration
 	createClusterProvisionDbBackupObjectStorageBucket bool
 	createClusterDbBackupObjectStorageId              string
 )
@@ -151,10 +153,13 @@ var createCmd = &cobra.Command{
 		}
 
 		if createClusterWait {
-			// Poll until cluster is available
-			// Note: WaitUntilDbClusterIsAvailable may not be available, so we poll manually
+			waitCtx, cancel, err := shared.WaitContext(cmd.Context(), createClusterWaitTimeout)
+			if err != nil {
+				return err
+			}
+			defer cancel()
 			for {
-				cluster, err = client.DBaaS().GetDbCluster(cmd.Context(), cluster.Identity)
+				cluster, err = client.DBaaS().GetDbCluster(waitCtx, cluster.Identity)
 				if err != nil {
 					return fmt.Errorf("failed to get database cluster: %w", err)
 				}
@@ -164,12 +169,10 @@ var createCmd = &cobra.Command{
 				if cluster.Status == dbaas.DbClusterStatusFailed {
 					return fmt.Errorf("database cluster creation failed")
 				}
-				// Simple polling with sleep
 				select {
-				case <-cmd.Context().Done():
-					return cmd.Context().Err()
+				case <-waitCtx.Done():
+					return waitCtx.Err()
 				case <-time.After(5 * time.Second):
-					// Continue polling
 				}
 			}
 		}
@@ -233,6 +236,7 @@ func init() {
 	createCmd.Flags().StringSliceVar(&createClusterAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	createCmd.Flags().BoolVar(&createClusterDeleteProtection, "delete-protection", false, "Enable delete protection")
 	createCmd.Flags().BoolVar(&createClusterWait, "wait", false, "Wait for the database cluster to be available before returning")
+	createCmd.Flags().DurationVar(&createClusterWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the database cluster to be available")
 	createCmd.Flags().BoolVar(&createClusterProvisionDbBackupObjectStorageBucket, "with-backup-bucket", false, "Provision a backup object storage bucket for the database cluster")
 	createCmd.Flags().StringVar(&createClusterDbBackupObjectStorageId, "backup-object-storage-id", "", "Backup object storage ID (enables backup storage, requires --with-backup-bucket=false)")
 

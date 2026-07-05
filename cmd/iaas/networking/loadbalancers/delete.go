@@ -3,6 +3,7 @@ package loadbalancers
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -16,6 +17,7 @@ import (
 
 var (
 	deleteWait          bool
+	deleteWaitTimeout   time.Duration
 	deleteForce         bool
 	deleteLabelSelector string
 )
@@ -91,7 +93,12 @@ var deleteCmd = &cobra.Command{
 				return fmt.Errorf("failed to delete load balancer: %w", err)
 			}
 			if deleteWait {
-				if err := client.IaaS().WaitUntilLoadbalancerIsDeleted(cmd.Context(), lb.Identity); err != nil {
+				waitCtx, cancel, err := shared.WaitContext(cmd.Context(), deleteWaitTimeout)
+				if err != nil {
+					return err
+				}
+				defer cancel()
+				if err := client.IaaS().WaitUntilLoadbalancerIsDeleted(waitCtx, lb.Identity); err != nil {
 					return fmt.Errorf("failed to wait for load balancer deletion: %w", err)
 				}
 			}
@@ -106,6 +113,7 @@ func init() {
 	LoadbalancersCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().BoolVar(&deleteWait, "wait", false, "Wait for the load balancer(s) to be deleted")
+	deleteCmd.Flags().DurationVar(&deleteWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the load balancer(s) to be deleted")
 	deleteCmd.Flags().BoolVar(&deleteForce, "force", false, "Force deletion and skip confirmation")
 	deleteCmd.Flags().StringVarP(&deleteLabelSelector, "selector", "l", "", "Label selector (format: key1=value1,key2=value2)")
 
