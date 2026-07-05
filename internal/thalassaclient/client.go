@@ -12,10 +12,34 @@ import (
 	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
+// Scope optionally overrides organisation and project from the active CLI context.
+type Scope struct {
+	Organisation string
+	Project      string
+}
+
+// ScopeFromContext captures the organisation and project currently in effect.
+func ScopeFromContext() Scope {
+	return Scope{
+		Organisation: contextstate.Organisation(),
+		Project:      contextstate.Project(),
+	}
+}
+
 func GetThalassaClient() (thalassa.Client, error) {
+	return GetThalassaClientWithScope(Scope{})
+}
+
+func GetThalassaClientWithScope(scope Scope) (thalassa.Client, error) {
 	endpoint := contextstate.Server()
-	org := contextstate.Organisation()
-	projectRef := contextstate.Project()
+	org := scope.Organisation
+	if org == "" {
+		org = contextstate.Organisation()
+	}
+	projectRef := scope.Project
+	if projectRef == "" {
+		projectRef = contextstate.Project()
+	}
 
 	opts := []client.Option{
 		client.WithBaseURL(endpoint),
@@ -56,9 +80,9 @@ func GetThalassaClient() (thalassa.Client, error) {
 		opts = append(opts, client.WithProject(projectIdentity))
 	}
 
-	client, err := thalassa.NewClient(opts...)
+	apiClient, err := thalassa.NewClient(opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create client: %w", err)
 	}
-	return client, nil
+	return apiClient, nil
 }
