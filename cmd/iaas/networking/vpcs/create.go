@@ -10,6 +10,7 @@ import (
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 
@@ -29,6 +30,7 @@ const (
 var (
 	createVpcValues = iaas.CreateVpc{}
 	createVpcWait   bool
+	createVpcLabels []string
 )
 
 // getCmd represents the get command
@@ -63,6 +65,7 @@ var createCmd = &cobra.Command{
 			return err
 		}
 		createVpcValues.CloudRegionIdentity = region.Identity
+		createVpcValues.Labels = shared.KeyValuePairsToMap(createVpcLabels)
 
 		vpc, err := client.IaaS().CreateVpc(cmd.Context(), createVpcValues)
 		if err != nil {
@@ -123,6 +126,5 @@ func init() {
 	createCmd.Flags().StringVar(&createVpcValues.CloudRegionIdentity, CreateFlagRegion, "", "Region of the vpc")
 	createCmd.Flags().StringSliceVar(&createVpcValues.VpcCidrs, CreateFlagCIDRs, []string{"10.0.0.0/16"}, "CIDRs of the vpc")
 	createCmd.Flags().BoolVar(&createVpcWait, "wait", false, "Wait for the VPC to be ready before returning")
-	// createCmd.Flags().StringSliceVar(&createVpcValues.Labels, CreateFlagLabels, []string{}, "Labels of the vpc")
-	// createCmd.Flags().StringSliceVar(&createVpcValues.Annotations, CreateFlagAnnotations, []string{}, "Annotations of the vpc")
+	createCmd.Flags().StringSliceVar(&createVpcLabels, CreateFlagLabels, []string{}, "Labels in key=value format (can be specified multiple times)")
 }

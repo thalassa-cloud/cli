@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	iaasutil "github.com/thalassa-cloud/cli/internal/iaas"
+	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -28,6 +29,7 @@ const (
 var (
 	createSubnetValues = iaas.CreateSubnet{}
 	createSubnetWait   bool
+	createSubnetLabels []string
 )
 
 // getCmd represents the get command
@@ -56,6 +58,7 @@ var createCmd = &cobra.Command{
 			return err
 		}
 		createSubnetValues.VpcIdentity = vpc.Identity
+		createSubnetValues.Labels = shared.KeyValuePairsToMap(createSubnetLabels)
 
 		subnet, err := tcclient.IaaS().CreateSubnet(cmd.Context(), createSubnetValues)
 		if err != nil {
@@ -116,6 +119,7 @@ func init() {
 	createCmd.Flags().StringVar(&createSubnetValues.VpcIdentity, CreateFlagVpc, "", "VPC of the subnet")
 	createCmd.Flags().StringVar(&createSubnetValues.Cidr, CreateFlagCIDR, "", "CIDR of the subnet")
 	createCmd.Flags().BoolVar(&createSubnetWait, "wait", false, "Wait for the subnet to be ready before returning")
+	createCmd.Flags().StringSliceVar(&createSubnetLabels, CreateFlagLabels, []string{}, "Labels in key=value format (can be specified multiple times)")
 
 	// Register completions
 	_ = createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
