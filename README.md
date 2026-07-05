@@ -18,14 +18,25 @@ Download the latest release for your platform from the [GitHub releases page](ht
 
 ## Quick Start
 
-Authenticate with Thalassa Cloud:
+Authenticate with Thalassa Cloud (opens a browser login by default):
+
+```bash
+tcloud context create --api=https://api.thalassa.cloud
+```
+
+Or with a personal access token:
+
 ```bash
 tcloud context create --api=https://api.thalassa.cloud --token=<PAT>
 ```
 
 ## Configuration file
 
+The CLI stores non-secret settings in `~/.tcloud`. Sensitive credentials are kept out of this file when a system credential store is available (see [Credential storage](#credential-storage) below).
+
 ### With personal access token
+
+When using the file-backed credential store, tokens may appear in the config. With the default keychain storage, the config only records where credentials are stored:
 
 ```yaml
 configVersion: v1
@@ -42,9 +53,31 @@ servers:
         server: https://api.thalassa.cloud
 users:
     - name: default
-      user:
-        token: <PAT>
+      credentialStore: keychain
+      user: {}
 ```
+
+## Credential storage
+
+By default, the CLI stores secrets in the OS credential store when one is available:
+
+- **macOS:** Keychain (service name `Thalassa Cloud CLI`)
+- **Windows:** Credential Manager
+- **Linux:** Secret Service (for example GNOME Keyring or KWallet)
+
+Stored secrets include personal access tokens, OIDC client credentials, and browser login access/refresh tokens.
+
+Control the store with `THALASSA_CREDENTIAL_STORE`:
+
+| Value | Behaviour |
+|-------|-----------|
+| `auto` (default) | Use the OS credential store when available; otherwise store secrets in the config file |
+| `keychain` | Always use the OS credential store; fail if unavailable |
+| `file` | Store secrets in `~/.tcloud` (legacy behaviour) |
+
+Existing plaintext credentials in `~/.tcloud` are migrated to the keychain automatically on load when keychain storage is enabled.
+
+To inspect or remove keychain entries on macOS, open **Keychain Access** and search for `Thalassa Cloud CLI`.
 
 ## Config file permissions
 
