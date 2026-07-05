@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/go-resty/resty/v2"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/projectresolve"
 	"github.com/thalassa-cloud/cli/internal/version"
@@ -63,7 +64,7 @@ func GetThalassaClientWithScope(scope Scope) (thalassa.Client, error) {
 	clientSecret := contextstate.ClientSecretOrFlag()
 	accessToken := contextstate.AccessToken()
 	if accessToken != "" {
-		opts = append(opts, client.WithToken(accessToken))
+		opts = append(opts, client.WithMiddleware(refreshAccessToken))
 	} else if clientID != "" && clientSecret != "" {
 		opts = append(opts, client.WithAuthOIDC(clientID, clientSecret, fmt.Sprintf("%s/oidc/token", endpoint)))
 	} else if token != "" {
@@ -89,4 +90,23 @@ func GetThalassaClientWithScope(scope Scope) (thalassa.Client, error) {
 		return nil, fmt.Errorf("failed to create client: %w", err)
 	}
 	return apiClient, nil
+}
+
+// refreshAccessToken sets the Authorization header from the active browser
+// login session. Unlike client.WithToken, this refreshes the access token before
+// each request so long-running commands (e.g. --wait) do not fail with 401.
+func refreshAccessToken(_ *resty.Client, req *resty.Request) error {
+	ctx := req.Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if err := contextstate.EnsureFreshAccessToken(ctx); err != nil {
+		return err
+	}
+	accessToken := contextstate.AccessToken()
+	if accessToken == "" {
+		return errors.New("no browser access token available")
+	}
+	req.SetAuthToken(accessToken)
+	return nil
 }
