@@ -3,6 +3,7 @@ package kubernetes
 import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/connect"
+	"github.com/thalassa-cloud/cli/cmd/kubernetes/credential"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/iam"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/kubernetesversions"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/machines"
@@ -22,4 +23,5 @@ func init() {
 	KubernetesCmd.AddCommand(machines.MachinesCmd)
 	KubernetesCmd.AddCommand(iam.IamCmd)
 	KubernetesCmd.AddCommand(connect.KubernetesConnectCmd)
+	KubernetesCmd.AddCommand(credential.CredentialCmd)
 }

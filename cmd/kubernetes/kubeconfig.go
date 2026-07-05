@@ -5,63 +5,54 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/kuberesolve"
+	kubeconfigrender "github.com/thalassa-cloud/cli/internal/kubernetes/kubeconfig"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
-	"github.com/thalassa-cloud/client-go/kubernetes"
 )
+
+var kubeconfigInlineToken bool
 
 var KubernetesKubeConfigCmd = &cobra.Command{
 	Use:               "kubeconfig",
-	Aliases:           []string{},
-	Short:             "Kubernetes Kubeconfig management",
+	Short:             "Print a kubeconfig for a Kubernetes cluster",
 	ValidArgsFunction: completion.CompleteKubernetesCluster,
-	Args:              cobra.MaximumNArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	Args:              cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return
+			return err
 		}
 
-		if len(args) != 1 {
-			fmt.Fprintln(os.Stderr, "must provide a cluster. Missing value <cluster>")
-			return
-		}
-
-		clusterIdentity := args[0]
-		// get the cluster
-		cluster, err := client.Kubernetes().GetKubernetesCluster(ctx, clusterIdentity)
+		cluster, err := kuberesolve.ResolveKubernetesClusterRef(ctx, client.Kubernetes(), args[0])
 		if err != nil {
-			// try and find the cluster by name or slug
-			clusters, err := client.Kubernetes().ListKubernetesClusters(ctx, &kubernetes.ListKubernetesClustersRequest{})
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			for _, potentialCluster := range clusters {
-				if potentialCluster.Name == clusterIdentity || potentialCluster.Slug == clusterIdentity {
-					cluster = &potentialCluster
-					break
-				}
-			}
-		}
-		if cluster == nil {
-			fmt.Fprintln(os.Stderr, "cluster not found")
-			return
+			return err
 		}
 
 		fmt.Fprintf(os.Stderr, "Getting kubeconfig for cluster %s\n", cluster.Name)
 		session, err := client.Kubernetes().GetKubernetesClusterKubeconfig(ctx, cluster.Identity)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return err
 		}
 
-		fmt.Println(session.Kubeconfig)
+		authMode := kubeconfigrender.AuthModeExec
+		if kubeconfigInlineToken {
+			authMode = kubeconfigrender.AuthModeToken
+		}
+
+		config, err := kubeconfigrender.Render(kubeconfigrender.NewRenderInput(cluster, session), authMode)
+		if err != nil {
+			return err
+		}
+
+		fmt.Print(config)
+		return nil
 	},
 }
 
 func init() {
 	KubernetesCmd.AddCommand(KubernetesKubeConfigCmd)
+	KubernetesKubeConfigCmd.Flags().BoolVar(&kubeconfigInlineToken, "inline-token", false, "embed the session token in the kubeconfig instead of using a kubectl exec credential plugin")
 }

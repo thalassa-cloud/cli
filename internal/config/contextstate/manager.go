@@ -8,6 +8,7 @@ import (
 
 	"github.com/mitchellh/go-homedir"
 
+	"github.com/thalassa-cloud/cli/internal/credentials"
 	"github.com/thalassa-cloud/cli/internal/projectresolve"
 )
 
@@ -27,7 +28,8 @@ const (
 	ThalassaOrganisationIDEnvVar      = "THALASSA_ORGANISATION_ID"
 	ThalassaProjectIDEnvVar           = "THALASSA_PROJECT_ID"
 
-	ThalassaAPIEndpointEnvVar = "THALASSA_API_ENDPOINT"
+	ThalassaAPIEndpointEnvVar     = "THALASSA_API_ENDPOINT"
+	ThalassaCredentialStoreEnvVar = credentials.ThalassaCredentialStoreEnvVar
 )
 
 var (
@@ -83,6 +85,12 @@ type ConfigManager interface {
 
 	// Config returns the current configuration.
 	Config() Config
+
+	// SanitizedConfig returns the current configuration with secrets redacted.
+	SanitizedConfig() Config
+
+	// FixPermissions restricts the config file to owner-only access.
+	FixPermissions() error
 }
 
 func Init() {
@@ -111,6 +119,21 @@ func getConfigFilename() string {
 
 func GlobalConfigManager() ConfigManager {
 	return globalConfigManager
+}
+
+func ConfigFilename() string {
+	return getConfigFilename()
+}
+
+func FixConfigPermissions() error {
+	filename := getConfigFilename()
+	if _, err := os.Stat(filename); err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			return fmt.Errorf("config file not found: %s", filename)
+		}
+		return err
+	}
+	return globalConfigManager.FixPermissions()
 }
 
 func GetContextConfiguration() (Context, error) {

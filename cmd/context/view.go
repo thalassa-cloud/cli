@@ -18,7 +18,7 @@ var viewCmd = &cobra.Command{
 	Example: "tcloud context view",
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		data, err := yaml.Marshal(contextstate.GlobalConfigManager().Config())
+		data, err := yaml.Marshal(contextstate.GlobalConfigManager().SanitizedConfig())
 		if err != nil {
 			return err
 		}
