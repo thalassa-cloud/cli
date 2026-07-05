@@ -21,14 +21,16 @@ var ErrNotAvailable = errors.New("credential store not available")
 
 // Secrets holds sensitive user credentials.
 type Secrets struct {
-	Token        string `json:"token,omitempty"`
-	AccessToken  string `json:"accessToken,omitempty"`
-	ClientID     string `json:"clientID,omitempty"`
-	ClientSecret string `json:"clientSecret,omitempty"`
+	Token             string `json:"token,omitempty"`
+	AccessToken       string `json:"accessToken,omitempty"`
+	RefreshToken      string `json:"refreshToken,omitempty"`
+	AccessTokenExpiry string `json:"accessTokenExpiry,omitempty"`
+	ClientID          string `json:"clientID,omitempty"`
+	ClientSecret      string `json:"clientSecret,omitempty"`
 }
 
 func (s Secrets) Empty() bool {
-	return s.Token == "" && s.AccessToken == "" && s.ClientID == "" && s.ClientSecret == ""
+	return s.Token == "" && s.AccessToken == "" && s.RefreshToken == "" && s.ClientID == "" && s.ClientSecret == ""
 }
 
 // Store persists credentials outside the config file.
@@ -101,4 +103,9 @@ func unmarshalSecrets(raw string) (Secrets, error) {
 	}
 	err := json.Unmarshal([]byte(raw), &secrets)
 	return secrets, err
+}
+
+// IsNotFound reports whether err indicates missing credentials in the keychain.
+func IsNotFound(err error) bool {
+	return isKeyringNotFound(err)
 }
