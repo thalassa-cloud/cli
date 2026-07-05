@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage create"
 title: "object-storage create"
 slug: tcloud_object-storage_create
 url: /docs/tcloud/object-storage/create/
-weight: 9857
+weight: 9823
 cascade:
   type: docs
 ---
@@ -41,6 +41,7 @@ tcloud object-storage create [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

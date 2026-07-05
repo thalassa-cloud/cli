@@ -3,7 +3,7 @@ linkTitle: "tcloud context use"
 title: "context use"
 slug: tcloud_context_use
 url: /docs/tcloud/context/use/
-weight: 9979
+weight: 9977
 cascade:
   type: docs
 ---
@@ -41,6 +41,7 @@ tcloud context use <context>
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

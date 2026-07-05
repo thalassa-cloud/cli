@@ -3,7 +3,7 @@ linkTitle: "tcloud networking natgateways list"
 title: "networking natgateways list"
 slug: tcloud_networking_natgateways_list
 url: /docs/tcloud/networking/natgateways_list/
-weight: 9883
+weight: 9858
 cascade:
   type: docs
 ---
@@ -49,6 +49,7 @@ tcloud networking natgateways list --vpc vpc-123 --no-header
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

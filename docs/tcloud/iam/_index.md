@@ -3,7 +3,7 @@ linkTitle: "tcloud iam"
 title: "iam"
 slug: tcloud_iam
 url: /docs/tcloud/tcloud_iam/
-weight: 9905
+weight: 9903
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ and related resources. Commands apply to the organisation selected in your conte
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

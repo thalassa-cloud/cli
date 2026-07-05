@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles rules add"
 title: "iam roles rules add"
 slug: tcloud_iam_roles_rules_add
 url: /docs/tcloud/iam/roles_rules_add/
-weight: 9930
+weight: 9928
 cascade:
   type: docs
 ---
@@ -36,6 +36,7 @@ tcloud iam roles rules add <role> [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

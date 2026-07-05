@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes resize"
 title: "storage volumes resize"
 slug: tcloud_storage_volumes_resize
 url: /docs/tcloud/storage/volumes_resize/
-weight: 9833
+weight: 9774
 cascade:
   type: docs
 ---
@@ -39,6 +39,7 @@ tcloud storage volumes resize [volume-id...] [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

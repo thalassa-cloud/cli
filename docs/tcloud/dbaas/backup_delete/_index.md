@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas backup delete"
 title: "dbaas backup delete"
 slug: tcloud_dbaas_backup_delete
 url: /docs/tcloud/dbaas/backup_delete/
-weight: 9974
+weight: 9972
 cascade:
   type: docs
 ---
@@ -38,6 +38,7 @@ tcloud dbaas backup delete [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

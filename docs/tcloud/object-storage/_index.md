@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage"
 title: "object-storage"
 slug: tcloud_object-storage
 url: /docs/tcloud/tcloud_object-storage/
-weight: 9853
+weight: 9819
 cascade:
   type: docs
 ---
@@ -27,6 +27,7 @@ Manage object storage buckets
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

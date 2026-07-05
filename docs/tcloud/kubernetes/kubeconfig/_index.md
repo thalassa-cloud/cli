@@ -3,13 +3,13 @@ linkTitle: "tcloud kubernetes kubeconfig"
 title: "kubernetes kubeconfig"
 slug: tcloud_kubernetes_kubeconfig
 url: /docs/tcloud/kubernetes/kubeconfig/
-weight: 9899
+weight: 9886
 cascade:
   type: docs
 ---
 ## tcloud kubernetes kubeconfig
 
-Kubernetes Kubeconfig management
+Print a kubeconfig for a Kubernetes cluster
 
 ```
 tcloud kubernetes kubeconfig [flags]
@@ -18,7 +18,8 @@ tcloud kubernetes kubeconfig [flags]
 ### Options
 
 ```
-  -h, --help   help for kubeconfig
+  -h, --help           help for kubeconfig
+      --inline-token   embed the session token in the kubeconfig instead of using a kubectl exec credential plugin
 ```
 
 ### Options inherited from parent commands
@@ -31,6 +32,7 @@ tcloud kubernetes kubeconfig [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

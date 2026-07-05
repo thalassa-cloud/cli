@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes connect"
 title: "kubernetes connect"
 slug: tcloud_kubernetes_connect
 url: /docs/tcloud/kubernetes/connect/
-weight: 9904
+weight: 9902
 cascade:
   type: docs
 ---
@@ -19,8 +19,9 @@ tcloud kubernetes connect [flags]
 
 ```
   -h, --help                     help for connect
-      --kubeconfig-path string   path to the kubeconfig file
-      --temp                     use a temporary kubeconfig file (default true)
+      --inline-token             embed the session token in the kubeconfig instead of using a kubectl exec credential plugin
+      --kubeconfig-path string   path to write the kubeconfig when --temp=false
+      --temp                     use a temporary kubeconfig file that is removed when the shell exits (default true)
 ```
 
 ### Options inherited from parent commands
@@ -33,6 +34,7 @@ tcloud kubernetes connect [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

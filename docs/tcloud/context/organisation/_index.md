@@ -3,7 +3,7 @@ linkTitle: "tcloud context organisation"
 title: "context organisation"
 slug: tcloud_context_organisation
 url: /docs/tcloud/context/organisation/
-weight: 9980
+weight: 9979
 cascade:
   type: docs
 ---
@@ -41,6 +41,7 @@ tcloud context use-organisation <organisation>
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

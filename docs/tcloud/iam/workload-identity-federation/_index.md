@@ -3,7 +3,7 @@ linkTitle: "tcloud iam workload-identity-federation"
 title: "iam workload-identity-federation"
 slug: tcloud_iam_workload-identity-federation
 url: /docs/tcloud/iam/workload-identity-federation/
-weight: 9906
+weight: 9904
 cascade:
   type: docs
 ---
@@ -32,6 +32,7 @@ and federated identities for GitHub Actions, GitLab CI, and Kubernetes service a
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

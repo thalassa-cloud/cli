@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identity-providers update"
 title: "iam federated-identity-providers update"
 slug: tcloud_iam_federated-identity-providers_update
 url: /docs/tcloud/iam/federated-identity-providers_update/
-weight: 9946
+weight: 9944
 cascade:
   type: docs
 ---
@@ -38,6 +38,7 @@ tcloud iam federated-identity-providers update <identity> [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

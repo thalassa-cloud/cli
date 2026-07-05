@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpcs"
 title: "networking vpcs"
 slug: tcloud_networking_vpcs
 url: /docs/tcloud/networking/vpcs/
-weight: 9859
+weight: 9825
 cascade:
   type: docs
 ---
@@ -27,6 +27,7 @@ Manage VPCs
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

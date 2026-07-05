@@ -3,7 +3,7 @@ linkTitle: "tcloud iam teams delete"
 title: "iam teams delete"
 slug: tcloud_iam_teams_delete
 url: /docs/tcloud/iam/teams_delete/
-weight: 9919
+weight: 9917
 cascade:
   type: docs
 ---
@@ -34,6 +34,7 @@ tcloud iam teams delete <team> [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

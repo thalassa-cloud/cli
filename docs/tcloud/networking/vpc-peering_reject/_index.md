@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpc-peering reject"
 title: "networking vpc-peering reject"
 slug: tcloud_networking_vpc-peering_reject
 url: /docs/tcloud/networking/vpc-peering_reject/
-weight: 9865
+weight: 9831
 cascade:
   type: docs
 ---
@@ -46,6 +46,7 @@ tcloud networking vpc-peering reject vpcpc-123 --force
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

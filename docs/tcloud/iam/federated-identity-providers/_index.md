@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identity-providers"
 title: "iam federated-identity-providers"
 slug: tcloud_iam_federated-identity-providers
 url: /docs/tcloud/iam/federated-identity-providers/
-weight: 9945
+weight: 9943
 cascade:
   type: docs
 ---
@@ -27,6 +27,7 @@ Federated OIDC identity providers
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

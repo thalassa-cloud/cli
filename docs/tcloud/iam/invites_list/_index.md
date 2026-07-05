@@ -3,7 +3,7 @@ linkTitle: "tcloud iam invites list"
 title: "iam invites list"
 slug: tcloud_iam_invites_list
 url: /docs/tcloud/iam/invites_list/
-weight: 9944
+weight: 9942
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud iam invites list [flags]
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

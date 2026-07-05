@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles"
 title: "iam roles"
 slug: tcloud_iam_roles
 url: /docs/tcloud/iam/roles/
-weight: 9927
+weight: 9925
 cascade:
   type: docs
 ---
@@ -32,6 +32,7 @@ or service accounts. System roles may be read-only; the API enforces what you ca
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 

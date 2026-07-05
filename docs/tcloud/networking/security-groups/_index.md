@@ -3,7 +3,7 @@ linkTitle: "tcloud networking security-groups"
 title: "networking security-groups"
 slug: tcloud_networking_security-groups
 url: /docs/tcloud/networking/security-groups/
-weight: 9874
+weight: 9849
 cascade:
   type: docs
 ---
@@ -39,6 +39,7 @@ tcloud networking security-groups delete sg-456
   -c, --context string         Context name
       --debug                  Debug mode
   -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
 ```
 
