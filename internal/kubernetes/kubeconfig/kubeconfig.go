@@ -98,6 +98,9 @@ func execCredentialArgs(clusterIdentity string, scope thalassaclient.Scope) []st
 		"--cluster", clusterIdentity,
 		"--organisation", scope.Organisation,
 	}
+	if scope.Context != "" {
+		args = append(args, "--context", scope.Context)
+	}
 	if scope.Project != "" {
 		args = append(args, "--project", scope.Project)
 	}

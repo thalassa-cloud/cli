@@ -27,6 +27,7 @@ func TestRenderExecKubeconfigOmitsToken(t *testing.T) {
 		Executable:      "/usr/local/bin/tcloud",
 		ClusterIdentity: "cluster-id",
 		Scope: thalassaclient.Scope{
+			Context:      "dev",
 			Organisation: "acme",
 			Project:      "my-project",
 		},
@@ -39,6 +40,8 @@ func TestRenderExecKubeconfigOmitsToken(t *testing.T) {
 	assert.Contains(t, config, "cluster-id")
 	assert.Contains(t, config, "--organisation")
 	assert.Contains(t, config, "acme")
+	assert.Contains(t, config, "--context")
+	assert.Contains(t, config, "dev")
 	assert.Contains(t, config, "--project")
 	assert.Contains(t, config, "my-project")
 	assert.NotContains(t, config, "secret-token")

@@ -15,13 +15,15 @@ import (
 
 // Scope optionally overrides organisation and project from the active CLI context.
 type Scope struct {
+	Context      string
 	Organisation string
 	Project      string
 }
 
-// ScopeFromContext captures the organisation and project currently in effect.
+// ScopeFromContext captures the CLI context, organisation, and project currently in effect.
 func ScopeFromContext() Scope {
 	return Scope{
+		Context:      contextstate.Name(),
 		Organisation: contextstate.Organisation(),
 		Project:      contextstate.Project(),
 	}

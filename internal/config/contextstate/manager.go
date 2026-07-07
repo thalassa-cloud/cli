@@ -165,6 +165,17 @@ func Save() error {
 	return globalConfigManager.Save()
 }
 
+func Name() string {
+	if ContextFlag != "" {
+		return ContextFlag
+	}
+	currentcontext, err := globalConfigManager.Get()
+	if err != nil {
+		return ""
+	}
+	return currentcontext.Name
+}
+
 func Organisation() string {
 	if OrganisationFlag != "" {
 		return OrganisationFlag
