@@ -58,8 +58,8 @@ github.com/stretchr/objx v0.5.2/go.mod h1:FRsXN1f5AsAjCGJKqEizvkpNtU+EGNCLh3NxZ/
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/thalassa-cloud/client-go v0.35.1 h1:1ShdYmp0hgtW1Zq6byzIwPsOp2C/tEJ7lFo4+L2FR78=
-github.com/thalassa-cloud/client-go v0.35.1/go.mod h1:fKtWPWd8fzA/HvNEO1b/5CJ3de4f99RJuZmAgsZaEzc=
+github.com/thalassa-cloud/client-go v0.35.3 h1:H6yn/ma+DhLCCaWcSUEqUyJDfKX3r90Al5R7mGYkVgw=
+github.com/thalassa-cloud/client-go v0.35.3/go.mod h1:fKtWPWd8fzA/HvNEO1b/5CJ3de4f99RJuZmAgsZaEzc=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 github.com/zalando/go-keyring v0.2.8 h1:6sD/Ucpl7jNq10rM2pgqTs0sZ9V3qMrqfIIy5YPccHs=

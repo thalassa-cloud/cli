@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/thalassa-cloud/client-go/kubernetes"
 	"github.com/thalassa-cloud/client-go/thalassa"
 )
 
@@ -26,7 +27,9 @@ type execCredentialStatus struct {
 
 // WriteExecCredential fetches a cluster session token and writes kubectl ExecCredential JSON.
 func WriteExecCredential(ctx context.Context, client thalassa.Client, clusterIdentity string, out io.Writer) error {
-	session, err := client.Kubernetes().GetKubernetesClusterKubeconfig(ctx, clusterIdentity)
+	session, err := client.Kubernetes().GetKubernetesClusterKubeconfigWithParams(ctx, clusterIdentity, kubernetes.KubeconfigParams{
+		SessionLifetime: 5 * time.Minute,
+	})
 	if err != nil {
 		return err
 	}
