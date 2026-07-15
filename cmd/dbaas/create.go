@@ -15,6 +15,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/dbaas"
 	"github.com/thalassa-cloud/client-go/iaas"
+	tcclient "github.com/thalassa-cloud/client-go/pkg/client"
 )
 
 var (
@@ -35,6 +36,9 @@ var (
 	createClusterWaitTimeout                          time.Duration
 	createClusterProvisionDbBackupObjectStorageBucket bool
 	createClusterDbBackupObjectStorageId              string
+	createClusterRestoreFromBackup                    string
+	createClusterRestoreTargetTime                    string
+	createClusterRestoreTargetLSN                     string
 )
 
 // createCmd represents the create command
@@ -42,7 +46,7 @@ var createCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"create-cluster", "cluster-create"},
 	Short:   "Create a database cluster",
-	Long:    "Create a new database cluster in the Thalassa Cloud Platform.",
+	Long:    "Create a new database cluster in the Thalassa Cloud Platform. Use --restore-from-backup to create a cluster from an existing backup.",
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client, err := thalassaclient.GetThalassaClient()
@@ -67,6 +71,12 @@ var createCmd = &cobra.Command{
 		}
 		if createClusterReplicas < 0 {
 			return fmt.Errorf("replicas must be 0 or greater")
+		}
+		if createClusterRestoreTargetTime != "" && createClusterRestoreTargetLSN != "" {
+			return fmt.Errorf("--restore-target-time and --restore-target-lsn are mutually exclusive")
+		}
+		if (createClusterRestoreTargetTime != "" || createClusterRestoreTargetLSN != "") && createClusterRestoreFromBackup == "" {
+			return fmt.Errorf("--restore-from-backup is required when using a restore recovery target")
 		}
 
 		// Resolve volume type
@@ -145,6 +155,33 @@ var createCmd = &cobra.Command{
 
 		if createClusterReplicas > 0 {
 			req.Replicas = createClusterReplicas
+		}
+
+		if createClusterRestoreFromBackup != "" {
+			_, err := client.DBaaS().GetDbBackup(cmd.Context(), createClusterRestoreFromBackup)
+			if err != nil {
+				if tcclient.IsNotFound(err) {
+					return fmt.Errorf("backup not found: %s", createClusterRestoreFromBackup)
+				}
+				return fmt.Errorf("failed to get backup: %w", err)
+			}
+			req.RestoreFromBackupIdentity = &createClusterRestoreFromBackup
+
+			if createClusterRestoreTargetTime != "" || createClusterRestoreTargetLSN != "" {
+				recoveryTarget := &dbaas.RestoreRecoveryTarget{}
+				if createClusterRestoreTargetTime != "" {
+					targetTime, err := parseBarmanRestoreTargetTime(createClusterRestoreTargetTime)
+					if err != nil {
+						return fmt.Errorf("invalid restore target time: %w", err)
+					}
+					recoveryTarget.TargetTime = &targetTime
+				}
+				if createClusterRestoreTargetLSN != "" {
+					lsn := strings.TrimSpace(createClusterRestoreTargetLSN)
+					recoveryTarget.TargetLSN = &lsn
+				}
+				req.RestoreRecoveryTarget = recoveryTarget
+			}
 		}
 
 		cluster, err := client.DBaaS().CreateDbCluster(cmd.Context(), req)
@@ -239,11 +276,15 @@ func init() {
 	createCmd.Flags().DurationVar(&createClusterWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the database cluster to be available")
 	createCmd.Flags().BoolVar(&createClusterProvisionDbBackupObjectStorageBucket, "with-backup-bucket", false, "Provision a backup object storage bucket for the database cluster")
 	createCmd.Flags().StringVar(&createClusterDbBackupObjectStorageId, "backup-object-storage-id", "", "Backup object storage ID (enables backup storage, requires --with-backup-bucket=false)")
+	createCmd.Flags().StringVar(&createClusterRestoreFromBackup, "restore-from-backup", "", "Backup identity to restore the cluster from")
+	createCmd.Flags().StringVar(&createClusterRestoreTargetTime, "restore-target-time", "", barmanTargetTimeDescription+" (requires --restore-from-backup)")
+	createCmd.Flags().StringVar(&createClusterRestoreTargetLSN, "restore-target-lsn", "", "Point-in-time recovery target LSN (requires --restore-from-backup)")
 
 	// Register completions
 	_ = createCmd.RegisterFlagCompletionFunc("vpc", completion.CompleteVPCID)
 	_ = createCmd.RegisterFlagCompletionFunc("subnet", completion.CompleteSubnetEnhanced)
 	_ = createCmd.RegisterFlagCompletionFunc("engine-version", completion.CompleteDbEngineVersion)
+	_ = createCmd.RegisterFlagCompletionFunc("restore-from-backup", completion.CompleteDbBackupID)
 
 	_ = createCmd.MarkFlagRequired("name")
 	_ = createCmd.MarkFlagRequired("engine")

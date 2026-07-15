@@ -23,6 +23,7 @@ var (
 	updateClusterAnnotations       []string
 	updateClusterDeleteProtection  bool
 	updateClusterAutoUpgradePolicy string
+	updateClusterSecurityGroups    []string
 )
 
 // updateCmd represents the update command
@@ -63,6 +64,11 @@ var updateCmd = &cobra.Command{
 		req.AllocatedStorage = current.AllocatedStorage
 		if current.Replicas > 0 {
 			req.Replicas = current.Replicas
+		}
+		if len(current.SecurityGroups) > 0 {
+			for _, sg := range current.SecurityGroups {
+				req.SecurityGroupAttachments = append(req.SecurityGroupAttachments, sg.Identity)
+			}
 		}
 
 		// Update name if provided
@@ -117,6 +123,11 @@ var updateCmd = &cobra.Command{
 		// Update delete protection if provided
 		if cmd.Flags().Changed("delete-protection") {
 			req.DeleteProtection = updateClusterDeleteProtection
+		}
+
+		// Update security groups if provided
+		if cmd.Flags().Changed("security-groups") {
+			req.SecurityGroupAttachments = updateClusterSecurityGroups
 		}
 
 		// Update auto-upgrade policy if provided
@@ -188,9 +199,11 @@ func init() {
 	updateCmd.Flags().StringSliceVar(&updateClusterAnnotations, "annotations", []string{}, "Annotations in key=value format (can be specified multiple times)")
 	updateCmd.Flags().BoolVar(&updateClusterDeleteProtection, "delete-protection", false, "Enable or disable delete protection")
 	updateCmd.Flags().StringVar(&updateClusterAutoUpgradePolicy, "auto-upgrade-policy", "", "Auto-upgrade policy: none, latest-version, latest-stable, latest-patch, latest-minor, latest-major")
+	updateCmd.Flags().StringSliceVar(&updateClusterSecurityGroups, "security-groups", []string{}, "Security group identities to attach")
 
 	// Register completions
 	_ = updateCmd.RegisterFlagCompletionFunc("instance-type", completion.CompleteDbInstanceType)
+	_ = updateCmd.RegisterFlagCompletionFunc("security-groups", completion.CompleteSecurityGroupID)
 	_ = updateCmd.RegisterFlagCompletionFunc("auto-upgrade-policy", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{
 			string(dbaas.DbClusterAutoUpgradePolicyNone),
