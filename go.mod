@@ -6,7 +6,7 @@ require (
 	github.com/andanhm/go-prettytime v1.1.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/go-resty/resty/v2 v2.17.2
-	github.com/mattn/go-isatty v0.0.23
+	github.com/mattn/go-isatty v0.0.24
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.10.2
