@@ -9,7 +9,10 @@ import (
 // KmsCmd manages Key Management Service resources and crypto operations.
 var KmsCmd = &cobra.Command{
 	Use:   "kms",
-	Short: "Manage KMS keys and cryptographic operations",
+	Short: "Manage KMS keys and cryptographic operations (beta)",
+	Long: `Manage Key Management Service keys and cryptographic operations.
+
+Note: This command is in beta.`,
 }
 
 var (

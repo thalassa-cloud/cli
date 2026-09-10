@@ -10,7 +10,10 @@ import (
 // DnsCmd manages DNS zones and records.
 var DnsCmd = &cobra.Command{
 	Use:   "dns",
-	Short: "Manage DNS zones and records",
+	Short: "Manage DNS zones and records (beta)",
+	Long: `Manage DNS zones and records within the Thalassa Cloud Platform.
+
+Note: This command is in beta.`,
 }
 
 func init() {
