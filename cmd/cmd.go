@@ -24,6 +24,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/projects"
 	"github.com/thalassa-cloud/cli/cmd/quotas"
 	"github.com/thalassa-cloud/cli/cmd/registry"
+	"github.com/thalassa-cloud/cli/cmd/secrets"
 	"github.com/thalassa-cloud/cli/cmd/version"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
@@ -75,6 +76,7 @@ func init() {
 	RootCmd.AddCommand(objectstorage.ObjectStorageCmd)
 	RootCmd.AddCommand(dns.DnsCmd)
 	RootCmd.AddCommand(kms.KmsCmd)
+	RootCmd.AddCommand(secrets.SecretsCmd)
 
 	RootCmd.AddCommand(kubernetes.KubernetesCmd)
 	RootCmd.AddCommand(dbaas.DbaasCmd)
