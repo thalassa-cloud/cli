@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/audit"
 	"github.com/thalassa-cloud/cli/cmd/context"
 	"github.com/thalassa-cloud/cli/cmd/dbaas"
+	"github.com/thalassa-cloud/cli/cmd/dns"
 	"github.com/thalassa-cloud/cli/cmd/iaas/compute"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking"
 	"github.com/thalassa-cloud/cli/cmd/iaas/regions"
@@ -71,6 +72,7 @@ func init() {
 	RootCmd.AddCommand(storage.StorageCmd)
 	RootCmd.AddCommand(compute.ComputeCmd)
 	RootCmd.AddCommand(objectstorage.ObjectStorageCmd)
+	RootCmd.AddCommand(dns.DnsCmd)
 
 	RootCmd.AddCommand(kubernetes.KubernetesCmd)
 	RootCmd.AddCommand(dbaas.DbaasCmd)
