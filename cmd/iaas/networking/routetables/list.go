@@ -56,7 +56,7 @@ var getCmd = &cobra.Command{
 			row := []string{
 				rt.Identity,
 				rt.Name,
-				rt.Vpc.Name,
+				vpcName(rt),
 				formattime.FormatTime(rt.CreatedAt.Local(), showExactTime),
 			}
 
