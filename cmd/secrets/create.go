@@ -31,13 +31,24 @@ var (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a secret (metadata response only; use get-value to read material)",
-	Args:  cobra.NoArgs,
+	Example: `  tcloud secrets create --region nl-01 --path /app/prod/db --kms-key kms-123 --generate-bytes
+  tcloud secrets create --region nl-01 --path /app/prod/db --kms-key kms-123 --generate-bytes=64
+  tcloud secrets create --region nl-01 --path /app/prod/token --kms-key kms-123 --from-file ./token.txt`,
+	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, _ []string) error {
 		if createPath == "" {
 			return fmt.Errorf("--path is required")
 		}
 		if createKmsKey == "" {
 			return fmt.Errorf("--kms-key is required")
+		}
+		if createString == "" && createFromFile == "" && len(createKV) == 0 && createGenerateLen <= 0 {
+			return fmt.Errorf("provide --string, --from-file, --kv, or --generate-bytes[=N] (bare --generate-bytes defaults to %d)", generateBytesDefault)
+		}
+		if createGenerateLen > 0 {
+			if err := validateGenerateBytes(createGenerateLen); err != nil {
+				return err
+			}
 		}
 
 		secretString := createString
@@ -119,13 +130,17 @@ func init() {
 	createCmd.Flags().StringVar(&createString, "string", "", "Secret string value")
 	createCmd.Flags().StringVar(&createFromFile, "from-file", "", "Read secret string from a file")
 	createCmd.Flags().StringSliceVar(&createKV, "kv", nil, "Secret key/value pairs as key=value (repeatable)")
-	createCmd.Flags().IntVar(&createGenerateLen, "generate-bytes", 0, "Generate a random secret of this many bytes")
+	createCmd.Flags().IntVar(&createGenerateLen, "generate-bytes", 0, generateBytesFlagUsage())
+	createCmd.Flags().Lookup("generate-bytes").NoOptDefVal = fmt.Sprintf("%d", generateBytesDefault)
 	createCmd.Flags().StringSliceVar(&createLabels, "labels", nil, "Labels as key=value (repeatable)")
 	createCmd.Flags().StringSliceVar(&createAnnotations, "annotations", nil, "Annotations as key=value (repeatable)")
 	createCmd.Flags().StringVar(&createPolicyFile, "policy-file", "", "JSON file with an access policy")
 	_ = createCmd.MarkFlagRequired("region")
 	_ = createCmd.MarkFlagRequired("path")
 	_ = createCmd.MarkFlagRequired("kms-key")
+	_ = createCmd.MarkFlagFilename("from-file")
+	_ = createCmd.MarkFlagFilename("policy-file")
 	_ = createCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = createCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
 	_ = createCmd.RegisterFlagCompletionFunc("kms-key", completion.CompleteKmsKeyIdentity)
 }

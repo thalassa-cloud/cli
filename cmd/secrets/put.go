@@ -41,10 +41,13 @@ var putCmd = &cobra.Command{
 			SecretKeyValues: shared.KeyValuePairsToMap(putKV),
 		}
 		if putGenerateLen > 0 {
+			if err := validateGenerateBytes(putGenerateLen); err != nil {
+				return err
+			}
 			req.GenerateSecret = &clientsecrets.GenerateSecret{ByteLength: putGenerateLen}
 		}
 		if req.SecretString == "" && len(req.SecretKeyValues) == 0 && req.GenerateSecret == nil {
-			return fmt.Errorf("provide --string, --from-file, --kv, or --generate-bytes")
+			return fmt.Errorf("provide --string, --from-file, --kv, or --generate-bytes[=N] (bare --generate-bytes defaults to %d)", generateBytesDefault)
 		}
 
 		client, err := thalassaclient.GetThalassaClient()
@@ -68,8 +71,11 @@ func init() {
 	putCmd.Flags().StringVar(&putString, "string", "", "Secret string value")
 	putCmd.Flags().StringVar(&putFromFile, "from-file", "", "Read secret string from a file")
 	putCmd.Flags().StringSliceVar(&putKV, "kv", nil, "Secret key/value pairs as key=value (repeatable)")
-	putCmd.Flags().IntVar(&putGenerateLen, "generate-bytes", 0, "Generate a random secret of this many bytes")
+	putCmd.Flags().IntVar(&putGenerateLen, "generate-bytes", 0, generateBytesFlagUsage())
+	putCmd.Flags().Lookup("generate-bytes").NoOptDefVal = fmt.Sprintf("%d", generateBytesDefault)
 	_ = putCmd.MarkFlagRequired("region")
 	_ = putCmd.MarkFlagRequired("path")
+	_ = putCmd.MarkFlagFilename("from-file")
 	_ = putCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = putCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
 }
