@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestParseBarmanRestoreTargetTime(t *testing.T) {
+func TestParseRestoreTargetTime(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   string
@@ -15,23 +15,28 @@ func TestParseBarmanRestoreTargetTime(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:  "valid positive offset",
-			input: "2023-08-11 11:14:21.00000+02",
-			want:  "2023-08-11 11:14:21.00000+02",
+			name:  "rfc3339 zulu",
+			input: "2023-12-25T10:00:00Z",
+			want:  "2023-12-25T10:00:00Z",
 		},
 		{
-			name:  "valid negative offset",
+			name:  "barman positive offset converts to rfc3339 utc",
+			input: "2023-08-11 11:14:21.00000+02",
+			want:  "2023-08-11T09:14:21Z",
+		},
+		{
+			name:  "barman negative offset converts to rfc3339 utc",
 			input: "2023-08-11 11:14:21.00000-05",
-			want:  "2023-08-11 11:14:21.00000-05",
+			want:  "2023-08-11T16:14:21Z",
 		},
 		{
 			name:  "trims whitespace",
 			input: "  2023-08-11 11:14:21.00000+02  ",
-			want:  "2023-08-11 11:14:21.00000+02",
+			want:  "2023-08-11T09:14:21Z",
 		},
 		{
 			name:    "invalid format",
-			input:   "2026-07-15T10:00:00Z",
+			input:   "not-a-timestamp",
 			wantErr: true,
 		},
 		{
@@ -43,7 +48,7 @@ func TestParseBarmanRestoreTargetTime(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := parseBarmanRestoreTargetTime(tt.input)
+			got, err := parseRestoreTargetTime(tt.input)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
