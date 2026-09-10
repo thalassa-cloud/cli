@@ -11,6 +11,9 @@ import (
 	"github.com/mattn/go-isatty"
 )
 
+// ErrSelectionCancelled is returned when the user aborts fzf (e.g. Esc / Ctrl-C).
+var ErrSelectionCancelled = errors.New("selection cancelled")
+
 // InteractiveChoiceOptions provides configuration for the interactive choice functionality.
 type InteractiveChoiceOptions struct {
 	// FzfArgs are additional arguments to pass to the fzf command
@@ -53,19 +56,15 @@ func InteractiveChoiceWithOptions(command string, opts InteractiveChoiceOptions)
 
 	cmd.Env = append(os.Environ(), fmt.Sprintf("FZF_DEFAULT_COMMAND=%s", command))
 	if err := cmd.Run(); err != nil {
-		if exitErr, ok := err.(*exec.ExitError); ok {
-			// Exit code 130 typically means user interrupted (Ctrl-C), which is a normal operation
-			if exitErr.ExitCode() == 130 {
-				return "", errors.New("selection cancelled")
-			}
-			return "", fmt.Errorf("fzf exited with error: %w", exitErr)
+		if isFzfCancel(err) {
+			return "", ErrSelectionCancelled
 		}
 		return "", fmt.Errorf("error running fzf: %w", err)
 	}
 
 	choice := strings.TrimSpace(out.String())
 	if choice == "" {
-		return "", errors.New("no option selected")
+		return "", ErrSelectionCancelled
 	}
 
 	return firstColumn(choice), nil
@@ -99,21 +98,29 @@ func InteractiveChoiceFromLinesWithOptions(lines []string, opts InteractiveChoic
 	cmd.Env = withoutEnv(os.Environ(), "FZF_DEFAULT_COMMAND")
 
 	if err := cmd.Run(); err != nil {
-		if exitErr, ok := err.(*exec.ExitError); ok {
-			if exitErr.ExitCode() == 130 {
-				return "", errors.New("selection cancelled")
-			}
-			return "", fmt.Errorf("fzf exited with error: %w", exitErr)
+		if isFzfCancel(err) {
+			return "", ErrSelectionCancelled
 		}
 		return "", fmt.Errorf("error running fzf: %w", err)
 	}
 
 	choice := strings.TrimSpace(out.String())
 	if choice == "" {
-		return "", errors.New("no option selected")
+		return "", ErrSelectionCancelled
 	}
 
 	return firstColumn(choice), nil
+}
+
+// isFzfCancel reports whether fzf exited because the user aborted selection.
+// Exit 1 is abort/Esc; 130 is Ctrl-C.
+func isFzfCancel(err error) bool {
+	var exitErr *exec.ExitError
+	if !errors.As(err, &exitErr) {
+		return false
+	}
+	code := exitErr.ExitCode()
+	return code == 1 || code == 130
 }
 
 func firstColumn(choice string) string {
