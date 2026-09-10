@@ -876,11 +876,34 @@ func CompleteDnsZoneIdentity(cmd *cobra.Command, args []string, toComplete strin
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
+// completionFlagString returns a flag value from local or inherited flags.
+// Prefer Value.String so shell completion sees values typed earlier on the line.
+func completionFlagString(cmd *cobra.Command, name string) string {
+	if cmd == nil {
+		return ""
+	}
+	if f := cmd.Flags().Lookup(name); f != nil {
+		if v := strings.TrimSpace(f.Value.String()); v != "" {
+			return v
+		}
+	}
+	if f := cmd.InheritedFlags().Lookup(name); f != nil {
+		if v := strings.TrimSpace(f.Value.String()); v != "" {
+			return v
+		}
+	}
+	return ""
+}
+
 // CompleteKmsKeyIdentity provides completion for KMS key identities.
 // Requires the --region flag to be set.
 func CompleteKmsKeyIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	regionFlag, err := cmd.Flags().GetString("region")
-	if err != nil || regionFlag == "" {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	regionFlag := completionFlagString(cmd, "region")
+	if regionFlag == "" {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
@@ -897,6 +920,39 @@ func CompleteKmsKeyIdentity(cmd *cobra.Command, args []string, toComplete string
 	completions := make([]string, 0, len(keys))
 	for _, key := range keys {
 		completions = append(completions, key.Identity+"\t"+key.Name)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteKmsKeyVersion provides completion for KMS key versions.
+// Requires --region and --key (or a positional key identity).
+func CompleteKmsKeyVersion(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	regionFlag := completionFlagString(cmd, "region")
+	keyFlag := completionFlagString(cmd, "key")
+	if keyFlag == "" && len(args) > 0 {
+		keyFlag = strings.TrimSpace(args[0])
+	}
+	if regionFlag == "" || keyFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	key, err := client.KMS().GetKey(cmd.Context(), regionFlag, keyFlag)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(key.Versions))
+	for _, version := range key.Versions {
+		desc := version.Status
+		if desc == "" {
+			desc = "version"
+		}
+		completions = append(completions, fmt.Sprintf("%d\t%s", version.Version, desc))
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }

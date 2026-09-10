@@ -68,4 +68,5 @@ func init() {
 	_ = publicKeyCmd.MarkFlagRequired("key")
 	_ = publicKeyCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
 	_ = publicKeyCmd.RegisterFlagCompletionFunc("key", completion.CompleteKmsKeyIdentity)
+	_ = publicKeyCmd.RegisterFlagCompletionFunc("version", completion.CompleteKmsKeyVersion)
 }

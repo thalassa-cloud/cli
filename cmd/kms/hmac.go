@@ -54,4 +54,5 @@ func init() {
 	_ = hmacCmd.MarkFlagRequired("input")
 	_ = hmacCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
 	_ = hmacCmd.RegisterFlagCompletionFunc("key", completion.CompleteKmsKeyIdentity)
+	_ = hmacCmd.RegisterFlagCompletionFunc("key-version", completion.CompleteKmsKeyVersion)
 }

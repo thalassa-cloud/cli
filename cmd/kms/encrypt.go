@@ -67,4 +67,5 @@ func init() {
 	_ = encryptCmd.MarkFlagFilename("to-file")
 	_ = encryptCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
 	_ = encryptCmd.RegisterFlagCompletionFunc("key", completion.CompleteKmsKeyIdentity)
+	_ = encryptCmd.RegisterFlagCompletionFunc("key-version", completion.CompleteKmsKeyVersion)
 }

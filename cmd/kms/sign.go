@@ -76,4 +76,5 @@ func init() {
 	_ = signCmd.MarkFlagFilename("to-file")
 	_ = signCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
 	_ = signCmd.RegisterFlagCompletionFunc("key", completion.CompleteKmsKeyIdentity)
+	_ = signCmd.RegisterFlagCompletionFunc("key-version", completion.CompleteKmsKeyVersion)
 }
