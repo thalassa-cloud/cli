@@ -1,32 +1,30 @@
 ---
-linkTitle: "tcloud dbaas backup-schedules list"
-title: "dbaas backup-schedules list"
-slug: tcloud_dbaas_backup-schedules_list
-url: /docs/tcloud/dbaas/backup-schedules_list/
-weight: 9965
+linkTitle: "tcloud dbaas backup update"
+title: "dbaas backup update"
+slug: tcloud_dbaas_backup_update
+url: /docs/tcloud/dbaas/backup_update/
+weight: 9970
 cascade:
   type: docs
 ---
-## tcloud dbaas backup-schedules list
+## tcloud dbaas backup update
 
-List database backup schedules
+Update a database backup
 
 ### Synopsis
 
-List database backup schedules for a specific cluster or all schedules in the organisation
+Update backup properties such as delete protection
 
 ```
-tcloud dbaas backup-schedules list [flags]
+tcloud dbaas backup update [flags]
 ```
 
 ### Options
 
 ```
-      --cluster string   Filter by database cluster identity, slug, or name
-      --exact-time       Show exact time instead of relative time
-  -h, --help             help for list
-      --no-header        Do not print the header
-      --show-labels      Show labels
+      --delete-protection   Enable or disable delete protection
+  -h, --help                help for update
+      --no-header           Do not print the header
 ```
 
 ### Options inherited from parent commands
@@ -45,5 +43,5 @@ tcloud dbaas backup-schedules list [flags]
 
 ### SEE ALSO
 
-* [tcloud dbaas backup-schedules](/docs/tcloud/dbaas/backup-schedules/)	 - Manage database backup schedules
+* [tcloud dbaas backup](/docs/tcloud/dbaas/backup/)	 - Manage database backups
 

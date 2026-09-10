@@ -1,35 +1,36 @@
 ---
-linkTitle: "tcloud dbaas backup-schedules update"
-title: "dbaas backup-schedules update"
-slug: tcloud_dbaas_backup-schedules_update
-url: /docs/tcloud/dbaas/backup-schedules_update/
-weight: 9964
+linkTitle: "tcloud dbaas backup-stores update"
+title: "dbaas backup-stores update"
+slug: tcloud_dbaas_backup-stores_update
+url: /docs/tcloud/dbaas/backup-stores_update/
+weight: 9958
 cascade:
   type: docs
 ---
-## tcloud dbaas backup-schedules update
+## tcloud dbaas backup-stores update
 
-Update a database backup schedule
+Update a database backup store
 
 ### Synopsis
 
-Update properties of an existing backup schedule
+Update properties of an existing backup store
 
 ```
-tcloud dbaas backup-schedules update [flags]
+tcloud dbaas backup-stores update [flags]
 ```
 
 ### Options
 
 ```
       --annotations strings       Annotations in key=value format (can be specified multiple times)
-      --description string        Description of the backup schedule
+      --delete-protection         Enable or disable delete protection
+      --description string        Description of the backup store
   -h, --help                      help for update
       --labels strings            Labels in key=value format (can be specified multiple times)
-      --name string               Name of the backup schedule
+      --name string               Name of the backup store
       --no-header                 Do not print the header
-      --retention-policy string   Retention policy for the backup schedule
-      --schedule string           Cron expression for the backup schedule
+      --retention-mode string     Retention mode: retainForPointInTime or forceCleanupAfterExpiry
+      --retention-policy string   Retention policy in days, for example 30d
 ```
 
 ### Options inherited from parent commands
@@ -48,5 +49,5 @@ tcloud dbaas backup-schedules update [flags]
 
 ### SEE ALSO
 
-* [tcloud dbaas backup-schedules](/docs/tcloud/dbaas/backup-schedules/)	 - Manage database backup schedules
+* [tcloud dbaas backup-stores](/docs/tcloud/dbaas/backup-stores/)	 - Manage database backup stores
 

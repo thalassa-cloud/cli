@@ -1,32 +1,24 @@
 ---
-linkTitle: "tcloud dbaas backup-schedules list"
-title: "dbaas backup-schedules list"
-slug: tcloud_dbaas_backup-schedules_list
-url: /docs/tcloud/dbaas/backup-schedules_list/
-weight: 9965
+linkTitle: "tcloud dbaas recovery wal"
+title: "dbaas recovery wal"
+slug: tcloud_dbaas_recovery_wal
+url: /docs/tcloud/dbaas/recovery_wal/
+weight: 9947
 cascade:
   type: docs
 ---
-## tcloud dbaas backup-schedules list
+## tcloud dbaas recovery wal
 
-List database backup schedules
+Inspect WAL archives for recovery
 
 ### Synopsis
 
-List database backup schedules for a specific cluster or all schedules in the organisation
-
-```
-tcloud dbaas backup-schedules list [flags]
-```
+Browse WAL hierarchy, list WAL segments, and search WAL objects in a backup store
 
 ### Options
 
 ```
-      --cluster string   Filter by database cluster identity, slug, or name
-      --exact-time       Show exact time instead of relative time
-  -h, --help             help for list
-      --no-header        Do not print the header
-      --show-labels      Show labels
+  -h, --help   help for wal
 ```
 
 ### Options inherited from parent commands
@@ -45,5 +37,8 @@ tcloud dbaas backup-schedules list [flags]
 
 ### SEE ALSO
 
-* [tcloud dbaas backup-schedules](/docs/tcloud/dbaas/backup-schedules/)	 - Manage database backup schedules
+* [tcloud dbaas recovery](/docs/tcloud/dbaas/recovery/)	 - Inspect database backup recovery and PITR windows
+* [tcloud dbaas recovery wal hierarchy](/docs/tcloud/dbaas/recovery_wal_hierarchy/)	 - Show WAL archive hierarchy
+* [tcloud dbaas recovery wal list](/docs/tcloud/dbaas/recovery_wal_list/)	 - List WAL segment objects
+* [tcloud dbaas recovery wal search](/docs/tcloud/dbaas/recovery_wal_search/)	 - Search WAL archive objects
 

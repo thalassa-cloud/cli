@@ -1,36 +1,24 @@
 ---
-linkTitle: "tcloud dbaas instance-types"
-title: "dbaas instance-types"
-slug: tcloud_dbaas_instance-types
-url: /docs/tcloud/dbaas/instance-types/
-weight: 9953
+linkTitle: "tcloud dbaas backup-stores"
+title: "dbaas backup-stores"
+slug: tcloud_dbaas_backup-stores
+url: /docs/tcloud/dbaas/backup-stores/
+weight: 9956
 cascade:
   type: docs
 ---
-## tcloud dbaas instance-types
+## tcloud dbaas backup-stores
 
-Get a list of database instance types
+Manage database backup stores
 
 ### Synopsis
 
-Get a list of available database instance types within your organisation
-
-```
-tcloud dbaas instance-types [flags]
-```
-
-### Examples
-
-```
-tcloud dbaas instance-types
-tcloud dbaas instance-types --no-header
-```
+Manage backup stores used by database clusters for Barman backups and point-in-time recovery
 
 ### Options
 
 ```
-  -h, --help        help for instance-types
-      --no-header   Do not print the header
+  -h, --help   help for backup-stores
 ```
 
 ### Options inherited from parent commands
@@ -50,4 +38,9 @@ tcloud dbaas instance-types --no-header
 ### SEE ALSO
 
 * [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
+* [tcloud dbaas backup-stores create](/docs/tcloud/dbaas/backup-stores_create/)	 - Create a database backup store
+* [tcloud dbaas backup-stores delete](/docs/tcloud/dbaas/backup-stores_delete/)	 - Delete a database backup store
+* [tcloud dbaas backup-stores list](/docs/tcloud/dbaas/backup-stores_list/)	 - List database backup stores
+* [tcloud dbaas backup-stores update](/docs/tcloud/dbaas/backup-stores_update/)	 - Update a database backup store
+* [tcloud dbaas backup-stores view](/docs/tcloud/dbaas/backup-stores_view/)	 - View backup store details
 

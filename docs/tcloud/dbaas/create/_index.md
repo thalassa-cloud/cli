@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas create"
 title: "dbaas create"
 slug: tcloud_dbaas_create
 url: /docs/tcloud/dbaas/create/
-weight: 9962
+weight: 9955
 cascade:
   type: docs
 ---
@@ -13,7 +13,7 @@ Create a database cluster
 
 ### Synopsis
 
-Create a new database cluster in the Thalassa Cloud Platform.
+Create a new database cluster in the Thalassa Cloud Platform. Use --restore-from-backup to create a cluster from an existing backup.
 
 ```
 tcloud dbaas create [flags]
@@ -34,11 +34,15 @@ tcloud dbaas create [flags]
       --name string                       Name of the database cluster (required)
       --no-header                         Do not print the header
       --replicas int                      Number of replicas (default: 0)
+      --restore-from-backup string        Backup identity to restore the cluster from
+      --restore-target-lsn string         Point-in-time recovery target LSN (requires --restore-from-backup)
+      --restore-target-time string        Timestamp to restore to. Accepts RFC3339 (e.g. 2023-12-25T10:00:00Z) or barman format (YYYY-MM-DD HH:MM:SS.00000±TZ, e.g. '2023-08-11 11:14:21.00000+02') (requires --restore-from-backup)
       --storage int                       Storage size in GB (required)
       --subnet string                     Subnet identity, slug, or name (required)
       --volume-type string                Volume type (default "block")
       --vpc string                        VPC identity, slug, or name
       --wait                              Wait for the database cluster to be available before returning
+      --wait-timeout duration             Maximum time to wait for the database cluster to be available (default 20m0s)
       --with-backup-bucket                Provision a backup object storage bucket for the database cluster
 ```
 

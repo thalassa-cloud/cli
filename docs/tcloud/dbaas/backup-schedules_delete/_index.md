@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas backup-schedules delete"
 title: "dbaas backup-schedules delete"
 slug: tcloud_dbaas_backup-schedules_delete
 url: /docs/tcloud/dbaas/backup-schedules_delete/
-weight: 9967
+weight: 9966
 cascade:
   type: docs
 ---

@@ -1,35 +1,37 @@
 ---
-linkTitle: "tcloud dbaas backup-schedules update"
-title: "dbaas backup-schedules update"
-slug: tcloud_dbaas_backup-schedules_update
-url: /docs/tcloud/dbaas/backup-schedules_update/
-weight: 9964
+linkTitle: "tcloud dbaas backup-stores create"
+title: "dbaas backup-stores create"
+slug: tcloud_dbaas_backup-stores_create
+url: /docs/tcloud/dbaas/backup-stores_create/
+weight: 9961
 cascade:
   type: docs
 ---
-## tcloud dbaas backup-schedules update
+## tcloud dbaas backup-stores create
 
-Update a database backup schedule
+Create a database backup store
 
 ### Synopsis
 
-Update properties of an existing backup schedule
+Create a backup store for Barman backups and point-in-time recovery
 
 ```
-tcloud dbaas backup-schedules update [flags]
+tcloud dbaas backup-stores create [flags]
 ```
 
 ### Options
 
 ```
       --annotations strings       Annotations in key=value format (can be specified multiple times)
-      --description string        Description of the backup schedule
-  -h, --help                      help for update
+      --delete-protection         Enable delete protection
+      --description string        Description of the backup store
+  -h, --help                      help for create
       --labels strings            Labels in key=value format (can be specified multiple times)
-      --name string               Name of the backup schedule
+      --name string               Name of the backup store (required)
       --no-header                 Do not print the header
-      --retention-policy string   Retention policy for the backup schedule
-      --schedule string           Cron expression for the backup schedule
+      --region string             Region identity or slug (required)
+      --retention-mode string     Retention mode: retainForPointInTime or forceCleanupAfterExpiry (default "retainForPointInTime")
+      --retention-policy string   Retention policy in days, for example 30d
 ```
 
 ### Options inherited from parent commands
@@ -48,5 +50,5 @@ tcloud dbaas backup-schedules update [flags]
 
 ### SEE ALSO
 
-* [tcloud dbaas backup-schedules](/docs/tcloud/dbaas/backup-schedules/)	 - Manage database backup schedules
+* [tcloud dbaas backup-stores](/docs/tcloud/dbaas/backup-stores/)	 - Manage database backup stores
 

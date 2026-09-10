@@ -30,6 +30,7 @@ tcloud dbaas backup create [flags]
       --no-header                 Do not print the header
       --retention-policy string   Retention policy for the backup
       --wait                      Wait for the backup to be completed before returning
+      --wait-timeout duration     Maximum time to wait for the backup to be completed (default 20m0s)
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas update"
 title: "dbaas update"
 slug: tcloud_dbaas_update
 url: /docs/tcloud/dbaas/update/
-weight: 9958
+weight: 9944
 cascade:
   type: docs
 ---
@@ -32,6 +32,7 @@ tcloud dbaas update [flags]
       --name string                  Name of the database cluster
       --no-header                    Do not print the header
       --replicas int                 Number of replicas (default -1)
+      --security-groups strings      Security group identities to attach
       --storage int                  Storage size in GB
 ```
 
