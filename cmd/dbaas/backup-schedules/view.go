@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	dbaasutil "github.com/thalassa-cloud/cli/internal/dbaas"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -52,7 +53,7 @@ var backupScheduleViewCmd = &cobra.Command{
 			{"ID", schedule.Identity},
 			{"Name", schedule.Name},
 			{"Cluster", clusterName},
-			{"Status", string(schedule.Status)},
+			{"Status", dbaasutil.FormatStatus(string(schedule.Status))},
 			{"Method", string(schedule.Method)},
 			{"Schedule", schedule.Schedule},
 			{"Retention Policy", schedule.RetentionPolicy},

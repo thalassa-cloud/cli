@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	dbaasutil "github.com/thalassa-cloud/cli/internal/dbaas"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -59,7 +60,7 @@ var viewCmd = &cobra.Command{
 		body := [][]string{
 			{"ID", cluster.Identity},
 			{"Name", cluster.Name},
-			{"Status", string(cluster.Status)},
+			{"Status", dbaasutil.FormatStatus(string(cluster.Status))},
 			{"Engine", string(cluster.Engine)},
 			{"Engine Version", engineVersion},
 			{"Instance Type", instanceType},
@@ -93,6 +94,39 @@ var viewCmd = &cobra.Command{
 
 		if cluster.DeleteProtection {
 			body = append(body, []string{"Delete Protection", "enabled"})
+		}
+
+		if cluster.DbObjectStore != nil {
+			storeName := cluster.DbObjectStore.Name
+			if storeName == "" {
+				storeName = cluster.DbObjectStore.Identity
+			}
+			body = append(body, []string{"Backup Store", storeName})
+			body = append(body, []string{"Backup Store ID", cluster.DbObjectStore.Identity})
+			body = append(body, []string{"Backup Store Status", dbaasutil.FormatStatus(string(cluster.DbObjectStore.Status))})
+		}
+
+		if cluster.BackupRecoveryWindow != nil {
+			window := cluster.BackupRecoveryWindow
+			body = append(body, []string{"First Recoverability", dbaasutil.FormatOptionalTime(window.FirstRecoverabilityPoint, viewShowExactTime)})
+			body = append(body, []string{"Last Successful Backup", dbaasutil.FormatOptionalTime(window.LastSuccessfulBackupTime, viewShowExactTime)})
+			body = append(body, []string{"Last Failed Backup", dbaasutil.FormatOptionalTime(window.LastFailedBackupTime, viewShowExactTime)})
+			body = append(body, []string{"PITR Available", dbaasutil.FormatGoodYesNo(dbaasutil.PITRAvailableForCluster(cluster))})
+		}
+
+		if cluster.HealthStatus.ContinuousArchiving != nil {
+			archiving := cluster.HealthStatus.ContinuousArchiving
+			status := "unhealthy"
+			if archiving.Healthy {
+				status = "healthy"
+			}
+			body = append(body, []string{"Continuous Archiving", dbaasutil.FormatStatus(status)})
+			if archiving.Reason != "" {
+				body = append(body, []string{"Archiving Reason", archiving.Reason})
+			}
+			if archiving.Message != "" {
+				body = append(body, []string{"Archiving Message", archiving.Message})
+			}
 		}
 
 		if noHeader {

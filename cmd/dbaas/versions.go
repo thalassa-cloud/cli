@@ -64,6 +64,7 @@ var versionsCmd = &cobra.Command{
 
 func init() {
 	DbaasCmd.AddCommand(versionsCmd)
+	versionsCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	versionsCmd.Flags().StringVar(&engineType, "engine", "", "Database engine type (e.g., postgres)")
 	_ = versionsCmd.MarkFlagRequired("engine")
 }
