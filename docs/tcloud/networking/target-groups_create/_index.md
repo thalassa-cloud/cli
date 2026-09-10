@@ -3,7 +3,7 @@ linkTitle: "tcloud networking target-groups create"
 title: "networking target-groups create"
 slug: tcloud_networking_target-groups_create
 url: /docs/tcloud/networking/target-groups_create/
-weight: 9843
+weight: 9761
 cascade:
   type: docs
 ---

@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles delete"
 title: "iam roles delete"
 slug: tcloud_iam_roles_delete
 url: /docs/tcloud/iam/roles_delete/
-weight: 9931
+weight: 9898
 cascade:
   type: docs
 ---

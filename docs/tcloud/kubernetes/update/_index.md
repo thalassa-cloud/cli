@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes update"
 title: "kubernetes update"
 slug: tcloud_kubernetes_update
 url: /docs/tcloud/kubernetes/update/
-weight: 9877
+weight: 9820
 cascade:
   type: docs
 ---
@@ -53,6 +53,7 @@ tcloud kubernetes update <cluster> [flags]
       --name string                     Name of the cluster
       --pod-security-standards string   Pod security standards profile: baseline, restricted, or privileged
       --wait                            Wait for the cluster update to complete
+      --wait-timeout duration           Maximum time to wait for the cluster update to complete (default 20m0s)
 ```
 
 ### Options inherited from parent commands

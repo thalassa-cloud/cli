@@ -3,7 +3,7 @@ linkTitle: "tcloud registry"
 title: "registry"
 slug: tcloud_registry
 url: /docs/tcloud/tcloud_registry/
-weight: 9790
+weight: 9704
 cascade:
   type: docs
 ---

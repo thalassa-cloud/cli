@@ -3,7 +3,7 @@ linkTitle: "tcloud networking"
 title: "networking"
 slug: tcloud_networking
 url: /docs/tcloud/tcloud_networking/
-weight: 9824
+weight: 9742
 cascade:
   type: docs
 ---
@@ -40,7 +40,8 @@ Manage networking resources in the Thalassa Cloud Platform
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
 * [tcloud networking loadbalancers](/docs/tcloud/networking/loadbalancers/)	 - Manage load balancers
 * [tcloud networking natgateways](/docs/tcloud/networking/natgateways/)	 - Manage NAT gateways
-* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage routetables
+* [tcloud networking reserved-ips](/docs/tcloud/networking/reserved-ips/)	 - Manage reserved IP addresses
+* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage route tables
 * [tcloud networking security-groups](/docs/tcloud/networking/security-groups/)	 - Manage security groups
 * [tcloud networking subnets](/docs/tcloud/networking/subnets/)	 - Manage subnets
 * [tcloud networking target-groups](/docs/tcloud/networking/target-groups/)	 - Manage load balancer target groups

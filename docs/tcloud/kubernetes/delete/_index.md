@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes delete"
 title: "kubernetes delete"
 slug: tcloud_kubernetes_delete
 url: /docs/tcloud/kubernetes/delete/
-weight: 9900
+weight: 9846
 cascade:
   type: docs
 ---
@@ -35,9 +35,10 @@ tcloud kubernetes delete <cluster> [flags]
 ### Options
 
 ```
-      --force   Skip confirmation prompt
-  -h, --help    help for delete
-      --wait    Wait for the cluster to be deleted before returning
+      --force                   Skip confirmation prompt
+  -h, --help                    help for delete
+      --wait                    Wait for the cluster to be deleted before returning
+      --wait-timeout duration   Maximum time to wait for the cluster to be deleted (default 30m0s)
 ```
 
 ### Options inherited from parent commands

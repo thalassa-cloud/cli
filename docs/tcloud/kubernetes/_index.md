@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes"
 title: "kubernetes"
 slug: tcloud_kubernetes
 url: /docs/tcloud/tcloud_kubernetes/
-weight: 9874
+weight: 9817
 cascade:
   type: docs
 ---
@@ -43,6 +43,7 @@ Kubernetes commands to manage your Kubernetes clusters and node pools within the
 * [tcloud kubernetes delete](/docs/tcloud/kubernetes/delete/)	 - Delete a Kubernetes cluster
 * [tcloud kubernetes iam](/docs/tcloud/kubernetes/iam/)	 - Kubernetes cluster IAM roles and bindings
 * [tcloud kubernetes kubeconfig](/docs/tcloud/kubernetes/kubeconfig/)	 - Print a kubeconfig for a Kubernetes cluster
+* [tcloud kubernetes kubeconfig-sessions](/docs/tcloud/kubernetes/kubeconfig-sessions/)	 - Manage Kubernetes kubeconfig sessions
 * [tcloud kubernetes list](/docs/tcloud/kubernetes/list/)	 - Get a list of Kubernetes clusters
 * [tcloud kubernetes machines](/docs/tcloud/kubernetes/machines/)	 - List and manage Kubernetes cluster machines
 * [tcloud kubernetes nodepools](/docs/tcloud/kubernetes/nodepools/)	 - Manage Kubernetes NodePools

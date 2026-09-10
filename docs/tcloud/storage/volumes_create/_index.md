@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes create"
 title: "storage volumes create"
 slug: tcloud_storage_volumes_create
 url: /docs/tcloud/storage/volumes_create/
-weight: 9778
+weight: 9676
 cascade:
   type: docs
 ---
@@ -22,17 +22,18 @@ tcloud storage volumes create [flags]
 ### Options
 
 ```
-      --annotations strings   Annotations in key=value format (can be specified multiple times)
-      --delete-protection     Enable delete protection
-      --description string    Description of the volume
-  -h, --help                  help for create
-      --labels strings        Labels in key=value format (can be specified multiple times)
-      --name string           Name of the volume (required)
-      --no-header             Do not print the header
-      --region string         Region of the volume (required)
-      --size int              Size of the volume in GB (required)
-      --type string           Volume type (default "block")
-      --wait                  Wait for the volume to be available before returning
+      --annotations strings     Annotations in key=value format (can be specified multiple times)
+      --delete-protection       Enable delete protection
+      --description string      Description of the volume
+  -h, --help                    help for create
+      --labels strings          Labels in key=value format (can be specified multiple times)
+      --name string             Name of the volume (required)
+      --no-header               Do not print the header
+      --region string           Region of the volume (required)
+      --size int                Size of the volume in GB (required)
+      --type string             Volume type (default "block")
+      --wait                    Wait for the volume to be available before returning
+      --wait-timeout duration   Maximum time to wait for the volume to be available (default 20m0s)
 ```
 
 ### Options inherited from parent commands

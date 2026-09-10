@@ -3,7 +3,7 @@ linkTitle: "tcloud storage tfs create"
 title: "storage tfs create"
 slug: tcloud_storage_tfs_create
 url: /docs/tcloud/storage/tfs_create/
-weight: 9785
+weight: 9683
 cascade:
   type: docs
 ---
@@ -22,18 +22,19 @@ tcloud storage tfs create [flags]
 ### Options
 
 ```
-      --annotations strings   Annotations in key=value format (can be specified multiple times)
-      --delete-protection     Enable delete protection
-      --description string    Description of the TFS instance
-  -h, --help                  help for create
-      --labels strings        Labels in key=value format (can be specified multiple times)
-      --name string           Name of the TFS instance (required)
-      --no-header             Do not print the header
-      --region string         Region of the TFS instance (required)
-      --size int              Size of the TFS instance in GB (required) (default 1)
-      --subnet string         Subnet of the TFS instance (required)
-      --vpc string            VPC of the TFS instance (required)
-      --wait                  Wait for the TFS instance to be available before returning
+      --annotations strings     Annotations in key=value format (can be specified multiple times)
+      --delete-protection       Enable delete protection
+      --description string      Description of the TFS instance
+  -h, --help                    help for create
+      --labels strings          Labels in key=value format (can be specified multiple times)
+      --name string             Name of the TFS instance (required)
+      --no-header               Do not print the header
+      --region string           Region of the TFS instance (required)
+      --size int                Size of the TFS instance in GB (required) (default 1)
+      --subnet string           Subnet of the TFS instance (required)
+      --vpc string              VPC of the TFS instance (required)
+      --wait                    Wait for the TFS instance to be available before returning
+      --wait-timeout duration   Maximum time to wait for the TFS instance to be available (default 20m0s)
 ```
 
 ### Options inherited from parent commands

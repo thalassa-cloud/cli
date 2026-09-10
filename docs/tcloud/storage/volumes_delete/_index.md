@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes delete"
 title: "storage volumes delete"
 slug: tcloud_storage_volumes_delete
 url: /docs/tcloud/storage/volumes_delete/
-weight: 9777
+weight: 9675
 cascade:
   type: docs
 ---
@@ -22,10 +22,11 @@ tcloud storage volumes delete [flags]
 ### Options
 
 ```
-      --force             Force the deletion and skip the confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector to filter volumes (format: key1=value1,key2=value2)
-      --wait              Wait for the volume(s) to be deleted
+      --force                   Force the deletion and skip the confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector to filter volumes (format: key1=value1,key2=value2)
+      --wait                    Wait for the volume(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the volume(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

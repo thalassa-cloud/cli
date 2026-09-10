@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes connect"
 title: "kubernetes connect"
 slug: tcloud_kubernetes_connect
 url: /docs/tcloud/kubernetes/connect/
-weight: 9902
+weight: 9848
 cascade:
   type: docs
 ---

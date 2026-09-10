@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes kubeconfig"
 title: "kubernetes kubeconfig"
 slug: tcloud_kubernetes_kubeconfig
 url: /docs/tcloud/kubernetes/kubeconfig/
-weight: 9886
+weight: 9832
 cascade:
   type: docs
 ---
@@ -18,8 +18,9 @@ tcloud kubernetes kubeconfig [flags]
 ### Options
 
 ```
-  -h, --help           help for kubeconfig
-      --inline-token   embed the session token in the kubeconfig instead of using a kubectl exec credential plugin
+  -h, --help                        help for kubeconfig
+      --inline-token                embed the session token in the kubeconfig instead of using a kubectl exec credential plugin
+      --session-lifetime duration   Lifetime of the kubeconfig session token. Defaults to 4 weeks. (default 672h0m0s)
 ```
 
 ### Options inherited from parent commands

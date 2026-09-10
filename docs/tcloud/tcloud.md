@@ -3,7 +3,7 @@ linkTitle: "tcloud"
 title: "tcloud"
 slug: tcloud
 url: /docs/tcloud/tcloud/
-weight: 9770
+weight: 9668
 cascade:
   type: docs
 ---
@@ -33,16 +33,19 @@ A CLI for working with the Thalassa Cloud Platform
 * [tcloud compute](/docs/tcloud/tcloud_compute/)	 - Manage compute resources
 * [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 * [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
+* [tcloud dns](/docs/tcloud/tcloud_dns/)	 - Manage DNS zones and records (beta)
 * [tcloud iam](/docs/tcloud/tcloud_iam/)	 - Identity and access management for your organisation
+* [tcloud kms](/docs/tcloud/tcloud_kms/)	 - Manage KMS keys and cryptographic operations (beta)
 * [tcloud kubernetes](/docs/tcloud/tcloud_kubernetes/)	 - Manage Kubernetes clusters, node pools and more services related to Kubernetes
 * [tcloud me](/docs/tcloud/tcloud_me/)	 - Get information about the current user
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
 * [tcloud object-storage](/docs/tcloud/tcloud_object-storage/)	 - Manage object storage buckets
 * [tcloud oidc](/docs/tcloud/tcloud_oidc/)	 - OIDC token operations
-* [tcloud projects](/docs/tcloud/tcloud_projects/)	 - Manage projects (private beta)
+* [tcloud projects](/docs/tcloud/tcloud_projects/)	 - Manage projects (beta)
 * [tcloud quotas](/docs/tcloud/tcloud_quotas/)	 - View and request changes to organisation resource quotas
 * [tcloud regions](/docs/tcloud/tcloud_regions/)	 - Thalassa Cloud Platform Regions
 * [tcloud registry](/docs/tcloud/tcloud_registry/)	 - Manage the Thalassa container registry
+* [tcloud secrets](/docs/tcloud/tcloud_secrets/)	 - Manage secrets (beta)
 * [tcloud storage](/docs/tcloud/tcloud_storage/)	 - Manage storage resources
 * [tcloud version](/docs/tcloud/tcloud_version/)	 - Print version information
 

@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpcs delete"
 title: "networking vpcs delete"
 slug: tcloud_networking_vpcs_delete
 url: /docs/tcloud/networking/vpcs_delete/
-weight: 9827
+weight: 9745
 cascade:
   type: docs
 ---
@@ -30,10 +30,11 @@ tcloud networking vpcs delete --selector environment=test --force
 ### Options
 
 ```
-      --force             Force the deletion and skip the confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector to filter VPCs (format: key1=value1,key2=value2)
-      --wait              Wait for the VPC(s) to be deleted
+      --force                   Force the deletion and skip the confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector to filter VPCs (format: key1=value1,key2=value2)
+      --wait                    Wait for the VPC(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the VPC(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

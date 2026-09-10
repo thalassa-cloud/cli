@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes machines"
 title: "kubernetes machines"
 slug: tcloud_kubernetes_machines
 url: /docs/tcloud/kubernetes/machines/
-weight: 9883
+weight: 9826
 cascade:
   type: docs
 ---

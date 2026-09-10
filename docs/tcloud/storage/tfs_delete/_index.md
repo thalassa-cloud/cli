@@ -3,7 +3,7 @@ linkTitle: "tcloud storage tfs delete"
 title: "storage tfs delete"
 slug: tcloud_storage_tfs_delete
 url: /docs/tcloud/storage/tfs_delete/
-weight: 9784
+weight: 9682
 cascade:
   type: docs
 ---
@@ -22,10 +22,11 @@ tcloud storage tfs delete [flags]
 ### Options
 
 ```
-      --force             Force the deletion and skip the confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector to filter TFS instances (format: key1=value1,key2=value2)
-      --wait              Wait for the TFS instance(s) to be deleted
+      --force                   Force the deletion and skip the confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector to filter TFS instances (format: key1=value1,key2=value2)
+      --wait                    Wait for the TFS instance(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the TFS instance(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

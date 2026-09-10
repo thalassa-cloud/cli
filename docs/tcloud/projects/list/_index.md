@@ -3,7 +3,7 @@ linkTitle: "tcloud projects list"
 title: "projects list"
 slug: tcloud_projects_list
 url: /docs/tcloud/projects/list/
-weight: 9816
+weight: 9732
 cascade:
   type: docs
 ---
@@ -40,5 +40,5 @@ tcloud projects list [flags]
 
 ### SEE ALSO
 
-* [tcloud projects](/docs/tcloud/tcloud_projects/)	 - Manage projects (private beta)
+* [tcloud projects](/docs/tcloud/tcloud_projects/)	 - Manage projects (beta)
 

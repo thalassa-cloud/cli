@@ -3,7 +3,7 @@ linkTitle: "tcloud networking target-groups list"
 title: "networking target-groups list"
 slug: tcloud_networking_target-groups_list
 url: /docs/tcloud/networking/target-groups_list/
-weight: 9840
+weight: 9758
 cascade:
   type: docs
 ---

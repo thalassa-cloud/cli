@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identity-providers list"
 title: "iam federated-identity-providers list"
 slug: tcloud_iam_federated-identity-providers_list
 url: /docs/tcloud/iam/federated-identity-providers_list/
-weight: 9945
+weight: 9912
 cascade:
   type: docs
 ---

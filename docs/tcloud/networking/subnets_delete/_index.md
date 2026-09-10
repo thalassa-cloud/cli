@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets delete"
 title: "networking subnets delete"
 slug: tcloud_networking_subnets_delete
 url: /docs/tcloud/networking/subnets_delete/
-weight: 9847
+weight: 9765
 cascade:
   type: docs
 ---
@@ -30,10 +30,11 @@ tcloud networking subnets delete --selector environment=test --force
 ### Options
 
 ```
-      --force             Force the deletion and skip the confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector to filter subnets (format: key1=value1,key2=value2)
-      --wait              Wait for the subnet(s) to be deleted
+      --force                   Force the deletion and skip the confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector to filter subnets (format: key1=value1,key2=value2)
+      --wait                    Wait for the subnet(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the subnet(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

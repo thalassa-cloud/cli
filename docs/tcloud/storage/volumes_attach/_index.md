@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes attach"
 title: "storage volumes attach"
 slug: tcloud_storage_volumes_attach
 url: /docs/tcloud/storage/volumes_attach/
-weight: 9779
+weight: 9677
 cascade:
   type: docs
 ---

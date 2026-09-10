@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes create"
 title: "kubernetes create"
 slug: tcloud_kubernetes_create
 url: /docs/tcloud/kubernetes/create/
-weight: 9901
+weight: 9847
 cascade:
   type: docs
 ---
@@ -79,6 +79,7 @@ tcloud kubernetes create [flags]
       --subnet string                   Subnet for managed clusters
       --upgrade-strategy string         Upgrade strategy: manual, auto, always, on-delete, inplace, or never (default "auto")
       --wait                            Wait for the cluster to be ready before returning
+      --wait-timeout duration           Maximum time to wait for resources to be ready (default 20m0s)
 ```
 
 ### Options inherited from parent commands

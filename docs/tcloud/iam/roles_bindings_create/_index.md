@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles bindings create"
 title: "iam roles bindings create"
 slug: tcloud_iam_roles_bindings_create
 url: /docs/tcloud/iam/roles_bindings_create/
-weight: 9936
+weight: 9903
 cascade:
   type: docs
 ---

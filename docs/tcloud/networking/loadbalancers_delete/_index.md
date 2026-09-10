@@ -3,7 +3,7 @@ linkTitle: "tcloud networking loadbalancers delete"
 title: "networking loadbalancers delete"
 slug: tcloud_networking_loadbalancers_delete
 url: /docs/tcloud/networking/loadbalancers_delete/
-weight: 9870
+weight: 9813
 cascade:
   type: docs
 ---
@@ -30,10 +30,11 @@ tcloud networking loadbalancers delete --selector env=test --force
 ### Options
 
 ```
-      --force             Force deletion and skip confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector (format: key1=value1,key2=value2)
-      --wait              Wait for the load balancer(s) to be deleted
+      --force                   Force deletion and skip confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector (format: key1=value1,key2=value2)
+      --wait                    Wait for the load balancer(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the load balancer(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

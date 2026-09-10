@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools delete"
 title: "kubernetes nodepools delete"
 slug: tcloud_kubernetes_nodepools_delete
 url: /docs/tcloud/kubernetes/nodepools_delete/
-weight: 9881
+weight: 9824
 cascade:
   type: docs
 ---
@@ -25,6 +25,9 @@ Examples:
   # Delete a node pool and wait for completion
   tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --wait
 
+  # Delete a node pool and wait up to 45 minutes
+  tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --wait --wait-timeout 45m
+
   # Delete a node pool without confirmation
   tcloud kubernetes nodepools delete --cluster my-cluster --nodepool worker-pool --force
 
@@ -35,11 +38,12 @@ tcloud kubernetes nodepools delete [flags]
 ### Options
 
 ```
-      --cluster string    Cluster identity, name, or slug (required)
-      --force             Skip confirmation prompt
-  -h, --help              help for delete
-      --nodepool string   Node pool name, identity, or slug (required)
-      --wait              Wait for the node pool to be deleted before returning
+      --cluster string          Cluster identity, name, or slug (required)
+      --force                   Skip confirmation prompt
+  -h, --help                    help for delete
+      --nodepool string         Node pool name, identity, or slug (required)
+      --wait                    Wait for the node pool to be deleted before returning
+      --wait-timeout duration   Maximum time to wait for the node pool to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

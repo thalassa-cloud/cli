@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools create"
 title: "kubernetes nodepools create"
 slug: tcloud_kubernetes_nodepools_create
 url: /docs/tcloud/kubernetes/nodepools_create/
-weight: 9882
+weight: 9825
 cascade:
   type: docs
 ---
@@ -49,6 +49,7 @@ tcloud kubernetes nodepools create [flags]
       --subnet string               Subnet for the node pool (defaults to cluster subnet)
       --upgrade-strategy string     Upgrade strategy: manual, auto, always, on-delete, inplace, or never (default "auto")
       --wait                        Wait for the node pool to be ready before returning
+      --wait-timeout duration       Maximum time to wait for the node pool to be ready (default 20m0s)
 ```
 
 ### Options inherited from parent commands

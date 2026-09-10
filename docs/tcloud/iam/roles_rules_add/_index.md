@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles rules add"
 title: "iam roles rules add"
 slug: tcloud_iam_roles_rules_add
 url: /docs/tcloud/iam/roles_rules_add/
-weight: 9928
+weight: 9895
 cascade:
   type: docs
 ---

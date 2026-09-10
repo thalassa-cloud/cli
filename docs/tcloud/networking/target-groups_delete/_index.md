@@ -3,7 +3,7 @@ linkTitle: "tcloud networking target-groups delete"
 title: "networking target-groups delete"
 slug: tcloud_networking_target-groups_delete
 url: /docs/tcloud/networking/target-groups_delete/
-weight: 9842
+weight: 9760
 cascade:
   type: docs
 ---

@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles bindings list"
 title: "iam roles bindings list"
 slug: tcloud_iam_roles_bindings_list
 url: /docs/tcloud/iam/roles_bindings_list/
-weight: 9934
+weight: 9901
 cascade:
   type: docs
 ---
