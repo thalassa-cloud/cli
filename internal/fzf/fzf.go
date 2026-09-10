@@ -68,8 +68,69 @@ func InteractiveChoiceWithOptions(command string, opts InteractiveChoiceOptions)
 		return "", errors.New("no option selected")
 	}
 
+	return firstColumn(choice), nil
+}
+
+// InteractiveChoiceFromLines runs fzf against the provided lines and returns the selected item.
+// The first tab-separated column of the chosen line is returned.
+func InteractiveChoiceFromLines(lines []string) (string, error) {
+	return InteractiveChoiceFromLinesWithOptions(lines, DefaultOptions())
+}
+
+// InteractiveChoiceFromLinesWithOptions runs fzf against the provided lines with the given options.
+func InteractiveChoiceFromLinesWithOptions(lines []string, opts InteractiveChoiceOptions) (string, error) {
+	if !fzfInstalled() {
+		return "", errors.New("fzf command not found, please install it first")
+	}
+	if len(lines) == 0 {
+		return "", errors.New("no options available")
+	}
+
+	args := opts.FzfArgs
+	if !opts.EnablePreview {
+		args = append(args, "--no-preview")
+	}
+
+	cmd := exec.Command("fzf", args...)
+	var out bytes.Buffer
+	cmd.Stdin = strings.NewReader(strings.Join(lines, "\n") + "\n")
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = &out
+	cmd.Env = withoutEnv(os.Environ(), "FZF_DEFAULT_COMMAND")
+
+	if err := cmd.Run(); err != nil {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			if exitErr.ExitCode() == 130 {
+				return "", errors.New("selection cancelled")
+			}
+			return "", fmt.Errorf("fzf exited with error: %w", exitErr)
+		}
+		return "", fmt.Errorf("error running fzf: %w", err)
+	}
+
+	choice := strings.TrimSpace(out.String())
+	if choice == "" {
+		return "", errors.New("no option selected")
+	}
+
+	return firstColumn(choice), nil
+}
+
+func firstColumn(choice string) string {
 	parts := strings.SplitN(choice, "\t", 2)
-	return strings.TrimSpace(parts[0]), nil
+	return strings.TrimSpace(parts[0])
+}
+
+func withoutEnv(env []string, key string) []string {
+	prefix := key + "="
+	filtered := make([]string, 0, len(env))
+	for _, item := range env {
+		if strings.HasPrefix(item, prefix) {
+			continue
+		}
+		filtered = append(filtered, item)
+	}
+	return filtered
 }
 
 // IsInteractiveMode determines if we can use fzf for interactive selection.

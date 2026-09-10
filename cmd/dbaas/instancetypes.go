@@ -64,4 +64,5 @@ var instanceTypesCmd = &cobra.Command{
 
 func init() {
 	DbaasCmd.AddCommand(instanceTypesCmd)
+	instanceTypesCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 }

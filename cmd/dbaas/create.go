@@ -170,7 +170,7 @@ var createCmd = &cobra.Command{
 			if createClusterRestoreTargetTime != "" || createClusterRestoreTargetLSN != "" {
 				recoveryTarget := &dbaas.RestoreRecoveryTarget{}
 				if createClusterRestoreTargetTime != "" {
-					targetTime, err := parseBarmanRestoreTargetTime(createClusterRestoreTargetTime)
+					targetTime, err := parseRestoreTargetTime(createClusterRestoreTargetTime)
 					if err != nil {
 						return fmt.Errorf("invalid restore target time: %w", err)
 					}
@@ -277,7 +277,7 @@ func init() {
 	createCmd.Flags().BoolVar(&createClusterProvisionDbBackupObjectStorageBucket, "with-backup-bucket", false, "Provision a backup object storage bucket for the database cluster")
 	createCmd.Flags().StringVar(&createClusterDbBackupObjectStorageId, "backup-object-storage-id", "", "Backup object storage ID (enables backup storage, requires --with-backup-bucket=false)")
 	createCmd.Flags().StringVar(&createClusterRestoreFromBackup, "restore-from-backup", "", "Backup identity to restore the cluster from")
-	createCmd.Flags().StringVar(&createClusterRestoreTargetTime, "restore-target-time", "", barmanTargetTimeDescription+" (requires --restore-from-backup)")
+	createCmd.Flags().StringVar(&createClusterRestoreTargetTime, "restore-target-time", "", restoreTargetTimeDescription+" (requires --restore-from-backup)")
 	createCmd.Flags().StringVar(&createClusterRestoreTargetLSN, "restore-target-lsn", "", "Point-in-time recovery target LSN (requires --restore-from-backup)")
 
 	// Register completions

@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas backup view"
 title: "dbaas backup view"
 slug: tcloud_dbaas_backup_view
 url: /docs/tcloud/dbaas/backup_view/
-weight: 9970
+weight: 9969
 cascade:
   type: docs
 ---

@@ -1,7 +1,10 @@
 package shared
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 
 	"github.com/thalassa-cloud/client-go/pkg/base"
@@ -52,6 +55,32 @@ func PromptYesNoUnlessForce(force bool, question string) (proceed bool, err erro
 	default:
 		return false, nil
 	}
+}
+
+// PromptString reads a line from stdin. Empty input returns defaultValue.
+func PromptString(prompt, defaultValue string) (string, error) {
+	return PromptStringFrom(os.Stdin, prompt, defaultValue)
+}
+
+// PromptStringFrom reads a line from r. Empty input returns defaultValue.
+func PromptStringFrom(r io.Reader, prompt, defaultValue string) (string, error) {
+	if defaultValue != "" {
+		fmt.Printf("%s [%s]: ", prompt, defaultValue)
+	} else {
+		fmt.Printf("%s: ", prompt)
+	}
+	scanner := bufio.NewScanner(r)
+	if !scanner.Scan() {
+		if err := scanner.Err(); err != nil {
+			return "", fmt.Errorf("read input: %w", err)
+		}
+		return "", fmt.Errorf("read input: unexpected EOF")
+	}
+	value := strings.TrimSpace(scanner.Text())
+	if value == "" {
+		return defaultValue, nil
+	}
+	return value, nil
 }
 
 func KeyValuePairsToMap(pairs []string) map[string]string {

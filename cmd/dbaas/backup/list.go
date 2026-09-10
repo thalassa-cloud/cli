@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/completion"
+	dbaasutil "github.com/thalassa-cloud/cli/internal/dbaas"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/labels"
 	"github.com/thalassa-cloud/cli/internal/table"
@@ -210,6 +211,8 @@ var backupListCmd = &cobra.Command{
 				backup.BackupType,
 				trigger,
 				status,
+				dbaasutil.FormatBytes(backup.SizeBytes),
+				dbaasutil.FormatBoolYesNo(backup.RetentionExpired),
 				formattime.FormatTime(backup.CreatedAt.Local(), backupListShowExactTime),
 			}
 
@@ -237,7 +240,7 @@ var backupListCmd = &cobra.Command{
 		if backupListNoHeader {
 			table.Print(nil, body)
 		} else {
-			headers := []string{"ID", "Cluster", "Engine", "Version", "Type", "Trigger", "Status", "Created", "Completed"}
+			headers := []string{"ID", "Cluster", "Engine", "Version", "Type", "Trigger", "Status", "Size", "Retention Expired", "Created", "Completed"}
 			if backupListShowLabels {
 				headers = append(headers, "Labels")
 			}

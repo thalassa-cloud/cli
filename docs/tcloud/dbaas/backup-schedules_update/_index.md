@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas backup-schedules update"
 title: "dbaas backup-schedules update"
 slug: tcloud_dbaas_backup-schedules_update
 url: /docs/tcloud/dbaas/backup-schedules_update/
-weight: 9965
+weight: 9964
 cascade:
   type: docs
 ---

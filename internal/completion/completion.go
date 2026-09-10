@@ -12,7 +12,7 @@ import (
 	"github.com/thalassa-cloud/client-go/dbaas"
 	"github.com/thalassa-cloud/client-go/iaas"
 	"github.com/thalassa-cloud/client-go/kubernetes"
-	"github.com/thalassa-cloud/client-go/observability/prometheus"
+	"github.com/thalassa-cloud/client-go/observability"
 	"github.com/thalassa-cloud/client-go/tfs"
 )
 
@@ -258,6 +258,37 @@ func CompleteDbBackupID(cmd *cobra.Command, args []string, toComplete string) ([
 		}
 	}
 
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteDbBackupStoreID provides completion for DBaaS backup store IDs.
+func CompleteDbBackupStoreID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	stores, err := client.DBaaS().ListDbObjectStores(cmd.Context(), &dbaas.ListDbObjectStoresRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(stores))
+	for _, store := range stores {
+		alreadyAdded := slices.Contains(args, store.Identity)
+		if alreadyAdded {
+			continue
+		}
+		desc := store.Name
+		if store.Status != "" {
+			desc = fmt.Sprintf("%s (%s)", store.Name, store.Status)
+		}
+		completions = append(completions, store.Identity+"\t"+desc)
+	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
@@ -717,8 +748,14 @@ func CompleteContainerRegistryRepositoryID(cmd *cobra.Command, args []string, to
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
-// CompletePrometheusTenantID provides completion for Prometheus tenant IDs.
+// CompletePrometheusTenantID provides completion for observability workspace IDs.
+// Kept for compatibility with older command names that referred to Prometheus tenants.
 func CompletePrometheusTenantID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	return CompleteObservabilityWorkspaceID(cmd, args, toComplete)
+}
+
+// CompleteObservabilityWorkspaceID provides completion for observability workspace IDs.
+func CompleteObservabilityWorkspaceID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) > 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -728,15 +765,15 @@ func CompletePrometheusTenantID(cmd *cobra.Command, args []string, toComplete st
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	tenants, err := client.ObservabilityPrometheus().ListPrometheusTenants(cmd.Context(), &prometheus.ListPrometheusTenantsRequest{})
+	workspaces, err := client.Observability().ListObservabilityWorkspaces(cmd.Context(), &observability.ListObservabilityWorkspacesRequest{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	completions := make([]string, 0, len(tenants))
-	for _, tenant := range tenants {
-		desc := fmt.Sprintf("%s (%s)", tenant.Name, tenant.Status)
-		completions = append(completions, tenant.Identity+"\t"+desc)
+	completions := make([]string, 0, len(workspaces))
+	for _, workspace := range workspaces {
+		desc := fmt.Sprintf("%s (%s)", workspace.Name, workspace.Status)
+		completions = append(completions, workspace.Identity+"\t"+desc)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }

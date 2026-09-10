@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas instance-types"
 title: "dbaas instance-types"
 slug: tcloud_dbaas_instance-types
 url: /docs/tcloud/dbaas/instance-types/
-weight: 9960
+weight: 9953
 cascade:
   type: docs
 ---
@@ -29,7 +29,8 @@ tcloud dbaas instance-types --no-header
 ### Options
 
 ```
-  -h, --help   help for instance-types
+  -h, --help        help for instance-types
+      --no-header   Do not print the header
 ```
 
 ### Options inherited from parent commands

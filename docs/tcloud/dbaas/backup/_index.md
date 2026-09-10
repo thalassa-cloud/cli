@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas backup"
 title: "dbaas backup"
 slug: tcloud_dbaas_backup
 url: /docs/tcloud/dbaas/backup/
-weight: 9969
+weight: 9968
 cascade:
   type: docs
 ---
@@ -42,5 +42,6 @@ Manage database backups for database clusters
 * [tcloud dbaas backup create](/docs/tcloud/dbaas/backup_create/)	 - Create a database backup
 * [tcloud dbaas backup delete](/docs/tcloud/dbaas/backup_delete/)	 - Delete database backup(s)
 * [tcloud dbaas backup list](/docs/tcloud/dbaas/backup_list/)	 - List database backups
+* [tcloud dbaas backup update](/docs/tcloud/dbaas/backup_update/)	 - Update a database backup
 * [tcloud dbaas backup view](/docs/tcloud/dbaas/backup_view/)	 - View backup details
 

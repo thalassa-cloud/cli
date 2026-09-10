@@ -3,7 +3,7 @@ linkTitle: "tcloud dbaas delete"
 title: "dbaas delete"
 slug: tcloud_dbaas_delete
 url: /docs/tcloud/dbaas/delete/
-weight: 9961
+weight: 9954
 cascade:
   type: docs
 ---
@@ -22,10 +22,11 @@ tcloud dbaas delete [flags]
 ### Options
 
 ```
-      --force             Force the deletion and skip the confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector to filter clusters (format: key1=value1,key2=value2)
-      --wait              Wait for the database cluster(s) to be deleted
+      --force                   Force the deletion and skip the confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector to filter clusters (format: key1=value1,key2=value2)
+      --wait                    Wait for the database cluster(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the database cluster(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

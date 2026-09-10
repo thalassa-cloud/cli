@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	dbaasutil "github.com/thalassa-cloud/cli/internal/dbaas"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -53,12 +54,14 @@ var backupViewCmd = &cobra.Command{
 		body := [][]string{
 			{"ID", backup.Identity},
 			{"Cluster", clusterName},
-			{"Status", string(backup.Status)},
+			{"Status", dbaasutil.FormatStatus(string(backup.Status))},
 			{"Engine", string(backup.EngineType)},
 			{"Engine Version", backup.EngineVersion},
 			{"Backup Type", backup.BackupType},
 			{"Trigger", trigger},
 			{"Online", fmt.Sprintf("%v", backup.Online)},
+			{"Size", dbaasutil.FormatBytes(backup.SizeBytes)},
+			{"Retention Expired", dbaasutil.FormatBoolYesNo(backup.RetentionExpired)},
 			{"Delete Protection", fmt.Sprintf("%v", backup.DeleteProtection)},
 			{"Created", formattime.FormatTime(backup.CreatedAt.Local(), backupViewShowExactTime)},
 		}
@@ -89,6 +92,15 @@ var backupViewCmd = &cobra.Command{
 
 		if backup.EndWAL != "" {
 			body = append(body, []string{"End WAL", backup.EndWAL})
+		}
+
+		if backup.DbObjectStore != nil {
+			storeName := backup.DbObjectStore.Name
+			if storeName == "" {
+				storeName = backup.DbObjectStore.Identity
+			}
+			body = append(body, []string{"Backup Store", storeName})
+			body = append(body, []string{"Backup Store ID", backup.DbObjectStore.Identity})
 		}
 
 		if backup.DeleteScheduledAt != nil {

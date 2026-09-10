@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/cmd/dbaas/backup"
 	backupschedules "github.com/thalassa-cloud/cli/cmd/dbaas/backup-schedules"
+	backupstores "github.com/thalassa-cloud/cli/cmd/dbaas/backup-stores"
+	"github.com/thalassa-cloud/cli/cmd/dbaas/recovery"
 )
 
 var DbaasCmd = &cobra.Command{
@@ -17,4 +19,6 @@ var DbaasCmd = &cobra.Command{
 func init() {
 	DbaasCmd.AddCommand(backup.BackupCmd)
 	DbaasCmd.AddCommand(backupschedules.BackupSchedulesCmd)
+	DbaasCmd.AddCommand(backupstores.BackupStoresCmd)
+	DbaasCmd.AddCommand(recovery.RecoveryCmd)
 }
