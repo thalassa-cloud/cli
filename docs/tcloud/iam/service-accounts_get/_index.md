@@ -3,7 +3,7 @@ linkTitle: "tcloud iam service-accounts get"
 title: "iam service-accounts get"
 slug: tcloud_iam_service-accounts_get
 url: /docs/tcloud/iam/service-accounts_get/
-weight: 9922
+weight: 9889
 cascade:
   type: docs
 ---

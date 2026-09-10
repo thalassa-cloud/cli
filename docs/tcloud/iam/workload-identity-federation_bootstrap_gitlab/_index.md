@@ -3,7 +3,7 @@ linkTitle: "tcloud iam workload-identity-federation bootstrap gitlab"
 title: "iam workload-identity-federation bootstrap gitlab"
 slug: tcloud_iam_workload-identity-federation_bootstrap_gitlab
 url: /docs/tcloud/iam/workload-identity-federation_bootstrap_gitlab/
-weight: 9907
+weight: 9874
 cascade:
   type: docs
 ---

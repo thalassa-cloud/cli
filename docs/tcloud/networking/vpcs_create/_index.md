@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpcs create"
 title: "networking vpcs create"
 slug: tcloud_networking_vpcs_create
 url: /docs/tcloud/networking/vpcs_create/
-weight: 9828
+weight: 9746
 cascade:
   type: docs
 ---
@@ -18,13 +18,15 @@ tcloud networking vpcs create [flags]
 ### Options
 
 ```
-      --cidrs strings        CIDRs of the vpc (default [10.0.0.0/16])
-      --description string   Description of the vpc
-  -h, --help                 help for create
-      --name string          Name of the vpc
-      --no-header            Do not print the header
-      --region string        Region of the vpc
-      --wait                 Wait for the VPC to be ready before returning
+      --cidrs strings           CIDRs of the vpc (default [10.0.0.0/16])
+      --description string      Description of the vpc
+  -h, --help                    help for create
+      --labels strings          Labels in key=value format (can be specified multiple times)
+      --name string             Name of the vpc
+      --no-header               Do not print the header
+      --region string           Region of the vpc
+      --wait                    Wait for the VPC to be ready before returning
+      --wait-timeout duration   Maximum time to wait for the VPC to be ready (default 10m0s)
 ```
 
 ### Options inherited from parent commands

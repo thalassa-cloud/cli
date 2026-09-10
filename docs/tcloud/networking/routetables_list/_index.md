@@ -3,7 +3,7 @@ linkTitle: "tcloud networking routetables list"
 title: "networking routetables list"
 slug: tcloud_networking_routetables_list
 url: /docs/tcloud/networking/routetables_list/
-weight: 9855
+weight: 9786
 cascade:
   type: docs
 ---
@@ -40,5 +40,5 @@ tcloud networking routetables list [flags]
 
 ### SEE ALSO
 
-* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage routetables
+* [tcloud networking routetables](/docs/tcloud/networking/routetables/)	 - Manage route tables
 

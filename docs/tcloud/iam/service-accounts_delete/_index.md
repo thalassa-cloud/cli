@@ -3,7 +3,7 @@ linkTitle: "tcloud iam service-accounts delete"
 title: "iam service-accounts delete"
 slug: tcloud_iam_service-accounts_delete
 url: /docs/tcloud/iam/service-accounts_delete/
-weight: 9923
+weight: 9890
 cascade:
   type: docs
 ---

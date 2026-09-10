@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identities delete"
 title: "iam federated-identities delete"
 slug: tcloud_iam_federated-identities_delete
 url: /docs/tcloud/iam/federated-identities_delete/
-weight: 9953
+weight: 9920
 cascade:
   type: docs
 ---

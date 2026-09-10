@@ -1,0 +1,53 @@
+---
+linkTitle: "tcloud networking reserved-ips view"
+title: "networking reserved-ips view"
+slug: tcloud_networking_reserved-ips_view
+url: /docs/tcloud/networking/reserved-ips_view/
+weight: 9790
+cascade:
+  type: docs
+---
+## tcloud networking reserved-ips view
+
+View reserved IP details
+
+### Synopsis
+
+View detailed information about a specific reserved IP address.
+
+```
+tcloud networking reserved-ips view [flags]
+```
+
+### Examples
+
+```
+tcloud networking reserved-ips view rip-123
+tcloud networking reserved-ips view rip-123 --output yaml
+```
+
+### Options
+
+```
+  -h, --help            help for view
+  -o, --output string   Output format (yaml)
+```
+
+### Options inherited from parent commands
+
+```
+      --access-token string    Access Token authentication (overrides context)
+      --api string             API endpoint (overrides context)
+      --client-id string       OIDC client ID for OIDC authentication (overrides context)
+      --client-secret string   OIDC client secret for OIDC authentication (overrides context)
+  -c, --context string         Context name
+      --debug                  Debug mode
+  -O, --organisation string    Organisation slug or identity (overrides context)
+  -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
+      --token string           Personal access token (overrides context)
+```
+
+### SEE ALSO
+
+* [tcloud networking reserved-ips](/docs/tcloud/networking/reserved-ips/)	 - Manage reserved IP addresses
+

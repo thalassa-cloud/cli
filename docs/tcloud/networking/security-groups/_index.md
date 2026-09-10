@@ -3,7 +3,7 @@ linkTitle: "tcloud networking security-groups"
 title: "networking security-groups"
 slug: tcloud_networking_security-groups
 url: /docs/tcloud/networking/security-groups/
-weight: 9849
+weight: 9767
 cascade:
   type: docs
 ---
@@ -49,5 +49,7 @@ tcloud networking security-groups delete sg-456
 * [tcloud networking security-groups create](/docs/tcloud/networking/security-groups_create/)	 - Create a security group
 * [tcloud networking security-groups delete](/docs/tcloud/networking/security-groups_delete/)	 - Delete security group(s)
 * [tcloud networking security-groups list](/docs/tcloud/networking/security-groups_list/)	 - Get a list of security groups
+* [tcloud networking security-groups rules](/docs/tcloud/networking/security-groups_rules/)	 - Manage security group rules
+* [tcloud networking security-groups update](/docs/tcloud/networking/security-groups_update/)	 - Update security group metadata
 * [tcloud networking security-groups view](/docs/tcloud/networking/security-groups_view/)	 - View security group details
 

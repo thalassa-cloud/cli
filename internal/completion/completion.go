@@ -10,7 +10,9 @@ import (
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/containerregistry"
 	"github.com/thalassa-cloud/client-go/dbaas"
+	"github.com/thalassa-cloud/client-go/dns"
 	"github.com/thalassa-cloud/client-go/iaas"
+	"github.com/thalassa-cloud/client-go/kms"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 	"github.com/thalassa-cloud/client-go/observability"
 	"github.com/thalassa-cloud/client-go/tfs"
@@ -122,6 +124,79 @@ func CompleteNatGatewayID(cmd *cobra.Command, args []string, toComplete string) 
 		completions = append(completions, ngw.Identity)
 	}
 
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteReservedIPID provides completion for reserved IP IDs.
+func CompleteReservedIPID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	ips, err := client.IaaS().ListReservedIPs(cmd.Context(), &iaas.ListReservedIPsRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(ips))
+	for _, ip := range ips {
+		desc := ip.Name
+		if ip.IPv4Address != "" {
+			desc = fmt.Sprintf("%s (%s)", ip.Name, ip.IPv4Address)
+		}
+		completions = append(completions, ip.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteRouteTableID provides completion for route table IDs.
+func CompleteRouteTableID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	tables, err := client.IaaS().ListRouteTables(cmd.Context(), &iaas.ListRouteTablesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(tables))
+	for _, table := range tables {
+		completions = append(completions, table.Identity+"\t"+table.Name)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteSnapshotPolicyID provides completion for snapshot policy IDs.
+func CompleteSnapshotPolicyID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	policies, err := client.IaaS().ListSnapshotPolicies(cmd.Context(), &iaas.ListSnapshotPoliciesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(policies))
+	for _, policy := range policies {
+		completions = append(completions, policy.Identity+"\t"+policy.Name)
+	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
@@ -776,4 +851,188 @@ func CompleteObservabilityWorkspaceID(cmd *cobra.Command, args []string, toCompl
 		completions = append(completions, workspace.Identity+"\t"+desc)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteDnsZoneIdentity provides completion for DNS zone identities.
+func CompleteDnsZoneIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	zones, err := client.DNS().ListZones(cmd.Context(), &dns.ListZonesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(zones))
+	for _, zone := range zones {
+		completions = append(completions, zone.Identity+"\t"+zone.Name)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// completionFlagString returns a flag value from local or inherited flags.
+// Prefer Value.String so shell completion sees values typed earlier on the line.
+func completionFlagString(cmd *cobra.Command, name string) string {
+	if cmd == nil {
+		return ""
+	}
+	if f := cmd.Flags().Lookup(name); f != nil {
+		if v := strings.TrimSpace(f.Value.String()); v != "" {
+			return v
+		}
+	}
+	if f := cmd.InheritedFlags().Lookup(name); f != nil {
+		if v := strings.TrimSpace(f.Value.String()); v != "" {
+			return v
+		}
+	}
+	return ""
+}
+
+// CompleteKmsKeyIdentity provides completion for KMS key identities.
+// Requires the --region flag to be set.
+func CompleteKmsKeyIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	regionFlag := completionFlagString(cmd, "region")
+	if regionFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	keys, err := client.KMS().ListKeys(cmd.Context(), regionFlag, &kms.ListKeysRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(keys))
+	for _, key := range keys {
+		completions = append(completions, key.Identity+"\t"+key.Name)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteKmsKeyVersion provides completion for KMS key versions.
+// Requires --region and --key (or a positional key identity).
+func CompleteKmsKeyVersion(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	regionFlag := completionFlagString(cmd, "region")
+	keyFlag := completionFlagString(cmd, "key")
+	if keyFlag == "" && len(args) > 0 {
+		keyFlag = strings.TrimSpace(args[0])
+	}
+	if regionFlag == "" || keyFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	key, err := client.KMS().GetKey(cmd.Context(), regionFlag, keyFlag)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(key.Versions))
+	for _, version := range key.Versions {
+		desc := version.Status
+		if desc == "" {
+			desc = "version"
+		}
+		completions = append(completions, fmt.Sprintf("%d\t%s", version.Version, desc))
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteSecretPath provides completion for secret paths and prefixes.
+// Requires the --region flag. Uses BrowseSecrets at the parent of toComplete.
+func CompleteSecretPath(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	regionFlag := completionFlagString(cmd, "region")
+	if regionFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	browsePath := secretBrowseParent(toComplete)
+	result, err := client.Secrets().BrowseSecrets(cmd.Context(), regionFlag, browsePath)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(result.Prefixes)+len(result.Secrets))
+	for _, prefix := range result.Prefixes {
+		completions = append(completions, prefix+"\tprefix")
+	}
+	for _, secret := range result.Secrets {
+		desc := "secret"
+		if secret.Description != "" {
+			desc = secret.Description
+		}
+		completions = append(completions, secret.Path+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteSecretVersion provides completion for secret versions.
+// Requires --region and --path.
+func CompleteSecretVersion(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	regionFlag := completionFlagString(cmd, "region")
+	pathFlag := completionFlagString(cmd, "path")
+	if regionFlag == "" || pathFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	secret, err := client.Secrets().GetSecret(cmd.Context(), regionFlag, pathFlag, true)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(secret.Versions))
+	for _, version := range secret.Versions {
+		desc := version.Status
+		if desc == "" {
+			desc = "version"
+		}
+		completions = append(completions, fmt.Sprintf("%d\t%s", version.Version, desc))
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+func secretBrowseParent(toComplete string) string {
+	trimmed := strings.TrimSpace(toComplete)
+	if trimmed == "" || trimmed == "/" {
+		return "/"
+	}
+	if !strings.HasPrefix(trimmed, "/") {
+		trimmed = "/" + trimmed
+	}
+	if strings.HasSuffix(trimmed, "/") {
+		return trimmed
+	}
+	idx := strings.LastIndex(trimmed, "/")
+	if idx <= 0 {
+		return "/"
+	}
+	return trimmed[:idx+1]
 }

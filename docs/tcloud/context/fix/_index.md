@@ -13,7 +13,7 @@ Fix config file security issues
 
 ### Synopsis
 
-Fix security issues in the CLI config file, such as overly permissive file permissions.
+Fix security issues in the CLI config file, such as overly permissive file permissions or migrating credentials to the keychain.
 
 ```
 tcloud context fix [flags]
@@ -23,12 +23,14 @@ tcloud context fix [flags]
 
 ```
   tcloud context fix
+  tcloud context fix --migrate-credentials
 ```
 
 ### Options
 
 ```
-  -h, --help   help for fix
+  -h, --help                  help for fix
+      --migrate-credentials   move plaintext credentials from the config file into the keychain
 ```
 
 ### Options inherited from parent commands

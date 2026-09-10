@@ -3,7 +3,7 @@ linkTitle: "tcloud networking loadbalancers create"
 title: "networking loadbalancers create"
 slug: tcloud_networking_loadbalancers_create
 url: /docs/tcloud/networking/loadbalancers_create/
-weight: 9871
+weight: 9814
 cascade:
   type: docs
 ---
@@ -39,6 +39,7 @@ tcloud networking loadbalancers create --name internal --subnet subnet-123 --int
       --security-groups strings   Security group identities to attach
       --subnet string             Subnet identity, slug, or name
       --wait                      Wait for the load balancer to be ready
+      --wait-timeout duration     Maximum time to wait for the load balancer to be ready (default 10m0s)
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes nodepools update"
 title: "kubernetes nodepools update"
 slug: tcloud_kubernetes_nodepools_update
 url: /docs/tcloud/kubernetes/nodepools_update/
-weight: 9879
+weight: 9822
 cascade:
   type: docs
 ---
@@ -53,6 +53,7 @@ tcloud kubernetes nodepools update [flags]
       --security-groups strings   Security group identities to attach to node pool machines
       --upgrade-strategy string   Upgrade strategy: manual, auto, always, on-delete, inplace, or never
       --wait                      Wait for the node pool update to complete
+      --wait-timeout duration     Maximum time to wait for the node pool update to complete (default 20m0s)
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud registry repositories delete-artifacts"
 title: "registry repositories delete-artifacts"
 slug: tcloud_registry_repositories_delete-artifacts
 url: /docs/tcloud/registry/repositories_delete-artifacts/
-weight: 9794
+weight: 9708
 cascade:
   type: docs
 ---

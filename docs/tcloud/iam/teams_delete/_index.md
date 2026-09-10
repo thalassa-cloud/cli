@@ -3,7 +3,7 @@ linkTitle: "tcloud iam teams delete"
 title: "iam teams delete"
 slug: tcloud_iam_teams_delete
 url: /docs/tcloud/iam/teams_delete/
-weight: 9917
+weight: 9884
 cascade:
   type: docs
 ---

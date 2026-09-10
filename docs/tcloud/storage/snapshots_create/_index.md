@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshots create"
 title: "storage snapshots create"
 slug: tcloud_storage_snapshots_create
 url: /docs/tcloud/storage/snapshots_create/
-weight: 9789
+weight: 9687
 cascade:
   type: docs
 ---
@@ -22,13 +22,14 @@ tcloud storage snapshots create <name> [flags]
 ### Options
 
 ```
-      --annotations strings   Annotations in key=value format (can be specified multiple times)
-      --delete-protection     Enable delete protection for the snapshot
-      --description string    Description of the snapshot
-  -h, --help                  help for create
-      --labels strings        Labels in key=value format (can be specified multiple times)
-      --volume string         Volume identity to create snapshot from
-      --wait                  Wait for the snapshot to be ready for use
+      --annotations strings     Annotations in key=value format (can be specified multiple times)
+      --delete-protection       Enable delete protection for the snapshot
+      --description string      Description of the snapshot
+  -h, --help                    help for create
+      --labels strings          Labels in key=value format (can be specified multiple times)
+      --volume string           Volume identity to create snapshot from
+      --wait                    Wait for the snapshot to be ready for use
+      --wait-timeout duration   Maximum time to wait for the snapshot to be ready (default 20m0s)
 ```
 
 ### Options inherited from parent commands

@@ -3,7 +3,7 @@ linkTitle: "tcloud registry repositories delete"
 title: "registry repositories delete"
 slug: tcloud_registry_repositories_delete
 url: /docs/tcloud/registry/repositories_delete/
-weight: 9795
+weight: 9709
 cascade:
   type: docs
 ---

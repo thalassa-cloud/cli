@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshots delete"
 title: "storage snapshots delete"
 slug: tcloud_storage_snapshots_delete
 url: /docs/tcloud/storage/snapshots_delete/
-weight: 9788
+weight: 9686
 cascade:
   type: docs
 ---
@@ -22,10 +22,11 @@ tcloud storage snapshots delete [flags]
 ### Options
 
 ```
-      --force             Force the deletion and skip the confirmation
-  -h, --help              help for delete
-  -l, --selector string   Label selector to filter snapshots (format: key1=value1,key2=value2)
-      --wait              Wait for the snapshot(s) to be deleted
+      --force                   Force the deletion and skip the confirmation
+  -h, --help                    help for delete
+  -l, --selector string         Label selector to filter snapshots (format: key1=value1,key2=value2)
+      --wait                    Wait for the snapshot(s) to be deleted
+      --wait-timeout duration   Maximum time to wait for the snapshot(s) to be deleted (default 20m0s)
 ```
 
 ### Options inherited from parent commands

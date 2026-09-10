@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces retention run"
 title: "registry namespaces retention run"
 slug: tcloud_registry_namespaces_retention_run
 url: /docs/tcloud/registry/namespaces_retention_run/
-weight: 9800
+weight: 9714
 cascade:
   type: docs
 ---

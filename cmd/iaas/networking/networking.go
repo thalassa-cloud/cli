@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/loadbalancers"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/natgateways"
+	"github.com/thalassa-cloud/cli/cmd/iaas/networking/reservedips"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/routetables"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/securitygroups"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking/subnets"
@@ -25,6 +26,7 @@ func init() {
 	NetworkingCmd.AddCommand(subnets.SubnetsCmd)
 	NetworkingCmd.AddCommand(routetables.RouteTablesCmd)
 	NetworkingCmd.AddCommand(natgateways.NatGatewaysCmd)
+	NetworkingCmd.AddCommand(reservedips.ReservedIPsCmd)
 	NetworkingCmd.AddCommand(loadbalancers.LoadbalancersCmd)
 	NetworkingCmd.AddCommand(targetgroups.TargetGroupsCmd)
 	NetworkingCmd.AddCommand(securitygroups.SecurityGroupsCmd)

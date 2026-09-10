@@ -5,6 +5,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/connect"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/credential"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/iam"
+	"github.com/thalassa-cloud/cli/cmd/kubernetes/kubeconfigsessions"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/kubernetesversions"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/machines"
 	"github.com/thalassa-cloud/cli/cmd/kubernetes/nodepools"
@@ -24,4 +25,5 @@ func init() {
 	KubernetesCmd.AddCommand(iam.IamCmd)
 	KubernetesCmd.AddCommand(connect.KubernetesConnectCmd)
 	KubernetesCmd.AddCommand(credential.CredentialCmd)
+	KubernetesCmd.AddCommand(kubeconfigsessions.KubeconfigSessionsCmd)
 }

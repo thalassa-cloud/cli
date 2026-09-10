@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces configuration view"
 title: "registry namespaces configuration view"
 slug: tcloud_registry_namespaces_configuration_view
 url: /docs/tcloud/registry/namespaces_configuration_view/
-weight: 9805
+weight: 9719
 cascade:
   type: docs
 ---

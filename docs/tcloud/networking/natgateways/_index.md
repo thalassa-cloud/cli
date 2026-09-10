@@ -3,7 +3,7 @@ linkTitle: "tcloud networking natgateways"
 title: "networking natgateways"
 slug: tcloud_networking_natgateways
 url: /docs/tcloud/networking/natgateways/
-weight: 9856
+weight: 9797
 cascade:
   type: docs
 ---
@@ -46,7 +46,9 @@ tcloud networking natgateways view ngw-123
 ### SEE ALSO
 
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
+* [tcloud networking natgateways create](/docs/tcloud/networking/natgateways_create/)	 - Create a NAT gateway
 * [tcloud networking natgateways delete](/docs/tcloud/networking/natgateways_delete/)	 - Delete NAT gateway(s)
 * [tcloud networking natgateways list](/docs/tcloud/networking/natgateways_list/)	 - Get a list of NAT gateways
+* [tcloud networking natgateways update](/docs/tcloud/networking/natgateways_update/)	 - Update a NAT gateway
 * [tcloud networking natgateways view](/docs/tcloud/networking/natgateways_view/)	 - View NAT gateway details
 

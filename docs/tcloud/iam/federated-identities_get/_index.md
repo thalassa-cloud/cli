@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identities get"
 title: "iam federated-identities get"
 slug: tcloud_iam_federated-identities_get
 url: /docs/tcloud/iam/federated-identities_get/
-weight: 9952
+weight: 9919
 cascade:
   type: docs
 ---

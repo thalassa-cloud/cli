@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes list"
 title: "kubernetes list"
 slug: tcloud_kubernetes_list
 url: /docs/tcloud/kubernetes/list/
-weight: 9885
+weight: 9828
 cascade:
   type: docs
 ---

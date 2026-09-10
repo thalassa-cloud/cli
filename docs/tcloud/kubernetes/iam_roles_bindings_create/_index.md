@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes iam roles bindings create"
 title: "kubernetes iam roles bindings create"
 slug: tcloud_kubernetes_iam_roles_bindings_create
 url: /docs/tcloud/kubernetes/iam_roles_bindings_create/
-weight: 9899
+weight: 9845
 cascade:
   type: docs
 ---

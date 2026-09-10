@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes iam"
 title: "kubernetes iam"
 slug: tcloud_kubernetes_iam
 url: /docs/tcloud/kubernetes/iam/
-weight: 9887
+weight: 9833
 cascade:
   type: docs
 ---

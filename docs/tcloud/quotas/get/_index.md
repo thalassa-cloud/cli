@@ -3,7 +3,7 @@ linkTitle: "tcloud quotas get"
 title: "quotas get"
 slug: tcloud_quotas_get
 url: /docs/tcloud/quotas/get/
-weight: 9814
+weight: 9728
 cascade:
   type: docs
 ---

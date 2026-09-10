@@ -3,19 +3,19 @@ linkTitle: "tcloud projects"
 title: "projects"
 slug: tcloud_projects
 url: /docs/tcloud/tcloud_projects/
-weight: 9815
+weight: 9729
 cascade:
   type: docs
 ---
 ## tcloud projects
 
-Manage projects (private beta)
+Manage projects (beta)
 
 ### Synopsis
 
 Manage projects within the organisation selected in your context.
 
-Note: This command is in private beta and requires the project feature gate to be enabled on your organisation.
+Note: This command is in beta and requires the project feature gate to be enabled on your organisation.
 
 ### Options
 
@@ -40,5 +40,9 @@ Note: This command is in private beta and requires the project feature gate to b
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud projects create](/docs/tcloud/projects/create/)	 - Create a project in the current organisation
+* [tcloud projects delete](/docs/tcloud/projects/delete/)	 - Delete a project
 * [tcloud projects list](/docs/tcloud/projects/list/)	 - List projects in the current organisation
+* [tcloud projects update](/docs/tcloud/projects/update/)	 - Update a project (only flags you set are changed)
+* [tcloud projects view](/docs/tcloud/projects/view/)	 - View a project
 

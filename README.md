@@ -1,8 +1,8 @@
-# Thalassa Cloud CLI (tcloud)
+# Thalassa Cloud CLI (`tcloud`)
 
-A command-line interface for managing your Thalassa Cloud Installation.
+`tcloud` is the official CLI for the Thalassa Cloud Platform. Use it to authenticate against your organisation, select a project context, and manage platform resources from the terminal — including compute, networking, storage, Kubernetes, DBaaS, IAM, DNS, KMS, secrets, and more.
 
-> This project is still in beta. Commands and UX may change while the project is in initial development.
+Run `tcloud --help` for the full command list, or see the generated docs under [`docs/tcloud`](docs/tcloud).
 
 ## Installation
 

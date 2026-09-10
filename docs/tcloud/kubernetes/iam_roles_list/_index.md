@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes iam roles list"
 title: "kubernetes iam roles list"
 slug: tcloud_kubernetes_iam_roles_list
 url: /docs/tcloud/kubernetes/iam_roles_list/
-weight: 9892
+weight: 9838
 cascade:
   type: docs
 ---

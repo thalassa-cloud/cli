@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces configuration delete"
 title: "registry namespaces configuration delete"
 slug: tcloud_registry_namespaces_configuration_delete
 url: /docs/tcloud/registry/namespaces_configuration_delete/
-weight: 9807
+weight: 9721
 cascade:
   type: docs
 ---

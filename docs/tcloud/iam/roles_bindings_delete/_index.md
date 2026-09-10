@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles bindings delete"
 title: "iam roles bindings delete"
 slug: tcloud_iam_roles_bindings_delete
 url: /docs/tcloud/iam/roles_bindings_delete/
-weight: 9935
+weight: 9902
 cascade:
   type: docs
 ---

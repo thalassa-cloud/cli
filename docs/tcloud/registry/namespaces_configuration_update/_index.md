@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces configuration update"
 title: "registry namespaces configuration update"
 slug: tcloud_registry_namespaces_configuration_update
 url: /docs/tcloud/registry/namespaces_configuration_update/
-weight: 9806
+weight: 9720
 cascade:
   type: docs
 ---

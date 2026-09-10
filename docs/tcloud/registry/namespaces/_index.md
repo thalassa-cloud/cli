@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces"
 title: "registry namespaces"
 slug: tcloud_registry_namespaces
 url: /docs/tcloud/registry/namespaces/
-weight: 9796
+weight: 9710
 cascade:
   type: docs
 ---

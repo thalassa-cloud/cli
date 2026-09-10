@@ -3,7 +3,7 @@ linkTitle: "tcloud iam teams get"
 title: "iam teams get"
 slug: tcloud_iam_teams_get
 url: /docs/tcloud/iam/teams_get/
-weight: 9916
+weight: 9883
 cascade:
   type: docs
 ---

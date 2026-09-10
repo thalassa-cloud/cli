@@ -3,7 +3,7 @@ linkTitle: "tcloud storage volumes resize"
 title: "storage volumes resize"
 slug: tcloud_storage_volumes_resize
 url: /docs/tcloud/storage/volumes_resize/
-weight: 9774
+weight: 9672
 cascade:
   type: docs
 ---
@@ -22,11 +22,12 @@ tcloud storage volumes resize [volume-id...] [flags]
 ### Options
 
 ```
-      --force             Force the resize and skip the confirmation
-  -h, --help              help for resize
-  -l, --selector string   Label selector to filter volumes (format: key1=value1,key2=value2)
-      --size int          New size in GB (required)
-      --wait              Wait for the resize operation to complete
+      --force                   Force the resize and skip the confirmation
+  -h, --help                    help for resize
+  -l, --selector string         Label selector to filter volumes (format: key1=value1,key2=value2)
+      --size int                New size in GB (required)
+      --wait                    Wait for the resize operation to complete
+      --wait-timeout duration   Maximum time to wait for the resize operation to complete (default 10m0s)
 ```
 
 ### Options inherited from parent commands

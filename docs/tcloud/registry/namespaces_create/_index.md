@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces create"
 title: "registry namespaces create"
 slug: tcloud_registry_namespaces_create
 url: /docs/tcloud/registry/namespaces_create/
-weight: 9803
+weight: 9717
 cascade:
   type: docs
 ---
