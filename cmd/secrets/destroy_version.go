@@ -53,4 +53,6 @@ func init() {
 	_ = destroyVersionCmd.MarkFlagRequired("path")
 	_ = destroyVersionCmd.MarkFlagRequired("version")
 	_ = destroyVersionCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = destroyVersionCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
+	_ = destroyVersionCmd.RegisterFlagCompletionFunc("version", completion.CompleteSecretVersion)
 }

@@ -50,5 +50,7 @@ func init() {
 	_ = policyCmd.MarkFlagRequired("region")
 	_ = policyCmd.MarkFlagRequired("path")
 	_ = policyCmd.MarkFlagRequired("file")
+	_ = policyCmd.MarkFlagFilename("file")
 	_ = policyCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = policyCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
 }

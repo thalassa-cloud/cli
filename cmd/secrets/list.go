@@ -68,4 +68,5 @@ func init() {
 	listCmd.Flags().StringVar(&listPrefix, "prefix", "/", "Path prefix")
 	_ = listCmd.MarkFlagRequired("region")
 	_ = listCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = listCmd.RegisterFlagCompletionFunc("prefix", completion.CompleteSecretPath)
 }

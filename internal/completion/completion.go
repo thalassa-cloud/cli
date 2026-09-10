@@ -956,3 +956,83 @@ func CompleteKmsKeyVersion(cmd *cobra.Command, args []string, toComplete string)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
+
+// CompleteSecretPath provides completion for secret paths and prefixes.
+// Requires the --region flag. Uses BrowseSecrets at the parent of toComplete.
+func CompleteSecretPath(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	regionFlag := completionFlagString(cmd, "region")
+	if regionFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	browsePath := secretBrowseParent(toComplete)
+	result, err := client.Secrets().BrowseSecrets(cmd.Context(), regionFlag, browsePath)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(result.Prefixes)+len(result.Secrets))
+	for _, prefix := range result.Prefixes {
+		completions = append(completions, prefix+"\tprefix")
+	}
+	for _, secret := range result.Secrets {
+		desc := "secret"
+		if secret.Description != "" {
+			desc = secret.Description
+		}
+		completions = append(completions, secret.Path+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteSecretVersion provides completion for secret versions.
+// Requires --region and --path.
+func CompleteSecretVersion(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	regionFlag := completionFlagString(cmd, "region")
+	pathFlag := completionFlagString(cmd, "path")
+	if regionFlag == "" || pathFlag == "" {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	secret, err := client.Secrets().GetSecret(cmd.Context(), regionFlag, pathFlag, true)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(secret.Versions))
+	for _, version := range secret.Versions {
+		desc := version.Status
+		if desc == "" {
+			desc = "version"
+		}
+		completions = append(completions, fmt.Sprintf("%d\t%s", version.Version, desc))
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+func secretBrowseParent(toComplete string) string {
+	trimmed := strings.TrimSpace(toComplete)
+	if trimmed == "" || trimmed == "/" {
+		return "/"
+	}
+	if !strings.HasPrefix(trimmed, "/") {
+		trimmed = "/" + trimmed
+	}
+	if strings.HasSuffix(trimmed, "/") {
+		return trimmed
+	}
+	idx := strings.LastIndex(trimmed, "/")
+	if idx <= 0 {
+		return "/"
+	}
+	return trimmed[:idx+1]
+}

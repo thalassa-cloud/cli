@@ -51,4 +51,5 @@ func init() {
 	_ = deleteCmd.MarkFlagRequired("region")
 	_ = deleteCmd.MarkFlagRequired("path")
 	_ = deleteCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = deleteCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
 }

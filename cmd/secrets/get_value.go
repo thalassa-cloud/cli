@@ -65,4 +65,6 @@ func init() {
 	_ = getValueCmd.MarkFlagRequired("region")
 	_ = getValueCmd.MarkFlagRequired("path")
 	_ = getValueCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = getValueCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
+	_ = getValueCmd.RegisterFlagCompletionFunc("version", completion.CompleteSecretVersion)
 }

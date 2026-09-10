@@ -90,4 +90,5 @@ func init() {
 	_ = viewCmd.MarkFlagRequired("region")
 	_ = viewCmd.MarkFlagRequired("path")
 	_ = viewCmd.RegisterFlagCompletionFunc("region", completion.CompleteRegion)
+	_ = viewCmd.RegisterFlagCompletionFunc("path", completion.CompleteSecretPath)
 }
