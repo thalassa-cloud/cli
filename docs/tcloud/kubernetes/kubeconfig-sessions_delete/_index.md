@@ -15,7 +15,7 @@ Delete a kubeconfig session
 
 Revoke a kubeconfig session for a Kubernetes cluster.
 
-Provide the cluster as the first argument or with --cluster, and the session identity as the final argument.
+Provide the cluster as the first argument or with --cluster, and the session identity as the final argument. The cluster may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file.
 
 ```
 tcloud kubernetes kubeconfig-sessions delete [cluster] <session> [flags]
@@ -24,7 +24,7 @@ tcloud kubernetes kubeconfig-sessions delete [cluster] <session> [flags]
 ### Options
 
 ```
-      --cluster string   Cluster identity, name, or slug
+      --cluster string   Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
       --force            Skip the confirmation prompt and delete
   -h, --help             help for delete
 ```

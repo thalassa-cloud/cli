@@ -11,8 +11,12 @@ cascade:
 
 Connect your shell to the Kubernetes Cluster
 
+### Synopsis
+
+Connect your shell to a Kubernetes cluster. The cluster argument may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file, or when `TCLOUD_CLUSTER_*` is already set by a previous connect.
+
 ```
-tcloud kubernetes connect [flags]
+tcloud kubernetes connect [cluster] [flags]
 ```
 
 ### Options

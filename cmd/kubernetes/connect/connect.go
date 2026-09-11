@@ -26,9 +26,10 @@ var (
 )
 
 var KubernetesConnectCmd = &cobra.Command{
-	Use:               "connect",
+	Use:               "connect [cluster]",
 	Aliases:           []string{"connection", "shell", "c"},
 	Short:             "Connect your shell to the Kubernetes Cluster",
+	Long:              "Connect your shell to a Kubernetes cluster. The cluster argument may be omitted when kubernetes.cluster is set in a directory .thalassa file, or when TCLOUD_CLUSTER_* is already set by a previous connect.",
 	Args:              cobra.MaximumNArgs(1),
 	ValidArgsFunction: completion.CompleteKubernetesCluster,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -157,15 +158,18 @@ func prepareKubeconfigFile(clusterSlug, config string) (path string, cleanup fun
 }
 
 func getSelectedCluster(args []string) (string, error) {
-	if len(args) == 0 && fzf.IsInteractiveMode(os.Stdout) {
-		command := fmt.Sprintf("%s kubernetes clusters --no-header", os.Args[0])
-		return fzf.InteractiveChoice(command)
-	}
 	if len(args) == 1 {
 		return args[0], nil
+	}
+	if ref, ok := kuberesolve.PreferredClusterRef(""); ok {
+		return ref, nil
+	}
+	if fzf.IsInteractiveMode(os.Stdout) {
+		command := fmt.Sprintf("%s kubernetes clusters --no-header", os.Args[0])
+		return fzf.InteractiveChoice(command)
 	}
 	if contextstate.OrganisationFlag != "" {
 		return "", errors.New("must provide a cluster when organisation is set via flag")
 	}
-	return "", errors.New("must provide a cluster")
+	return "", errors.New("must provide a cluster (argument or kubernetes.cluster in .thalassa)")
 }

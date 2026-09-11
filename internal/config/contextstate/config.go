@@ -24,15 +24,20 @@ func NewConfigFileContextManager(filename string) ConfigManager {
 	}
 }
 
-// Get returns the current context.
+// Get returns the current context from the config file (current-context).
 func (c *configFileContextManager) Get() (Context, error) {
-	if c.config.CurrentContext == "" {
+	return c.GetByName(c.config.CurrentContext)
+}
+
+// GetByName returns the named context from the config file.
+func (c *configFileContextManager) GetByName(name string) (Context, error) {
+	if name == "" {
 		return Context{}, errors.New("no current context set in config")
 	}
 
-	contextRef, ok := c.getContextRef(c.config.CurrentContext)
+	contextRef, ok := c.getContextRef(name)
 	if !ok {
-		return Context{}, fmt.Errorf("missing current context %q in config", c.config.CurrentContext)
+		return Context{}, fmt.Errorf("missing current context %q in config", name)
 	}
 
 	api, ok := c.getAPI(contextRef.Context.API)

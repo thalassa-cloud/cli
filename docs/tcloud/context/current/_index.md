@@ -13,7 +13,7 @@ Shows the current context
 
 ### Synopsis
 
-Shows the current context (or the context set with the --context flag)
+Shows the current context (the `--context` flag, a directory `.thalassa` overlay, or `current-context` in `~/.tcloud`)
 
 ```
 tcloud context current [flags]

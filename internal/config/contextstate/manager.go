@@ -9,6 +9,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 
 	"github.com/thalassa-cloud/cli/internal/credentials"
+	"github.com/thalassa-cloud/cli/internal/dirconfig"
 	"github.com/thalassa-cloud/cli/internal/projectresolve"
 )
 
@@ -53,9 +54,12 @@ var (
 // ConfigManager defines an interface for managing contexts within the application.
 // It provides methods to get, set, and manipulate contexts, as well as to load and save configurations.
 type ConfigManager interface {
-	// Get returns the current context.
+	// Get returns the current context from the config file (current-context).
 	// It returns an error if there is an issue retrieving the context.
 	Get() (Context, error)
+
+	// GetByName returns the named context from the config file without changing current-context.
+	GetByName(name string) (Context, error)
 
 	// Set sets the current context to the one specified by name.
 	// It returns an error if there is an issue setting the context.
@@ -105,6 +109,10 @@ func Init() {
 		fmt.Printf("Failed to initialize context: %v\n", err)
 		os.Exit(1)
 	}
+	if err := dirconfig.Load(); err != nil {
+		fmt.Printf("Failed to load directory config: %v\n", err)
+		os.Exit(1)
+	}
 }
 
 func getConfigFilename() string {
@@ -146,7 +154,7 @@ func MigrateCredentialsToKeychain() error {
 }
 
 func GetContextConfiguration() (Context, error) {
-	return globalConfigManager.Get()
+	return getEffectiveContext()
 }
 
 func Set(name string) error {
@@ -166,14 +174,7 @@ func Save() error {
 }
 
 func Name() string {
-	if ContextFlag != "" {
-		return ContextFlag
-	}
-	currentcontext, err := globalConfigManager.Get()
-	if err != nil {
-		return ""
-	}
-	return currentcontext.Name
+	return effectiveContextName()
 }
 
 func Organisation() string {
@@ -183,8 +184,11 @@ func Organisation() string {
 	if organisation := os.Getenv(ThalassaOrganisationIDEnvVar); organisation != "" {
 		return organisation
 	}
+	if organisation := dirconfig.Current().Config.Organisation; organisation != "" {
+		return organisation
+	}
 
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return ""
 	}
@@ -198,8 +202,11 @@ func Project() string {
 	if project := os.Getenv(ThalassaProjectIDEnvVar); project != "" {
 		return projectresolve.NormalizeProjectRef(project)
 	}
+	if project := dirconfig.Current().Config.Project; project != "" {
+		return projectresolve.NormalizeProjectRef(project)
+	}
 
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return ""
 	}
@@ -214,7 +221,7 @@ func Server() string {
 		return server
 	}
 
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return DefaultAPIURL
 	}
@@ -232,7 +239,7 @@ func AccessToken() string {
 		return accessToken
 	}
 
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return ""
 	}
@@ -246,7 +253,7 @@ func PersonalAccessToken() string {
 	if personalAccessToken := os.Getenv(ThalassaPersonalAccessTokenEnvVar); personalAccessToken != "" {
 		return personalAccessToken
 	}
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return ""
 	}
@@ -265,7 +272,7 @@ func ClientIdOrFlag() string {
 }
 
 func ClientId() string {
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return ""
 	}
@@ -283,7 +290,7 @@ func ClientSecretOrFlag() string {
 }
 
 func ClientSecret() string {
-	currentcontext, err := globalConfigManager.Get()
+	currentcontext, err := getEffectiveContext()
 	if err != nil {
 		return ""
 	}
@@ -291,7 +298,27 @@ func ClientSecret() string {
 }
 
 func GetContext() (Context, error) {
-	return globalConfigManager.Get()
+	return getEffectiveContext()
+}
+
+func effectiveContextName() string {
+	if ContextFlag != "" {
+		return ContextFlag
+	}
+	if name := dirconfig.Current().Config.Context; name != "" {
+		return name
+	}
+	if globalConfigManager == nil {
+		return ""
+	}
+	return globalConfigManager.Config().CurrentContext
+}
+
+func getEffectiveContext() (Context, error) {
+	if globalConfigManager == nil {
+		return Context{}, errors.New("no current context set in config")
+	}
+	return globalConfigManager.GetByName(effectiveContextName())
 }
 
 func Debug() bool {

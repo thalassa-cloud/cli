@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/kuberesolve"
 	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -57,8 +58,13 @@ to manage labels and annotations separately.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 
-		if updateNodePoolCluster == nil || *updateNodePoolCluster == "" {
-			return fmt.Errorf("--cluster is required")
+		clusterFlag := ""
+		if updateNodePoolCluster != nil {
+			clusterFlag = *updateNodePoolCluster
+		}
+		clusterIdentifier, err := kuberesolve.RequireClusterRef(clusterFlag)
+		if err != nil {
+			return err
 		}
 		if updateNodePoolName == nil || *updateNodePoolName == "" {
 			return fmt.Errorf("--name is required")
@@ -77,16 +83,16 @@ to manage labels and annotations separately.`,
 
 		var cluster *kubernetes.KubernetesCluster
 		for _, c := range clusters {
-			if strings.EqualFold(c.Identity, *updateNodePoolCluster) ||
-				strings.EqualFold(c.Name, *updateNodePoolCluster) ||
-				strings.EqualFold(c.Slug, *updateNodePoolCluster) {
+			if strings.EqualFold(c.Identity, clusterIdentifier) ||
+				strings.EqualFold(c.Name, clusterIdentifier) ||
+				strings.EqualFold(c.Slug, clusterIdentifier) {
 				cluster = &c
 				break
 			}
 		}
 
 		if cluster == nil {
-			return fmt.Errorf("cluster not found: %s", *updateNodePoolCluster)
+			return fmt.Errorf("cluster not found: %s", clusterIdentifier)
 		}
 
 		// Get node pools for the cluster
@@ -282,7 +288,7 @@ to manage labels and annotations separately.`,
 func init() {
 	// Command is registered in nodepools.go
 
-	updateNodePoolCluster = updateCmd.Flags().String("cluster", "", "Cluster identity, name, or slug (required)")
+	updateNodePoolCluster = updateCmd.Flags().String("cluster", "", "Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)")
 	updateNodePoolName = updateCmd.Flags().String("name", "", "Node pool name, identity, or slug (required)")
 	updateNodePoolMachineType = updateCmd.Flags().String("machine-type", "", "Machine type for the node pool")
 	updateNodePoolReplicas = updateCmd.Flags().Int("num-nodes", 0, "Number of nodes in the node pool (only when autoscaling is disabled)")

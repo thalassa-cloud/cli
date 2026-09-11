@@ -42,9 +42,11 @@ var listCmd = &cobra.Command{
 			}
 			clusterRef = args[0]
 		}
-		if clusterRef == "" {
-			return fmt.Errorf("cluster is required (argument or --cluster)")
+		resolved, err := kuberesolve.RequireClusterRef(clusterRef)
+		if err != nil {
+			return err
 		}
+		clusterRef = resolved
 
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
@@ -112,6 +114,6 @@ func init() {
 	KubeconfigSessionsCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
 	listCmd.Flags().BoolVar(&showExactTime, "exact-time", false, "Show full timestamps instead of relative time")
-	listCmd.Flags().StringVar(&listCluster, ClusterFlag, "", "Cluster identity, name, or slug")
+	listCmd.Flags().StringVar(&listCluster, ClusterFlag, "", "Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)")
 	_ = listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
 }

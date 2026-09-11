@@ -40,7 +40,7 @@ tcloud kubernetes nodepools update [flags]
 ### Options
 
 ```
-      --cluster string            Cluster identity, name, or slug (required)
+      --cluster string            Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
       --enable-autohealing        Enable autohealing for the node pool
       --enable-autoscaling        Enable autoscaling for the node pool
   -h, --help                      help for update

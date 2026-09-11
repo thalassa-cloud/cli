@@ -14,7 +14,7 @@ Manage Kubernetes NodePools
 ### Examples
 
 ```
-  # List all nodepools in a cluster
+  # List all nodepools in a cluster (uses kubernetes.cluster from .thalassa when --cluster is omitted)
   tcloud kubernetes nodepools list
 
   # Create a new nodepool

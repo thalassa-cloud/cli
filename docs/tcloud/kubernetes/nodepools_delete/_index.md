@@ -38,7 +38,7 @@ tcloud kubernetes nodepools delete [flags]
 ### Options
 
 ```
-      --cluster string          Cluster identity, name, or slug (required)
+      --cluster string          Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
       --force                   Skip confirmation prompt
   -h, --help                    help for delete
       --nodepool string         Node pool name, identity, or slug (required)

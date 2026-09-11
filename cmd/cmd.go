@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/audit"
 	"github.com/thalassa-cloud/cli/cmd/context"
 	"github.com/thalassa-cloud/cli/cmd/dbaas"
+	"github.com/thalassa-cloud/cli/cmd/dir"
 	"github.com/thalassa-cloud/cli/cmd/dns"
 	"github.com/thalassa-cloud/cli/cmd/iaas/compute"
 	"github.com/thalassa-cloud/cli/cmd/iaas/networking"
@@ -28,6 +29,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/version"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/dirconfig"
 )
 
 var RootCmd = &cobra.Command{
@@ -59,6 +61,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientIDFlag, "client-id", "", "OIDC client ID for OIDC authentication (overrides context)")
 	RootCmd.PersistentFlags().StringVar(&contextstate.OidcClientSecretFlag, "client-secret", "", "OIDC client secret for OIDC authentication (overrides context)")
 	RootCmd.PersistentFlags().BoolVar(&contextstate.DebugFlag, "debug", false, "Debug mode")
+	RootCmd.PersistentFlags().BoolVar(&dirconfig.IgnoreDirConfigFlag, "ignore-dir-config", false, "Ignore directory-local .thalassa defaults")
 
 	// Register completions
 	_ = RootCmd.RegisterFlagCompletionFunc("organisation", completion.CompleteOrganisation)
@@ -66,6 +69,7 @@ func init() {
 
 	RootCmd.AddCommand(api.ApiCmd)
 	RootCmd.AddCommand(context.ContextCmd)
+	RootCmd.AddCommand(dir.DirCmd)
 	RootCmd.AddCommand(version.VersionCmd)
 
 	RootCmd.AddCommand(regions.RegionsCmd)

@@ -12,7 +12,7 @@ import (
 var currentContextCmd = &cobra.Command{
 	Use:     "current",
 	Short:   "Shows the current context",
-	Long:    "Shows the current context (or the context set with the --context flag)",
+	Long:    "Shows the current context (the --context flag, a directory .thalassa overlay, or current-context in ~/.tcloud)",
 	Example: "tcloud context current",
 	Args:    cobra.NoArgs,
 

@@ -21,6 +21,7 @@ A CLI for working with the Thalassa Cloud Platform
   -c, --context string         Context name
       --debug                  Debug mode
   -h, --help                   help for tcloud
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
@@ -33,6 +34,7 @@ A CLI for working with the Thalassa Cloud Platform
 * [tcloud compute](/docs/tcloud/tcloud_compute/)	 - Manage compute resources
 * [tcloud context](/docs/tcloud/tcloud_context/)	 - Manage context
 * [tcloud dbaas](/docs/tcloud/tcloud_dbaas/)	 - Manage database clusters and related services
+* [tcloud dir](/docs/tcloud/tcloud_dir/)	 - Manage directory-local Thalassa defaults
 * [tcloud dns](/docs/tcloud/tcloud_dns/)	 - Manage DNS zones and records (beta)
 * [tcloud iam](/docs/tcloud/tcloud_iam/)	 - Identity and access management for your organisation
 * [tcloud kms](/docs/tcloud/tcloud_kms/)	 - Manage KMS keys and cryptographic operations (beta)

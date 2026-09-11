@@ -21,7 +21,7 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a kubeconfig session",
 	Long: `Revoke a kubeconfig session for a Kubernetes cluster.
 
-Provide the cluster as the first argument or with --cluster, and the session identity as the final argument.`,
+Provide the cluster as the first argument or with --cluster, and the session identity as the final argument. The cluster may be omitted when kubernetes.cluster is set in a directory .thalassa file.`,
 	Aliases:           []string{"rm", "remove"},
 	Args:              cobra.RangeArgs(1, 2),
 	ValidArgsFunction: completeDeleteArgs,
@@ -41,7 +41,11 @@ Provide the cluster as the first argument or with --cluster, and the session ide
 			sessionIdentity = args[1]
 		}
 		if clusterRef == "" {
-			return fmt.Errorf("cluster is required (argument or --cluster)")
+			resolved, err := kuberesolve.RequireClusterRef("")
+			if err != nil {
+				return err
+			}
+			clusterRef = resolved
 		}
 		if sessionIdentity == "" {
 			return fmt.Errorf("session identity is required")
@@ -90,7 +94,7 @@ func completeDeleteArgs(cmd *cobra.Command, args []string, toComplete string) ([
 
 func init() {
 	KubeconfigSessionsCmd.AddCommand(deleteCmd)
-	deleteCmd.Flags().StringVar(&deleteCluster, ClusterFlag, "", "Cluster identity, name, or slug")
+	deleteCmd.Flags().StringVar(&deleteCluster, ClusterFlag, "", "Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)")
 	deleteCmd.Flags().BoolVar(&deleteForce, shared.ForceKey, false, "Skip the confirmation prompt and delete")
 	_ = deleteCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/kuberesolve"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/iaas"
@@ -52,6 +53,13 @@ var listCmd = &cobra.Command{
 			}
 		}
 
+		clusterFilter := cluster
+		if clusterFilter == "" {
+			if ref, ok := kuberesolve.PreferredClusterRef(""); ok {
+				clusterFilter = ref
+			}
+		}
+
 		// Get clusters
 		clusters, err := client.Kubernetes().ListKubernetesClusters(ctx, &kubernetes.ListKubernetesClustersRequest{})
 		if err != nil {
@@ -67,7 +75,7 @@ var listCmd = &cobra.Command{
 			}
 
 			// Skip clusters that don't match cluster filter
-			if cluster != "" && !matchesClusterRef(&c, cluster) {
+			if clusterFilter != "" && !matchesClusterRef(&c, clusterFilter) {
 				continue
 			}
 
@@ -141,7 +149,7 @@ func formatReplicas(np *kubernetes.KubernetesNodePool) string {
 
 func init() {
 	listCmd.Flags().BoolVar(&noHeader, NoHeaderKey, false, "Do not print the header")
-	listCmd.Flags().StringVar(&cluster, ClusterFlag, "", "Cluster ID")
+	listCmd.Flags().StringVar(&cluster, ClusterFlag, "", "Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)")
 	listCmd.Flags().StringVar(&vpc, VpcFlag, "", "VPC ID")
 
 	// Register completions

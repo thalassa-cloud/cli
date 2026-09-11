@@ -36,7 +36,11 @@ var listCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, _ []string) error {
 		ctx := cmd.Context()
 		if cluster == "" {
-			return fmt.Errorf("--cluster is required")
+			ref, err := kuberesolve.RequireClusterRef("")
+			if err != nil {
+				return err
+			}
+			cluster = ref
 		}
 
 		client, err := thalassaclient.GetThalassaClient()
@@ -126,7 +130,6 @@ func init() {
 	listCmd.Flags().BoolVar(&showExactTime, "show-exact-time", false, "Show exact time instead of relative time")
 	listCmd.Flags().StringVar(&cluster, ClusterFlag, "", "Cluster identity, name, or slug")
 	listCmd.Flags().StringVar(&nodePool, NodePoolFlag, "", "Filter by node pool identity, name, or slug")
-	_ = listCmd.MarkFlagRequired(ClusterFlag)
 	_ = listCmd.RegisterFlagCompletionFunc(ClusterFlag, completion.CompleteKubernetesCluster)
 	_ = listCmd.RegisterFlagCompletionFunc(NodePoolFlag, completion.CompleteKubernetesNodePool)
 }
