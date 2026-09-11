@@ -33,7 +33,7 @@ tcloud kubernetes nodepools create [flags]
 
 ```
       --availability-zone strings   Availability zone for the node pool (can be specified multiple times). If not specified, a random AZ from the cluster's region will be selected.
-      --cluster string              Cluster identity, name, or slug (required)
+      --cluster string              Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
       --enable-autohealing          Enable autohealing for the node pool
       --enable-autoscaling          Enable autoscaling for the node pool
   -h, --help                        help for create

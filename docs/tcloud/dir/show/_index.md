@@ -1,27 +1,28 @@
 ---
-linkTitle: "tcloud kubernetes nodepools list"
-title: "kubernetes nodepools list"
-slug: tcloud_kubernetes_nodepools_list
-url: /docs/tcloud/kubernetes/nodepools_list/
-weight: 9823
+linkTitle: "tcloud dir show"
+title: "dir show"
+slug: tcloud_dir_show
+url: /docs/tcloud/dir/show/
+weight: 9973
 cascade:
   type: docs
 ---
-## tcloud kubernetes nodepools list
+## tcloud dir show
 
-Kubernetes Cluster NodePool list
+Show the directory-local config in effect
+
+### Synopsis
+
+Show the nearest `.thalassa` (or `.thalassa/config.yaml`) found by walking up from the current directory.
 
 ```
-tcloud kubernetes nodepools list [flags]
+tcloud dir show [flags]
 ```
 
 ### Options
 
 ```
-      --cluster string   Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
-  -h, --help             help for list
-      --no-header        Do not print the header
-      --vpc string       VPC ID
+  -h, --help   help for show
 ```
 
 ### Options inherited from parent commands
@@ -33,6 +34,7 @@ tcloud kubernetes nodepools list [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
@@ -40,5 +42,4 @@ tcloud kubernetes nodepools list [flags]
 
 ### SEE ALSO
 
-* [tcloud kubernetes nodepools](/docs/tcloud/kubernetes/nodepools/)	 - Manage Kubernetes NodePools
-
+* [tcloud dir](/docs/tcloud/tcloud_dir/)	 - Manage directory-local Thalassa defaults

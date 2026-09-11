@@ -20,10 +20,11 @@ var (
 )
 
 var KubernetesKubeConfigCmd = &cobra.Command{
-	Use:               "kubeconfig",
+	Use:               "kubeconfig [cluster]",
 	Short:             "Print a kubeconfig for a Kubernetes cluster",
+	Long:              "Print a kubeconfig for a Kubernetes cluster. The cluster may be omitted when kubernetes.cluster is set in a directory .thalassa file.",
 	ValidArgsFunction: completion.CompleteKubernetesCluster,
-	Args:              cobra.ExactArgs(1),
+	Args:              cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 		client, err := thalassaclient.GetThalassaClient()
@@ -31,7 +32,16 @@ var KubernetesKubeConfigCmd = &cobra.Command{
 			return err
 		}
 
-		cluster, err := kuberesolve.ResolveKubernetesClusterRef(ctx, client.Kubernetes(), args[0])
+		clusterRef := ""
+		if len(args) == 1 {
+			clusterRef = args[0]
+		}
+		clusterRef, err = kuberesolve.RequireClusterRef(clusterRef)
+		if err != nil {
+			return err
+		}
+
+		cluster, err := kuberesolve.ResolveKubernetesClusterRef(ctx, client.Kubernetes(), clusterRef)
 		if err != nil {
 			return err
 		}

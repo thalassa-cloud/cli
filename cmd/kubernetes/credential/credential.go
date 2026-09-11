@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
+	"github.com/thalassa-cloud/cli/internal/dirconfig"
 	"github.com/thalassa-cloud/cli/internal/kubernetes/auth"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 )
@@ -24,6 +25,8 @@ var CredentialCmd = &cobra.Command{
 	Hidden: true,
 	Args:   cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		dirconfig.Disable()
+
 		if clusterIdentity == "" {
 			return fmt.Errorf("cluster identity is required")
 		}

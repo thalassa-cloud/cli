@@ -11,6 +11,8 @@ cascade:
 
 List kubeconfig sessions for a Kubernetes cluster
 
+The cluster may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file.
+
 ```
 tcloud kubernetes kubeconfig-sessions list [cluster] [flags]
 ```
@@ -18,7 +20,7 @@ tcloud kubernetes kubeconfig-sessions list [cluster] [flags]
 ### Options
 
 ```
-      --cluster string   Cluster identity, name, or slug
+      --cluster string   Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
       --exact-time       Show full timestamps instead of relative time
   -h, --help             help for list
       --no-header        Do not print the header

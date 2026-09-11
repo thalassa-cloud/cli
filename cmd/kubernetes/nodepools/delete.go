@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/completion"
+	"github.com/thalassa-cloud/cli/internal/kuberesolve"
 	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
@@ -45,14 +46,14 @@ Examples:
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 
-		if deleteNodePoolCluster == "" {
-			return fmt.Errorf("--cluster is required")
+		clusterIdentifier, err := kuberesolve.RequireClusterRef(deleteNodePoolCluster)
+		if err != nil {
+			return err
 		}
 		if deleteNodePoolId == "" {
 			return fmt.Errorf("--nodepool is required")
 		}
 
-		clusterIdentifier := deleteNodePoolCluster
 		nodePoolIdentifier := deleteNodePoolId
 
 		client, err := thalassaclient.GetThalassaClient()
@@ -130,7 +131,7 @@ Examples:
 func init() {
 	// Command is registered in kubernetesclusters.go
 
-	deleteCmd.Flags().StringVar(&deleteNodePoolCluster, "cluster", "", "Cluster identity, name, or slug (required)")
+	deleteCmd.Flags().StringVar(&deleteNodePoolCluster, "cluster", "", "Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)")
 	deleteCmd.Flags().StringVar(&deleteNodePoolId, "nodepool", "", "Node pool name, identity, or slug (required)")
 	deleteCmd.Flags().BoolVar(&deleteNodePoolWait, "wait", false, "Wait for the node pool to be deleted before returning")
 	deleteCmd.Flags().DurationVar(&deleteNodePoolWaitTimeout, "wait-timeout", 20*time.Minute, "Maximum time to wait for the node pool to be deleted")

@@ -13,7 +13,7 @@ List machines in a Kubernetes cluster
 
 ### Synopsis
 
-Lists worker machines (nodes) across node pools in the given cluster.
+Lists worker machines (nodes) across node pools in the given cluster. `--cluster` may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file.
 
 ```
 tcloud kubernetes machines list [flags]
@@ -22,7 +22,7 @@ tcloud kubernetes machines list [flags]
 ### Options
 
 ```
-      --cluster string    Cluster identity, name, or slug
+      --cluster string    Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
   -h, --help              help for list
       --no-header         Do not print the header
       --nodepool string   Filter by node pool identity, name, or slug

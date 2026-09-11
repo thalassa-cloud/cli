@@ -57,6 +57,27 @@ users:
       user: {}
 ```
 
+## Directory defaults (`.thalassa`)
+
+Optionally, a repository can pin a CLI context and Kubernetes cluster without changing `~/.tcloud`. From the working directory, `tcloud` walks up looking for:
+
+- `.thalassa` (a YAML file), or
+- `.thalassa/config.yaml` (when `.thalassa` is a directory)
+
+The nearest file wins. Missing files are ignored. The overlay holds **names and references only** — never tokens or kubeconfig data.
+
+```yaml
+context: prod
+organisation: acme          # optional; overrides the named context's organisation
+project: platform           # optional
+kubernetes:
+  cluster: prod-cluster     # identity, name, or slug
+```
+
+Precedence is: command flags and positional arguments, then environment variables (`THALASSA_*`, `TCLOUD_CLUSTER_*`), then `.thalassa`, then `~/.tcloud`. Cluster create/delete/update/upgrade still require an explicit cluster argument.
+
+Create a file with `tcloud dir init --cluster <cluster>`, inspect it with `tcloud dir show`, and disable it for one invocation with `--ignore-dir-config` or `THALASSA_DIR_CONFIG=0`.
+
 ## Credential storage
 
 By default, the CLI stores secrets in the OS credential store when one is available:

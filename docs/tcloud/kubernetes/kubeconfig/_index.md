@@ -11,8 +11,12 @@ cascade:
 
 Print a kubeconfig for a Kubernetes cluster
 
+### Synopsis
+
+Print a kubeconfig for a Kubernetes cluster. The cluster may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file.
+
 ```
-tcloud kubernetes kubeconfig [flags]
+tcloud kubernetes kubeconfig [cluster] [flags]
 ```
 
 ### Options

@@ -10,6 +10,7 @@ import (
 	"github.com/thalassa-cloud/cli/internal/completion"
 	"github.com/thalassa-cloud/cli/internal/formattime"
 	"github.com/thalassa-cloud/cli/internal/fzf"
+	"github.com/thalassa-cloud/cli/internal/kuberesolve"
 	"github.com/thalassa-cloud/cli/internal/shared"
 	"github.com/thalassa-cloud/cli/internal/table"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
@@ -55,10 +56,10 @@ Examples:
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 
-		if createNodePoolCluster == "" {
-			return fmt.Errorf("--cluster is required")
+		clusterIdentifier, err := kuberesolve.RequireClusterRef(createNodePoolCluster)
+		if err != nil {
+			return err
 		}
-		clusterIdentifier := createNodePoolCluster
 
 		client, err := thalassaclient.GetThalassaClient()
 		if err != nil {
@@ -210,7 +211,7 @@ Examples:
 func init() {
 	// Command is registered in kubernetesclusters.go
 
-	createCmd.Flags().StringVar(&createNodePoolCluster, "cluster", "", "Cluster identity, name, or slug (required)")
+	createCmd.Flags().StringVar(&createNodePoolCluster, "cluster", "", "Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)")
 	createCmd.Flags().StringVar(&createNodePoolName, "name", "worker", "Name of the node pool (default: worker)")
 	createCmd.Flags().StringVar(&createNodePoolMachineType, "machine-type", "", "Machine type for the node pool (required)")
 	createCmd.Flags().IntVar(&createNodePoolReplicas, "num-nodes", 1, "Number of nodes in the node pool (ignored if --enable-autoscaling is set)")
