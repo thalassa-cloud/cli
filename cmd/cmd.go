@@ -21,6 +21,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/kubernetes"
 	"github.com/thalassa-cloud/cli/cmd/me"
 	"github.com/thalassa-cloud/cli/cmd/objectstorage"
+	"github.com/thalassa-cloud/cli/cmd/observability"
 	"github.com/thalassa-cloud/cli/cmd/oidc"
 	"github.com/thalassa-cloud/cli/cmd/projects"
 	"github.com/thalassa-cloud/cli/cmd/quotas"
@@ -86,6 +87,7 @@ func init() {
 	RootCmd.AddCommand(dbaas.DbaasCmd)
 	RootCmd.AddCommand(me.MeCmd)
 	RootCmd.AddCommand(iam.IamCmd)
+	RootCmd.AddCommand(observability.ObservabilityCmd)
 	RootCmd.AddCommand(projects.ProjectsCmd)
 	RootCmd.AddCommand(audit.AuditCmd)
 	RootCmd.AddCommand(registry.RegistryCmd)
