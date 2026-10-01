@@ -3,7 +3,7 @@ linkTitle: "tcloud networking reserved-ips delete"
 title: "networking reserved-ips delete"
 slug: tcloud_networking_reserved-ips_delete
 url: /docs/tcloud/networking/reserved-ips_delete/
-weight: 9794
+weight: 9777
 cascade:
   type: docs
 ---
@@ -43,6 +43,7 @@ tcloud networking reserved-ips delete --selector env=test --force
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

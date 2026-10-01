@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes kubeconfig-sessions delete"
 title: "kubernetes kubeconfig-sessions delete"
 slug: tcloud_kubernetes_kubeconfig-sessions_delete
 url: /docs/tcloud/kubernetes/kubeconfig-sessions_delete/
-weight: 9831
+weight: 9814
 cascade:
   type: docs
 ---
@@ -15,7 +15,7 @@ Delete a kubeconfig session
 
 Revoke a kubeconfig session for a Kubernetes cluster.
 
-Provide the cluster as the first argument or with --cluster, and the session identity as the final argument. The cluster may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file.
+Provide the cluster as the first argument or with --cluster, and the session identity as the final argument. The cluster may be omitted when kubernetes.cluster is set in a directory .thalassa file.
 
 ```
 tcloud kubernetes kubeconfig-sessions delete [cluster] <session> [flags]
@@ -38,6 +38,7 @@ tcloud kubernetes kubeconfig-sessions delete [cluster] <session> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

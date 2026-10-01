@@ -3,7 +3,7 @@ linkTitle: "tcloud registry repositories delete"
 title: "registry repositories delete"
 slug: tcloud_registry_repositories_delete
 url: /docs/tcloud/registry/repositories_delete/
-weight: 9709
+weight: 9685
 cascade:
   type: docs
 ---
@@ -42,6 +42,7 @@ tcloud registry repositories delete --namespace crns-123 repo-456 --force
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

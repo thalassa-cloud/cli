@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes"
 title: "kubernetes"
 slug: tcloud_kubernetes
 url: /docs/tcloud/tcloud_kubernetes/
-weight: 9817
+weight: 9800
 cascade:
   type: docs
 ---
@@ -30,6 +30,7 @@ Kubernetes commands to manage your Kubernetes clusters and node pools within the
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

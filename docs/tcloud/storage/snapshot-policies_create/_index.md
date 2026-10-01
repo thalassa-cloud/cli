@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshot-policies create"
 title: "storage snapshot-policies create"
 slug: tcloud_storage_snapshot-policies_create
 url: /docs/tcloud/storage/snapshot-policies_create/
-weight: 9693
+weight: 9669
 cascade:
   type: docs
 ---
@@ -55,6 +55,7 @@ tcloud storage snapshot-policies create --name weekly --region nl-ams --schedule
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

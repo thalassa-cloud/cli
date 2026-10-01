@@ -3,7 +3,7 @@ linkTitle: "tcloud networking reserved-ips update"
 title: "networking reserved-ips update"
 slug: tcloud_networking_reserved-ips_update
 url: /docs/tcloud/networking/reserved-ips_update/
-weight: 9791
+weight: 9774
 cascade:
   type: docs
 ---
@@ -46,6 +46,7 @@ tcloud networking reserved-ips update rip-123 --description 'updated'
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

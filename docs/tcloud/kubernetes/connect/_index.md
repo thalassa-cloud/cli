@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes connect"
 title: "kubernetes connect"
 slug: tcloud_kubernetes_connect
 url: /docs/tcloud/kubernetes/connect/
-weight: 9848
+weight: 9831
 cascade:
   type: docs
 ---
@@ -13,7 +13,7 @@ Connect your shell to the Kubernetes Cluster
 
 ### Synopsis
 
-Connect your shell to a Kubernetes cluster. The cluster argument may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file, or when `TCLOUD_CLUSTER_*` is already set by a previous connect.
+Connect your shell to a Kubernetes cluster. The cluster argument may be omitted when kubernetes.cluster is set in a directory .thalassa file, or when TCLOUD_CLUSTER_* is already set by a previous connect.
 
 ```
 tcloud kubernetes connect [cluster] [flags]
@@ -37,6 +37,7 @@ tcloud kubernetes connect [cluster] [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

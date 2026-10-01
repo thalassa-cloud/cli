@@ -3,7 +3,7 @@ linkTitle: "tcloud storage tfs list"
 title: "storage tfs list"
 slug: tcloud_storage_tfs_list
 url: /docs/tcloud/storage/tfs_list/
-weight: 9681
+weight: 9657
 cascade:
   type: docs
 ---
@@ -37,6 +37,7 @@ tcloud storage tfs list [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

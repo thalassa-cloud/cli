@@ -3,7 +3,7 @@ linkTitle: "tcloud iam roles bindings delete"
 title: "iam roles bindings delete"
 slug: tcloud_iam_roles_bindings_delete
 url: /docs/tcloud/iam/roles_bindings_delete/
-weight: 9902
+weight: 9885
 cascade:
   type: docs
 ---
@@ -32,6 +32,7 @@ tcloud iam roles bindings delete <role> <binding> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

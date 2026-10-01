@@ -3,7 +3,7 @@ linkTitle: "tcloud networking vpc-peering accept"
 title: "networking vpc-peering accept"
 slug: tcloud_networking_vpc-peering_accept
 url: /docs/tcloud/networking/vpc-peering_accept/
-weight: 9753
+weight: 9736
 cascade:
   type: docs
 ---
@@ -43,6 +43,7 @@ tcloud networking vpc-peering accept vpcpc-123 --force
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

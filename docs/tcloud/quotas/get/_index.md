@@ -3,7 +3,7 @@ linkTitle: "tcloud quotas get"
 title: "quotas get"
 slug: tcloud_quotas_get
 url: /docs/tcloud/quotas/get/
-weight: 9728
+weight: 9704
 cascade:
   type: docs
 ---
@@ -31,6 +31,7 @@ tcloud quotas get <name> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

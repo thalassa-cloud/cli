@@ -3,7 +3,7 @@ linkTitle: "tcloud dns records view"
 title: "dns records view"
 slug: tcloud_dns_records_view
 url: /docs/tcloud/dns/records_view/
-weight: 9936
+weight: 9933
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud dns records view <record> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

@@ -3,7 +3,7 @@ linkTitle: "tcloud networking natgateways create"
 title: "networking natgateways create"
 slug: tcloud_networking_natgateways_create
 url: /docs/tcloud/networking/natgateways_create/
-weight: 9802
+weight: 9785
 cascade:
   type: docs
 ---
@@ -51,6 +51,7 @@ tcloud networking natgateways create --name egress --subnet subnet-123 --configu
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

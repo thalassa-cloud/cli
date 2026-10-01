@@ -3,7 +3,7 @@ linkTitle: "tcloud secrets policy"
 title: "secrets policy"
 slug: tcloud_secrets_policy
 url: /docs/tcloud/secrets/policy/
-weight: 9697
+weight: 9673
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud secrets policy [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

@@ -3,7 +3,7 @@ linkTitle: "tcloud iam teams members list"
 title: "iam teams members list"
 slug: tcloud_iam_teams_members_list
 url: /docs/tcloud/iam/teams_members_list/
-weight: 9880
+weight: 9863
 cascade:
   type: docs
 ---
@@ -31,6 +31,7 @@ tcloud iam teams members list <team> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

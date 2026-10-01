@@ -3,7 +3,7 @@ linkTitle: "tcloud dir"
 title: "dir"
 slug: tcloud_dir
 url: /docs/tcloud/tcloud_dir/
-weight: 9974
+weight: 9938
 cascade:
   type: docs
 ---
@@ -13,19 +13,9 @@ Manage directory-local Thalassa defaults
 
 ### Synopsis
 
-Manage optional project-local defaults discovered from a `.thalassa` file (or `.thalassa/config.yaml`) by walking up from the current directory.
+Manage optional project-local defaults discovered from a .thalassa file (or .thalassa/config.yaml) by walking up from the current directory.
 
 Directory config can set a preferred CLI context, organisation, project, and Kubernetes cluster.
-
-```yaml
-context: prod
-organisation: acme
-project: platform
-kubernetes:
-  cluster: prod-cluster
-```
-
-Disable with `--ignore-dir-config` or `THALASSA_DIR_CONFIG=0`.
 
 ### Options
 
@@ -53,3 +43,4 @@ Disable with `--ignore-dir-config` or `THALASSA_DIR_CONFIG=0`.
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
 * [tcloud dir init](/docs/tcloud/dir/init/)	 - Write a .thalassa file in the current directory
 * [tcloud dir show](/docs/tcloud/dir/show/)	 - Show the directory-local config in effect
+

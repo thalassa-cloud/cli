@@ -3,7 +3,7 @@ linkTitle: "tcloud dns zones dnssec enable"
 title: "dns zones dnssec enable"
 slug: tcloud_dns_zones_dnssec_enable
 url: /docs/tcloud/dns/zones_dnssec_enable/
-weight: 9931
+weight: 9928
 cascade:
   type: docs
 ---
@@ -33,6 +33,7 @@ tcloud dns zones dnssec enable <zone> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
