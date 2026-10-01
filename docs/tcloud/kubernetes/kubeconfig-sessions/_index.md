@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes kubeconfig-sessions"
 title: "kubernetes kubeconfig-sessions"
 slug: tcloud_kubernetes_kubeconfig-sessions
 url: /docs/tcloud/kubernetes/kubeconfig-sessions/
-weight: 9829
+weight: 9812
 cascade:
   type: docs
 ---
@@ -40,6 +40,7 @@ List and revoke active kubeconfig sessions for a Kubernetes cluster.
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

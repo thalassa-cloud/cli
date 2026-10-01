@@ -3,7 +3,7 @@ linkTitle: "tcloud networking loadbalancers listeners create"
 title: "networking loadbalancers listeners create"
 slug: tcloud_networking_loadbalancers_listeners_create
 url: /docs/tcloud/networking/loadbalancers_listeners_create/
-weight: 9811
+weight: 9794
 cascade:
   type: docs
 ---
@@ -51,6 +51,7 @@ tcloud networking loadbalancers listeners create --loadbalancer lb-123 --name ht
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

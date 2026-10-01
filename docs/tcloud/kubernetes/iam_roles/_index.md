@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes iam roles"
 title: "kubernetes iam roles"
 slug: tcloud_kubernetes_iam_roles
 url: /docs/tcloud/kubernetes/iam_roles/
-weight: 9834
+weight: 9817
 cascade:
   type: docs
 ---
@@ -31,6 +31,7 @@ teams, or service accounts. System roles may be read-only; the API enforces what
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

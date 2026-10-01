@@ -3,7 +3,7 @@ linkTitle: "tcloud oidc"
 title: "oidc"
 slug: tcloud_oidc
 url: /docs/tcloud/tcloud_oidc/
-weight: 9735
+weight: 9711
 cascade:
   type: docs
 ---
@@ -30,6 +30,7 @@ OIDC token operations for Thalassa Cloud, such as OIDC Federation and token exch
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

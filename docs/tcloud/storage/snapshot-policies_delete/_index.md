@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshot-policies delete"
 title: "storage snapshot-policies delete"
 slug: tcloud_storage_snapshot-policies_delete
 url: /docs/tcloud/storage/snapshot-policies_delete/
-weight: 9692
+weight: 9668
 cascade:
   type: docs
 ---
@@ -32,6 +32,7 @@ tcloud storage snapshot-policies delete [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

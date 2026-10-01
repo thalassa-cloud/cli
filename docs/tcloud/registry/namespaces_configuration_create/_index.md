@@ -3,7 +3,7 @@ linkTitle: "tcloud registry namespaces configuration create"
 title: "registry namespaces configuration create"
 slug: tcloud_registry_namespaces_configuration_create
 url: /docs/tcloud/registry/namespaces_configuration_create/
-weight: 9722
+weight: 9698
 cascade:
   type: docs
 ---
@@ -43,6 +43,7 @@ tcloud registry namespaces configuration create --namespace crns-123 --visibilit
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes iam roles rules"
 title: "kubernetes iam roles rules"
 slug: tcloud_kubernetes_iam_roles_rules
 url: /docs/tcloud/kubernetes/iam_roles_rules/
-weight: 9835
+weight: 9818
 cascade:
   type: docs
 ---
@@ -26,6 +26,7 @@ Permission rules on a Kubernetes cluster role
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

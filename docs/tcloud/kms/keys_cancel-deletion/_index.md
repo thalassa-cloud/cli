@@ -3,7 +3,7 @@ linkTitle: "tcloud kms keys cancel-deletion"
 title: "kms keys cancel-deletion"
 slug: tcloud_kms_keys_cancel-deletion
 url: /docs/tcloud/kms/keys_cancel-deletion/
-weight: 9865
+weight: 9848
 cascade:
   type: docs
 ---
@@ -31,6 +31,7 @@ tcloud kms keys cancel-deletion <key> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

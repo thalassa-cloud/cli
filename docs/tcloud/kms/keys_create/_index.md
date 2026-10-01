@@ -3,7 +3,7 @@ linkTitle: "tcloud kms keys create"
 title: "kms keys create"
 slug: tcloud_kms_keys_create
 url: /docs/tcloud/kms/keys_create/
-weight: 9864
+weight: 9847
 cascade:
   type: docs
 ---
@@ -44,6 +44,7 @@ tcloud kms keys create [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

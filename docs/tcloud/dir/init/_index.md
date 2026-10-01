@@ -3,7 +3,7 @@ linkTitle: "tcloud dir init"
 title: "dir init"
 slug: tcloud_dir_init
 url: /docs/tcloud/dir/init/
-weight: 9972
+weight: 9940
 cascade:
   type: docs
 ---
@@ -13,9 +13,9 @@ Write a .thalassa file in the current directory
 
 ### Synopsis
 
-Write a `.thalassa` file in the current directory from the effective CLI context and an optional Kubernetes cluster.
+Write a .thalassa file in the current directory from the effective CLI context and an optional Kubernetes cluster.
 
-The file contains names and references only. Credentials stay in `~/.tcloud` or the system credential store. Existing files are not overwritten unless `--force` is set.
+The file contains names and references only. Credentials stay in ~/.tcloud or the system credential store. Existing files are not overwritten unless --force is set.
 
 ```
 tcloud dir init [flags]
@@ -53,3 +53,4 @@ tcloud dir init --cluster prod-cluster
 ### SEE ALSO
 
 * [tcloud dir](/docs/tcloud/tcloud_dir/)	 - Manage directory-local Thalassa defaults
+

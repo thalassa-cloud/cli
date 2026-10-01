@@ -3,7 +3,7 @@ linkTitle: "tcloud networking target-groups"
 title: "networking target-groups"
 slug: tcloud_networking_target-groups
 url: /docs/tcloud/networking/target-groups/
-weight: 9754
+weight: 9737
 cascade:
   type: docs
 ---
@@ -38,6 +38,7 @@ tcloud networking target-groups attach tg-123 --server machine-123
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

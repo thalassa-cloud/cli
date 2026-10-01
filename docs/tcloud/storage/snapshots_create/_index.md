@@ -3,7 +3,7 @@ linkTitle: "tcloud storage snapshots create"
 title: "storage snapshots create"
 slug: tcloud_storage_snapshots_create
 url: /docs/tcloud/storage/snapshots_create/
-weight: 9687
+weight: 9663
 cascade:
   type: docs
 ---
@@ -41,6 +41,7 @@ tcloud storage snapshots create <name> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

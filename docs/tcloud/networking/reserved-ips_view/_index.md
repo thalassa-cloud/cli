@@ -3,7 +3,7 @@ linkTitle: "tcloud networking reserved-ips view"
 title: "networking reserved-ips view"
 slug: tcloud_networking_reserved-ips_view
 url: /docs/tcloud/networking/reserved-ips_view/
-weight: 9790
+weight: 9773
 cascade:
   type: docs
 ---
@@ -42,6 +42,7 @@ tcloud networking reserved-ips view rip-123 --output yaml
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

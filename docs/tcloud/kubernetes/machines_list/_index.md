@@ -3,7 +3,7 @@ linkTitle: "tcloud kubernetes machines list"
 title: "kubernetes machines list"
 slug: tcloud_kubernetes_machines_list
 url: /docs/tcloud/kubernetes/machines_list/
-weight: 9827
+weight: 9810
 cascade:
   type: docs
 ---
@@ -13,7 +13,7 @@ List machines in a Kubernetes cluster
 
 ### Synopsis
 
-Lists worker machines (nodes) across node pools in the given cluster. `--cluster` may be omitted when `kubernetes.cluster` is set in a directory `.thalassa` file.
+Lists worker machines (nodes) across node pools in the given cluster.
 
 ```
 tcloud kubernetes machines list [flags]
@@ -22,7 +22,7 @@ tcloud kubernetes machines list [flags]
 ### Options
 
 ```
-      --cluster string    Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
+      --cluster string    Cluster identity, name, or slug
   -h, --help              help for list
       --no-header         Do not print the header
       --nodepool string   Filter by node pool identity, name, or slug
@@ -38,6 +38,7 @@ tcloud kubernetes machines list [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

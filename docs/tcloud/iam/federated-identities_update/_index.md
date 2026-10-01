@@ -3,7 +3,7 @@ linkTitle: "tcloud iam federated-identities update"
 title: "iam federated-identities update"
 slug: tcloud_iam_federated-identities_update
 url: /docs/tcloud/iam/federated-identities_update/
-weight: 9917
+weight: 9914
 cascade:
   type: docs
 ---
@@ -41,6 +41,7 @@ tcloud iam federated-identities update <identity> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

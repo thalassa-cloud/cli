@@ -3,7 +3,7 @@ linkTitle: "tcloud dir show"
 title: "dir show"
 slug: tcloud_dir_show
 url: /docs/tcloud/dir/show/
-weight: 9973
+weight: 9939
 cascade:
   type: docs
 ---
@@ -13,7 +13,7 @@ Show the directory-local config in effect
 
 ### Synopsis
 
-Show the nearest `.thalassa` (or `.thalassa/config.yaml`) found by walking up from the current directory.
+Show the nearest .thalassa (or .thalassa/config.yaml) found by walking up from the current directory.
 
 ```
 tcloud dir show [flags]
@@ -43,3 +43,4 @@ tcloud dir show [flags]
 ### SEE ALSO
 
 * [tcloud dir](/docs/tcloud/tcloud_dir/)	 - Manage directory-local Thalassa defaults
+

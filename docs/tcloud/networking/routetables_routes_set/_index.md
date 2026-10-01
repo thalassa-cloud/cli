@@ -3,7 +3,7 @@ linkTitle: "tcloud networking routetables routes set"
 title: "networking routetables routes set"
 slug: tcloud_networking_routetables_routes_set
 url: /docs/tcloud/networking/routetables_routes_set/
-weight: 9782
+weight: 9765
 cascade:
   type: docs
 ---
@@ -42,6 +42,7 @@ tcloud networking routetables routes set rt-123 --file routes.json
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

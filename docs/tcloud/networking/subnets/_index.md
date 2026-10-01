@@ -3,7 +3,7 @@ linkTitle: "tcloud networking subnets"
 title: "networking subnets"
 slug: tcloud_networking_subnets
 url: /docs/tcloud/networking/subnets/
-weight: 9763
+weight: 9746
 cascade:
   type: docs
 ---
@@ -26,6 +26,7 @@ Manage subnets
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

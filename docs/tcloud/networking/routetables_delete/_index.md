@@ -3,7 +3,7 @@ linkTitle: "tcloud networking routetables delete"
 title: "networking routetables delete"
 slug: tcloud_networking_routetables_delete
 url: /docs/tcloud/networking/routetables_delete/
-weight: 9787
+weight: 9770
 cascade:
   type: docs
 ---
@@ -31,6 +31,7 @@ tcloud networking routetables delete ROUTE_TABLE [ROUTE_TABLE...] [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

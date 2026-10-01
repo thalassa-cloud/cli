@@ -3,7 +3,7 @@ linkTitle: "tcloud"
 title: "tcloud"
 slug: tcloud
 url: /docs/tcloud/tcloud/
-weight: 9668
+weight: 9644
 cascade:
   type: docs
 ---
@@ -42,6 +42,7 @@ A CLI for working with the Thalassa Cloud Platform
 * [tcloud me](/docs/tcloud/tcloud_me/)	 - Get information about the current user
 * [tcloud networking](/docs/tcloud/tcloud_networking/)	 - Manage networking resources
 * [tcloud object-storage](/docs/tcloud/tcloud_object-storage/)	 - Manage object storage buckets
+* [tcloud observability](/docs/tcloud/tcloud_observability/)	 - Manage observability workspaces (metrics and logs)
 * [tcloud oidc](/docs/tcloud/tcloud_oidc/)	 - OIDC token operations
 * [tcloud projects](/docs/tcloud/tcloud_projects/)	 - Manage projects (beta)
 * [tcloud quick-launch](/docs/tcloud/tcloud_quick-launch/)	 - Provision stacks from quick-launch templates

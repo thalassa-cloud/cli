@@ -3,7 +3,7 @@ linkTitle: "tcloud object-storage create"
 title: "object-storage create"
 slug: tcloud_object-storage_create
 url: /docs/tcloud/object-storage/create/
-weight: 9741
+weight: 9724
 cascade:
   type: docs
 ---
@@ -40,6 +40,7 @@ tcloud object-storage create [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)

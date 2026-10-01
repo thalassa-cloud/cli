@@ -3,7 +3,7 @@ linkTitle: "tcloud iam teams get"
 title: "iam teams get"
 slug: tcloud_iam_teams_get
 url: /docs/tcloud/iam/teams_get/
-weight: 9883
+weight: 9866
 cascade:
   type: docs
 ---
@@ -32,6 +32,7 @@ tcloud iam teams get <team> [flags]
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
