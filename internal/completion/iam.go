@@ -221,6 +221,97 @@ func CompleteIAMPolicyIdentityFlag(cmd *cobra.Command, args []string, toComplete
 	return completeIAMPolicyIdentities(cmd)
 }
 
+// CompleteIAMPolicyIdentity completes IAM policy identities, slugs, and names (first positional only).
+func CompleteIAMPolicyIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+	return completeIAMPolicyIdentities(cmd)
+}
+
+// CompleteIAMPolicyResourceType completes resource types usable in IAM policy rules.
+func CompleteIAMPolicyResourceType(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	types, err := client.IAM().ListResourceTypes(cmd.Context())
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	return types, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteIAMPolicyThenBinding completes the policy then binding identities for that policy.
+func CompleteIAMPolicyThenBinding(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	switch len(args) {
+	case 0:
+		return CompleteIAMPolicyIdentity(cmd, args, toComplete)
+	case 1:
+		client, err := thalassaclient.GetThalassaClient()
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError
+		}
+		policy, err := iamresolve.ResolveIamPolicyRef(cmd.Context(), client.IAM(), args[0])
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError
+		}
+		bindings, err := client.IAM().ListIamPolicyBindings(cmd.Context(), policy.Identity, &clientiam.ListIamPolicyBindingsRequest{})
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError
+		}
+		out := make([]string, 0, len(bindings)*3)
+		for _, b := range bindings {
+			desc := b.Name
+			if desc == "" {
+				desc = b.Slug
+			}
+			out = append(out, b.Identity+"\t"+desc)
+			if b.Slug != "" && b.Slug != b.Identity {
+				out = append(out, b.Slug+"\t"+desc)
+			}
+			if b.Name != "" && b.Name != b.Identity && b.Name != b.Slug {
+				out = append(out, b.Name+"\t"+desc)
+			}
+		}
+		return out, cobra.ShellCompDirectiveNoFileComp
+	default:
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+}
+
+// CompleteIAMPolicyThenRule completes the policy then rule identities on that policy.
+func CompleteIAMPolicyThenRule(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	switch len(args) {
+	case 0:
+		return CompleteIAMPolicyIdentity(cmd, args, toComplete)
+	case 1:
+		client, err := thalassaclient.GetThalassaClient()
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError
+		}
+		policy, err := iamresolve.ResolveIamPolicyRef(cmd.Context(), client.IAM(), args[0])
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError
+		}
+		policy, err = client.IAM().GetIamPolicy(cmd.Context(), policy.Identity)
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError
+		}
+		out := make([]string, 0, len(policy.Rules))
+		for _, ru := range policy.Rules {
+			note := ru.Note
+			if note == "" {
+				note = "rule"
+			}
+			out = append(out, ru.Identity+"\t"+note)
+		}
+		return out, cobra.ShellCompDirectiveNoFileComp
+	default:
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+}
+
 func completeIAMServiceAccountIdentities(cmd *cobra.Command) ([]string, cobra.ShellCompDirective) {
 	client, err := thalassaclient.GetThalassaClient()
 	if err != nil {
