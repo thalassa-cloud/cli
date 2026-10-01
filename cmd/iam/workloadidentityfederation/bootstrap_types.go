@@ -9,7 +9,8 @@ type BootstrapOptions struct {
 	RefKind          RefKind
 	Ref              string   // branch name, tag name, or environment name (GitHub)
 	GitLabRefType    string   // branch, tag, etc. (GitLab id_token sub ref_type segment)
-	RoleRefs         []string // organisation role identities, slugs, or names (at least one)
+	RoleRefs         []string // organisation role identities, slugs, or names
+	PolicyRefs       []string // IAM policy identities, slugs, or names
 	TrustedAudiences []string
 	AllowedScopes    []clientiam.AccessCredentialsScope
 
@@ -39,6 +40,14 @@ type BootstrapRoleResult struct {
 	WouldCreateBinding bool
 }
 
+// BootstrapPolicyResult is one IAM policy involved in bootstrap and its binding outcome.
+type BootstrapPolicyResult struct {
+	Identity           string
+	Slug               string
+	CreatedBinding     bool
+	WouldCreateBinding bool
+}
+
 // BootstrapResult summarises what bootstrap did or would do.
 type BootstrapResult struct {
 	WIFKey                    string
@@ -48,6 +57,7 @@ type BootstrapResult struct {
 	ServiceAccountIdentity    string
 	ServiceAccountSlug        string
 	Roles                     []BootstrapRoleResult
+	Policies                  []BootstrapPolicyResult
 	FederatedIdentityIdentity string
 
 	CreatedProvider              bool

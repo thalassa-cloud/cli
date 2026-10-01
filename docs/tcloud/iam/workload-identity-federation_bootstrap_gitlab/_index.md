@@ -28,6 +28,9 @@ tcloud iam workload-identity-federation bootstrap gitlab [flags]
   # GitLab.com, branch main
   tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --role deployer
 
+  # Bind IAM policies
+  tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --policy ci-deploy
+
   # Multiple organisation roles
   tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --role deployer --role reader
 
@@ -62,10 +65,11 @@ tcloud iam workload-identity-federation bootstrap gitlab [flags]
       --name string                   Base name for the Thalassa service account and federated identity (federated identity becomes <name>-fi; default: wif-<platform>-<key>)
       --no-hints                      Do not print platform hints after bootstrap
   -O, --organisation string           Organisation slug or identity (overrides context)
+      --policy strings                IAM policy identity, slug, or name (repeatable; at least one --role or --policy required)
   -P, --project string                Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --provider-description string   Optional description when creating the federated identity provider
       --provider-name string          Optional display name when creating the federated identity provider
-      --role strings                  Organisation role identity, slug, or name (required; repeatable)
+      --role strings                  Organisation role identity, slug, or name (repeatable; at least one --role or --policy required)
       --scope strings                 Federated identity allowed scopes: api:read, api:write, kubernetes, objectStorage (default: api:read,api:write)
       --token string                  Personal access token (overrides context)
       --trusted-audience strings      JWT aud values to trust (repeatable; default: current context API URL, e.g. https://api.thalassa.cloud)

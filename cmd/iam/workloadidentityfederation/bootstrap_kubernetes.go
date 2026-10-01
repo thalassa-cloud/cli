@@ -32,6 +32,10 @@ creates the federated identity provider if it does not exist yet.`,
   tcloud iam workload-identity-federation bootstrap kubernetes --cluster my-cluster-slug \
     --namespace default --service-account my-app --role deployer
 
+  # Bind IAM policies
+  tcloud iam workload-identity-federation bootstrap kubernetes --cluster my-cluster-slug \
+    --namespace default --service-account my-app --policy ci-deploy
+
   # Multiple organisation roles
   tcloud iam workload-identity-federation bootstrap kubernetes --cluster my-cluster-slug \
     --namespace default --service-account my-app --role deployer --role reader

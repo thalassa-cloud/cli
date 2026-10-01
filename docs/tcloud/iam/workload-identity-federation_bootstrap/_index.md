@@ -14,7 +14,9 @@ Provision workload identity for GitHub, GitLab, or Kubernetes
 ### Synopsis
 
 Creates (when missing) a federated OIDC identity provider, a Thalassa service account,
-role binding(s) to your organisation role(s), and a federated identity for the workload JWT subject.
+bindings to organisation role(s) and/or IAM policy(ies), and a federated identity for the workload JWT subject.
+
+Provide at least one --role or --policy (both may be repeated and combined).
 
 Resources are labelled thalassa.cloud/managed-by=workload-identity-bootstrap and thalassa.cloud/wif-vcs=<github|gitlab|kubernetes>.
 
@@ -31,9 +33,10 @@ Subcommands:
   -h, --help                          help for bootstrap
       --name string                   Base name for the Thalassa service account and federated identity (federated identity becomes <name>-fi; default: wif-<platform>-<key>)
       --no-hints                      Do not print platform hints after bootstrap
+      --policy strings                IAM policy identity, slug, or name (repeatable; at least one --role or --policy required)
       --provider-description string   Optional description when creating the federated identity provider
       --provider-name string          Optional display name when creating the federated identity provider
-      --role strings                  Organisation role identity, slug, or name (required; repeatable)
+      --role strings                  Organisation role identity, slug, or name (repeatable; at least one --role or --policy required)
       --scope strings                 Federated identity allowed scopes: api:read, api:write, kubernetes, objectStorage (default: api:read,api:write)
       --trusted-audience strings      JWT aud values to trust (repeatable; default: current context API URL, e.g. https://api.thalassa.cloud)
 ```
