@@ -227,8 +227,79 @@ func resolveOrganisationRole(ctx context.Context, c *clientiam.Client, ref strin
 	return nil, fmt.Errorf("organisation role not found: %s", ref)
 }
 
+// resolveOrganisationRoles resolves each --role ref and de-duplicates by role identity.
+// An empty refs slice returns an empty result (roles are optional when --policy is set).
+func resolveOrganisationRoles(ctx context.Context, c *clientiam.Client, refs []string) ([]*clientiam.OrganisationRole, error) {
+	out := make([]*clientiam.OrganisationRole, 0, len(refs))
+	seen := make(map[string]struct{}, len(refs))
+	for _, ref := range refs {
+		role, err := resolveOrganisationRole(ctx, c, ref)
+		if err != nil {
+			return nil, err
+		}
+		if _, ok := seen[role.Identity]; ok {
+			continue
+		}
+		seen[role.Identity] = struct{}{}
+		out = append(out, role)
+	}
+	return out, nil
+}
+
+func resolveIamPolicy(ctx context.Context, c *clientiam.Client, ref string) (*clientiam.IamPolicy, error) {
+	ref = strings.TrimSpace(ref)
+	if ref == "" {
+		return nil, fmt.Errorf("policy is required")
+	}
+	if policy, err := c.GetIamPolicy(ctx, ref); err == nil && policy != nil {
+		return policy, nil
+	}
+	policies, err := c.ListIamPolicies(ctx, &clientiam.ListIamPoliciesRequest{})
+	if err != nil {
+		return nil, fmt.Errorf("list IAM policies: %w", err)
+	}
+	for i := range policies {
+		p := &policies[i]
+		if strings.EqualFold(p.Identity, ref) || strings.EqualFold(p.Slug, ref) || strings.EqualFold(p.Name, ref) {
+			return p, nil
+		}
+	}
+	return nil, fmt.Errorf("IAM policy not found: %s", ref)
+}
+
+// resolveIamPolicies resolves each --policy ref and de-duplicates by policy identity.
+func resolveIamPolicies(ctx context.Context, c *clientiam.Client, refs []string) ([]*clientiam.IamPolicy, error) {
+	out := make([]*clientiam.IamPolicy, 0, len(refs))
+	seen := make(map[string]struct{}, len(refs))
+	for _, ref := range refs {
+		policy, err := resolveIamPolicy(ctx, c, ref)
+		if err != nil {
+			return nil, err
+		}
+		if _, ok := seen[policy.Identity]; ok {
+			continue
+		}
+		seen[policy.Identity] = struct{}{}
+		out = append(out, policy)
+	}
+	return out, nil
+}
+
 func hasRoleBindingForServiceAccount(ctx context.Context, c *clientiam.Client, roleIdentity, saIdentity string) (bool, error) {
 	bindings, err := c.ListRoleBindings(ctx, roleIdentity, &clientiam.ListRoleBindingsRequest{})
+	if err != nil {
+		return false, err
+	}
+	for _, b := range bindings {
+		if b.ServiceAccount != nil && b.ServiceAccount.Identity == saIdentity {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func hasPolicyBindingForServiceAccount(ctx context.Context, c *clientiam.Client, policyIdentity, saIdentity string) (bool, error) {
+	bindings, err := c.ListIamPolicyBindings(ctx, policyIdentity, &clientiam.ListIamPolicyBindingsRequest{})
 	if err != nil {
 		return false, err
 	}
@@ -247,6 +318,24 @@ func createRoleBindingForSA(ctx context.Context, c *clientiam.Client, role *clie
 	}
 	saID := sa.Identity
 	binding, err := c.CreateRoleBinding(ctx, role.Identity, clientiam.CreateRoleBinding{
+		Name:                   name,
+		Description:            fmt.Sprintf("Workload identity federation (%s) for Thalassa service account %s", vcs, sa.Slug),
+		Labels:                 bootstrapLabels(vcs, key),
+		ServiceAccountIdentity: &saID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return binding, nil
+}
+
+func createPolicyBindingForSA(ctx context.Context, c *clientiam.Client, policy *clientiam.IamPolicy, sa *clientiam.ServiceAccount, vcs, key string) (*clientiam.IamPolicyBinding, error) {
+	name := fmt.Sprintf("wif-%s-%s", vcs, key)
+	if len(name) > 63 {
+		name = name[:63]
+	}
+	saID := sa.Identity
+	binding, err := c.CreateIamPolicyBinding(ctx, policy.Identity, clientiam.CreateIamPolicyBindingRequest{
 		Name:                   name,
 		Description:            fmt.Sprintf("Workload identity federation (%s) for Thalassa service account %s", vcs, sa.Slug),
 		Labels:                 bootstrapLabels(vcs, key),
@@ -318,12 +407,33 @@ func RunBootstrap(ctx context.Context, client thalassa.Client, opts BootstrapOpt
 
 	scopes := defaultBootstrapScopes(opts)
 
-	role, err := resolveOrganisationRole(ctx, iamc, opts.RoleRef)
+	if len(opts.RoleRefs) == 0 && len(opts.PolicyRefs) == 0 {
+		return nil, fmt.Errorf("at least one --role or --policy is required")
+	}
+
+	roles, err := resolveOrganisationRoles(ctx, iamc, opts.RoleRefs)
 	if err != nil {
 		return nil, err
 	}
-	res.RoleIdentity = role.Identity
-	res.RoleSlug = role.Slug
+	res.Roles = make([]BootstrapRoleResult, len(roles))
+	for i, role := range roles {
+		res.Roles[i] = BootstrapRoleResult{
+			Identity: role.Identity,
+			Slug:     role.Slug,
+		}
+	}
+
+	policies, err := resolveIamPolicies(ctx, iamc, opts.PolicyRefs)
+	if err != nil {
+		return nil, err
+	}
+	res.Policies = make([]BootstrapPolicyResult, len(policies))
+	for i, policy := range policies {
+		res.Policies[i] = BootstrapPolicyResult{
+			Identity: policy.Identity,
+			Slug:     policy.Slug,
+		}
+	}
 
 	provider, err := ensureBootstrapProvider(ctx, iamc, opts, issuerSubject.issuer, issuerSubject.k8sClusterBoundProvider, res)
 	if err != nil {
@@ -341,7 +451,10 @@ func RunBootstrap(ctx context.Context, client thalassa.Client, opts BootstrapOpt
 		return nil, err
 	}
 
-	if err := ensureBootstrapRoleBinding(ctx, iamc, opts, role, sa, key, res); err != nil {
+	if err := ensureBootstrapRoleBindings(ctx, iamc, opts, roles, sa, key, res); err != nil {
+		return nil, err
+	}
+	if err := ensureBootstrapPolicyBindings(ctx, iamc, opts, policies, sa, key, res); err != nil {
 		return nil, err
 	}
 

@@ -190,6 +190,37 @@ func CompleteIAMOrganisationRoleIdentityFlag(cmd *cobra.Command, args []string, 
 	return completeIAMOrganisationRoleIdentities(cmd)
 }
 
+func completeIAMPolicyIdentities(cmd *cobra.Command) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	policies, err := client.IAM().ListIamPolicies(cmd.Context(), &clientiam.ListIamPoliciesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	out := make([]string, 0, len(policies)*3)
+	for _, p := range policies {
+		desc := p.Name
+		if desc == "" {
+			desc = p.Slug
+		}
+		out = append(out, p.Identity+"\t"+desc)
+		if p.Slug != "" && p.Slug != p.Identity {
+			out = append(out, p.Slug+"\t"+desc)
+		}
+		if p.Name != "" && p.Name != p.Identity && p.Name != p.Slug {
+			out = append(out, p.Name+"\t"+desc)
+		}
+	}
+	return out, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteIAMPolicyIdentityFlag completes IAM policies for flag values (ignores positional args).
+func CompleteIAMPolicyIdentityFlag(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	return completeIAMPolicyIdentities(cmd)
+}
+
 func completeIAMServiceAccountIdentities(cmd *cobra.Command) ([]string, cobra.ShellCompDirective) {
 	client, err := thalassaclient.GetThalassaClient()
 	if err != nil {

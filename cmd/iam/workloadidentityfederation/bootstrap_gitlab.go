@@ -26,6 +26,12 @@ The GitLab id_token sub uses project_path:<group/project>:ref_type:<type>:ref:<r
 	Example: `  # GitLab.com, branch main
   tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --role deployer
 
+  # Bind IAM policies
+  tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --policy ci-deploy
+
+  # Multiple organisation roles
+  tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --role deployer --role reader
+
   # Tag pipeline
   tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref v1.0.0 --ref-type tag --role deployer
 

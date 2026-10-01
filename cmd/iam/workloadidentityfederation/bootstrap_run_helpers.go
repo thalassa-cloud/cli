@@ -242,6 +242,27 @@ func ensureBootstrapFederatedIdentity(
 	return fi, nil
 }
 
+func ensureBootstrapRoleBindings(
+	ctx context.Context,
+	iamc *clientiam.Client,
+	opts BootstrapOptions,
+	roles []*clientiam.OrganisationRole,
+	sa *clientiam.ServiceAccount,
+	key string,
+	res *BootstrapResult,
+) error {
+	for i, role := range roles {
+		if i >= len(res.Roles) {
+			return fmt.Errorf("internal: role result missing for %s", role.Identity)
+		}
+		outcome := &res.Roles[i]
+		if err := ensureBootstrapRoleBinding(ctx, iamc, opts, role, sa, key, outcome, res.WouldCreateServiceAccount); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func ensureBootstrapRoleBinding(
 	ctx context.Context,
 	iamc *clientiam.Client,
@@ -249,19 +270,20 @@ func ensureBootstrapRoleBinding(
 	role *clientiam.OrganisationRole,
 	sa *clientiam.ServiceAccount,
 	key string,
-	res *BootstrapResult,
+	outcome *BootstrapRoleResult,
+	wouldCreateServiceAccount bool,
 ) error {
 	if opts.DryRun {
 		if sa != nil {
 			ok, err := hasRoleBindingForServiceAccount(ctx, iamc, role.Identity, sa.Identity)
 			if err != nil {
-				return fmt.Errorf("list role bindings: %w", err)
+				return fmt.Errorf("list role bindings for role %s: %w", role.Slug, err)
 			}
 			if !ok {
-				res.WouldCreateRoleBinding = true
+				outcome.WouldCreateBinding = true
 			}
-		} else if res.WouldCreateServiceAccount {
-			res.WouldCreateRoleBinding = true
+		} else if wouldCreateServiceAccount {
+			outcome.WouldCreateBinding = true
 		}
 		return nil
 	}
@@ -272,7 +294,7 @@ func ensureBootstrapRoleBinding(
 
 	ok, err := hasRoleBindingForServiceAccount(ctx, iamc, role.Identity, sa.Identity)
 	if err != nil {
-		return fmt.Errorf("list role bindings: %w", err)
+		return fmt.Errorf("list role bindings for role %s: %w", role.Slug, err)
 	}
 	if ok {
 		return nil
@@ -280,9 +302,79 @@ func ensureBootstrapRoleBinding(
 
 	_, err = createRoleBindingForSA(ctx, iamc, role, sa, opts.VCS, key)
 	if err != nil {
-		return fmt.Errorf("create role binding: %w", err)
+		return fmt.Errorf("create role binding for role %s: %w", role.Slug, err)
 	}
-	res.CreatedRoleBinding = true
+	outcome.CreatedBinding = true
+	return nil
+}
+
+func ensureBootstrapPolicyBindings(
+	ctx context.Context,
+	iamc *clientiam.Client,
+	opts BootstrapOptions,
+	policies []*clientiam.IamPolicy,
+	sa *clientiam.ServiceAccount,
+	key string,
+	res *BootstrapResult,
+) error {
+	for i, policy := range policies {
+		if i >= len(res.Policies) {
+			return fmt.Errorf("internal: policy result missing for %s", policy.Identity)
+		}
+		outcome := &res.Policies[i]
+		if err := ensureBootstrapPolicyBinding(ctx, iamc, opts, policy, sa, key, outcome, res.WouldCreateServiceAccount); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func ensureBootstrapPolicyBinding(
+	ctx context.Context,
+	iamc *clientiam.Client,
+	opts BootstrapOptions,
+	policy *clientiam.IamPolicy,
+	sa *clientiam.ServiceAccount,
+	key string,
+	outcome *BootstrapPolicyResult,
+	wouldCreateServiceAccount bool,
+) error {
+	label := policy.Slug
+	if label == "" {
+		label = policy.Identity
+	}
+	if opts.DryRun {
+		if sa != nil {
+			ok, err := hasPolicyBindingForServiceAccount(ctx, iamc, policy.Identity, sa.Identity)
+			if err != nil {
+				return fmt.Errorf("list policy bindings for policy %s: %w", label, err)
+			}
+			if !ok {
+				outcome.WouldCreateBinding = true
+			}
+		} else if wouldCreateServiceAccount {
+			outcome.WouldCreateBinding = true
+		}
+		return nil
+	}
+
+	if sa == nil {
+		return nil
+	}
+
+	ok, err := hasPolicyBindingForServiceAccount(ctx, iamc, policy.Identity, sa.Identity)
+	if err != nil {
+		return fmt.Errorf("list policy bindings for policy %s: %w", label, err)
+	}
+	if ok {
+		return nil
+	}
+
+	_, err = createPolicyBindingForSA(ctx, iamc, policy, sa, opts.VCS, key)
+	if err != nil {
+		return fmt.Errorf("create policy binding for policy %s: %w", label, err)
+	}
+	outcome.CreatedBinding = true
 	return nil
 }
 

@@ -19,7 +19,7 @@ var (
 var bootstrapKubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
 	Short:   "Bootstrap workload identity for Kubernetes service accounts",
-	Aliases: []string{"k8s"},
+	Aliases: []string{"k8s", "kubectl", "kubernetes"},
 	Long: `Binds system:serviceaccount:<namespace>:<name> to a Thalassa service account via a federated identity.
 
 Thalassa clusters: pass --cluster to resolve the cluster and use the platform-managed federated identity
@@ -31,6 +31,14 @@ creates the federated identity provider if it does not exist yet.`,
 	Example: `  # Thalassa-managed cluster (OIDC provider from label kubernetes_cluster_id)
   tcloud iam workload-identity-federation bootstrap kubernetes --cluster my-cluster-slug \
     --namespace default --service-account my-app --role deployer
+
+  # Bind IAM policies
+  tcloud iam workload-identity-federation bootstrap kubernetes --cluster my-cluster-slug \
+    --namespace default --service-account my-app --policy ci-deploy
+
+  # Multiple organisation roles
+  tcloud iam workload-identity-federation bootstrap kubernetes --cluster my-cluster-slug \
+    --namespace default --service-account my-app --role deployer --role reader
 
   # Self-managed / custom issuer
   tcloud iam workload-identity-federation bootstrap kubernetes --issuer https://k8s.example.com \

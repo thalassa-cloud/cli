@@ -7,9 +7,10 @@ type BootstrapOptions struct {
 	VCS              string // ValueVCSGitHub, ValueVCSGitLab, or ValueVCSKubernetes
 	Repository       string // owner/repo (GitHub), group/project (GitLab), or namespace/sa (Kubernetes)
 	RefKind          RefKind
-	Ref              string // branch name, tag name, or environment name (GitHub)
-	GitLabRefType    string // branch, tag, etc. (GitLab id_token sub ref_type segment)
-	RoleRef          string // organisation role identity, slug, or name
+	Ref              string   // branch name, tag name, or environment name (GitHub)
+	GitLabRefType    string   // branch, tag, etc. (GitLab id_token sub ref_type segment)
+	RoleRefs         []string // organisation role identities, slugs, or names
+	PolicyRefs       []string // IAM policy identities, slugs, or names
 	TrustedAudiences []string
 	AllowedScopes    []clientiam.AccessCredentialsScope
 
@@ -31,6 +32,22 @@ type BootstrapOptions struct {
 	DryRun bool
 }
 
+// BootstrapRoleResult is one organisation role involved in bootstrap and its binding outcome.
+type BootstrapRoleResult struct {
+	Identity           string
+	Slug               string
+	CreatedBinding     bool
+	WouldCreateBinding bool
+}
+
+// BootstrapPolicyResult is one IAM policy involved in bootstrap and its binding outcome.
+type BootstrapPolicyResult struct {
+	Identity           string
+	Slug               string
+	CreatedBinding     bool
+	WouldCreateBinding bool
+}
+
 // BootstrapResult summarises what bootstrap did or would do.
 type BootstrapResult struct {
 	WIFKey                    string
@@ -39,18 +56,16 @@ type BootstrapResult struct {
 	ProviderIdentity          string
 	ServiceAccountIdentity    string
 	ServiceAccountSlug        string
-	RoleIdentity              string
-	RoleSlug                  string
+	Roles                     []BootstrapRoleResult
+	Policies                  []BootstrapPolicyResult
 	FederatedIdentityIdentity string
 
 	CreatedProvider              bool
 	CreatedServiceAccount        bool
-	CreatedRoleBinding           bool
 	CreatedFederatedIdentity     bool
 	UpdatedFederatedIdentity     bool // existing FI reconciled to bootstrap (scopes, audiences, labels, etc.)
 	WouldCreateProvider          bool
 	WouldCreateServiceAccount    bool
-	WouldCreateRoleBinding       bool
 	WouldCreateFederatedIdentity bool
 	WouldUpdateFederatedIdentity bool // dry-run: existing FI would be reconciled
 }

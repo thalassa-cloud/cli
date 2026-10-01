@@ -26,6 +26,12 @@ The JWT issuer is https://token.actions.githubusercontent.com. Match subjects wi
 	Example: `  # Main branch (JWT aud defaults to context API URL)
   tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref main --role deployer
 
+  # Bind IAM policies instead of (or in addition to) organisation roles
+  tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref main --policy ci-deploy --policy ci-read
+
+  # Multiple organisation roles
+  tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref main --role deployer --role reader
+
   # Specific ref kind
   tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref-kind branch --ref main --role deployer
 

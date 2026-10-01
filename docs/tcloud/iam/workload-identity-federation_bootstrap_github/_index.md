@@ -3,7 +3,7 @@ linkTitle: "tcloud iam workload-identity-federation bootstrap github"
 title: "iam workload-identity-federation bootstrap github"
 slug: tcloud_iam_workload-identity-federation_bootstrap_github
 url: /docs/tcloud/iam/workload-identity-federation_bootstrap_github/
-weight: 9875
+weight: 9872
 cascade:
   type: docs
 ---
@@ -28,6 +28,12 @@ tcloud iam workload-identity-federation bootstrap github [flags]
 ```
   # Main branch (JWT aud defaults to context API URL)
   tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref main --role deployer
+
+  # Bind IAM policies instead of (or in addition to) organisation roles
+  tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref main --policy ci-deploy --policy ci-read
+
+  # Multiple organisation roles
+  tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref main --role deployer --role reader
 
   # Specific ref kind
   tcloud iam workload-identity-federation bootstrap github --repository acme/api --ref-kind branch --ref main --role deployer
@@ -58,13 +64,15 @@ tcloud iam workload-identity-federation bootstrap github [flags]
   -c, --context string                Context name
       --debug                         Debug mode
       --dry-run                       Print planned changes without calling the API
+      --ignore-dir-config             Ignore directory-local .thalassa defaults
       --name string                   Base name for the Thalassa service account and federated identity (federated identity becomes <name>-fi; default: wif-<platform>-<key>)
       --no-hints                      Do not print platform hints after bootstrap
   -O, --organisation string           Organisation slug or identity (overrides context)
+      --policy strings                IAM policy identity, slug, or name (repeatable; at least one --role or --policy required)
   -P, --project string                Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --provider-description string   Optional description when creating the federated identity provider
       --provider-name string          Optional display name when creating the federated identity provider
-      --role string                   Organisation role identity, slug, or name (required)
+      --role strings                  Organisation role identity, slug, or name (repeatable; at least one --role or --policy required)
       --scope strings                 Federated identity allowed scopes: api:read, api:write, kubernetes, objectStorage (default: api:read,api:write)
       --token string                  Personal access token (overrides context)
       --trusted-audience strings      JWT aud values to trust (repeatable; default: current context API URL, e.g. https://api.thalassa.cloud)

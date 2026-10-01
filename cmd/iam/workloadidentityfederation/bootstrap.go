@@ -14,7 +14,8 @@ import (
 
 // Persistent flags shared by all bootstrap <platform> subcommands.
 var (
-	flagRole             string
+	flagRoles            []string
+	flagPolicies         []string
 	flagTrustedAudiences []string
 	flagScopes           []string
 	flagProviderName     string
@@ -28,7 +29,9 @@ var bootstrapCmd = &cobra.Command{
 	Use:   "bootstrap",
 	Short: "Provision workload identity for GitHub, GitLab, or Kubernetes",
 	Long: fmt.Sprintf(`Creates (when missing) a federated OIDC identity provider, a Thalassa service account,
-a role binding to your organisation role, and a federated identity for the workload JWT subject.
+bindings to organisation role(s) and/or IAM policy(ies), and a federated identity for the workload JWT subject.
+
+Provide at least one --role or --policy (both may be repeated and combined).
 
 Resources are labelled %s=%s and %s=<github|gitlab|kubernetes>.
 
@@ -41,7 +44,11 @@ Subcommands:
 }
 
 func executeBootstrap(cmd *cobra.Command, opts BootstrapOptions) error {
-	opts.RoleRef = strings.TrimSpace(flagRole)
+	opts.RoleRefs = normalizeStringRefs(flagRoles)
+	opts.PolicyRefs = normalizeStringRefs(flagPolicies)
+	if len(opts.RoleRefs) == 0 && len(opts.PolicyRefs) == 0 {
+		return fmt.Errorf("at least one --role or --policy is required")
+	}
 	opts.ProviderDisplayName = strings.TrimSpace(flagProviderName)
 	opts.ProviderDescription = strings.TrimSpace(flagProviderDesc)
 	opts.ResourceName = strings.TrimSpace(flagBootstrapName)
@@ -82,6 +89,30 @@ func executeBootstrap(cmd *cobra.Command, opts BootstrapOptions) error {
 	return nil
 }
 
+// normalizeStringRefs trims and de-duplicates flag values (case-insensitive on the raw ref).
+func normalizeStringRefs(refs []string) []string {
+	seen := make(map[string]struct{}, len(refs))
+	out := make([]string, 0, len(refs))
+	for _, ref := range refs {
+		ref = strings.TrimSpace(ref)
+		if ref == "" {
+			continue
+		}
+		key := strings.ToLower(ref)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		out = append(out, ref)
+	}
+	return out
+}
+
+// normalizeRoleRefs is kept for tests; prefer normalizeStringRefs.
+func normalizeRoleRefs(refs []string) []string {
+	return normalizeStringRefs(refs)
+}
+
 // parseGitHubRefKind parses --ref-kind for the github bootstrap subcommand.
 func parseGitHubRefKind(s string) (RefKind, error) {
 	s = strings.ToLower(strings.TrimSpace(s))
@@ -98,7 +129,8 @@ func parseGitHubRefKind(s string) (RefKind, error) {
 
 func init() {
 	p := bootstrapCmd.PersistentFlags()
-	p.StringVar(&flagRole, "role", "", "Organisation role identity, slug, or name (required)")
+	p.StringSliceVar(&flagRoles, "role", nil, "Organisation role identity, slug, or name (repeatable; at least one --role or --policy required)")
+	p.StringSliceVar(&flagPolicies, "policy", nil, "IAM policy identity, slug, or name (repeatable; at least one --role or --policy required)")
 	p.StringSliceVar(&flagTrustedAudiences, "trusted-audience", nil, "JWT aud values to trust (repeatable; default: current context API URL, e.g. https://api.thalassa.cloud)")
 	p.StringSliceVar(&flagScopes, "scope", nil, "Federated identity allowed scopes: api:read, api:write, kubernetes, objectStorage (default: api:read,api:write)")
 	p.StringVar(&flagProviderName, "provider-name", "", "Optional display name when creating the federated identity provider")
@@ -107,8 +139,8 @@ func init() {
 	p.BoolVar(&flagDryRun, "dry-run", false, "Print planned changes without calling the API")
 	p.BoolVar(&flagNoHints, "no-hints", false, "Do not print platform hints after bootstrap")
 
-	_ = bootstrapCmd.MarkPersistentFlagRequired("role")
 	_ = bootstrapCmd.RegisterFlagCompletionFunc("role", completion.CompleteIAMOrganisationRoleIdentityFlag)
+	_ = bootstrapCmd.RegisterFlagCompletionFunc("policy", completion.CompleteIAMPolicyIdentityFlag)
 
 	bootstrapCmd.AddCommand(bootstrapGitHubCmd, bootstrapGitLabCmd, bootstrapKubernetesCmd)
 }

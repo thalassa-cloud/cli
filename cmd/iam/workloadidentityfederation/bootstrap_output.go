@@ -39,18 +39,39 @@ func termDim(s string) string {
 	return "\x1b[2m" + s + "\x1b[0m"
 }
 
-func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
-	check := termGreen("✔")
-	would := "○"
+func bootstrapOutcomeMarkers() (check, would string) {
+	check = termGreen("✔")
+	would = "○"
 	if stdoutIsTTY() {
 		would = "\x1b[33m○\x1b[0m" // amber for planned
 	}
+	return check, would
+}
+
+func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
+	check, would := bootstrapOutcomeMarkers()
 
 	fmt.Printf("%s Bootstrap workload identity (%s)\n\n", termCyan("►"), termBold(vcs))
 
-	fmt.Printf("%s Organisation role - %s %s\n", check, res.RoleSlug, termDim("("+res.RoleIdentity+")"))
+	for _, role := range res.Roles {
+		fmt.Printf("%s Organisation role - %s %s\n", check, role.Slug, termDim("("+role.Identity+")"))
+	}
+	for _, policy := range res.Policies {
+		fmt.Printf("%s IAM policy - %s %s\n", check, policy.Slug, termDim("("+policy.Identity+")"))
+	}
 
-	// Federated identity provider (OIDC issuer registration)
+	printBootstrapProviderOutcome(check, would, res, dry)
+	printBootstrapServiceAccountOutcome(check, would, res, dry)
+	printBootstrapFederatedIdentityOutcome(check, would, res, dry)
+	printBootstrapRoleBindingOutcomes(check, would, res.Roles, dry)
+	printBootstrapPolicyBindingOutcomes(check, would, res.Policies, dry)
+
+	fmt.Println()
+	fmt.Printf("  %s %s\n", termDim("issuer:"), res.Issuer)
+	fmt.Printf("  %s %s\n", termDim("JWT sub:"), res.ProviderSubject)
+}
+
+func printBootstrapProviderOutcome(check, would string, res *BootstrapResult, dry bool) {
 	switch {
 	case dry && res.WouldCreateProvider:
 		fmt.Printf("%s Federated identity provider - would create %s\n", would, termDim("("+res.Issuer+")"))
@@ -61,8 +82,9 @@ func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
 	default:
 		fmt.Printf("%s Federated identity provider - already present %s\n", check, res.ProviderIdentity)
 	}
+}
 
-	// Thalassa service account
+func printBootstrapServiceAccountOutcome(check, would string, res *BootstrapResult, dry bool) {
 	switch {
 	case dry && res.WouldCreateServiceAccount:
 		fmt.Printf("%s Service account - would create\n", would)
@@ -73,8 +95,9 @@ func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
 	default:
 		fmt.Printf("%s Service account - already present %s %s\n", check, res.ServiceAccountIdentity, termDim("("+res.ServiceAccountSlug+")"))
 	}
+}
 
-	// Federated identity (JWT subject → service account)
+func printBootstrapFederatedIdentityOutcome(check, would string, res *BootstrapResult, dry bool) {
 	switch {
 	case dry && res.WouldCreateFederatedIdentity:
 		fmt.Printf("%s Federated identity - would create %s\n", would, termDim("("+res.ProviderSubject+")"))
@@ -89,20 +112,37 @@ func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
 	default:
 		fmt.Printf("%s Federated identity - already present %s\n", check, res.FederatedIdentityIdentity)
 	}
+}
 
-	// Organisation role binding
+func printBootstrapBindingLine(check, would, kind, label string, dry, wouldCreate, created bool) {
 	switch {
-	case dry && res.WouldCreateRoleBinding:
-		fmt.Printf("%s Organisation role binding - would create\n", would)
+	case dry && wouldCreate:
+		fmt.Printf("%s %s (%s) - would create\n", would, kind, label)
 	case dry:
-		fmt.Printf("%s Organisation role binding - already present\n", check)
-	case res.CreatedRoleBinding:
-		fmt.Printf("%s Organisation role binding - created\n", check)
+		fmt.Printf("%s %s (%s) - already present\n", check, kind, label)
+	case created:
+		fmt.Printf("%s %s (%s) - created\n", check, kind, label)
 	default:
-		fmt.Printf("%s Organisation role binding - already present\n", check)
+		fmt.Printf("%s %s (%s) - already present\n", check, kind, label)
 	}
+}
 
-	fmt.Println()
-	fmt.Printf("  %s %s\n", termDim("issuer:"), res.Issuer)
-	fmt.Printf("  %s %s\n", termDim("JWT sub:"), res.ProviderSubject)
+func printBootstrapRoleBindingOutcomes(check, would string, roles []BootstrapRoleResult, dry bool) {
+	for _, role := range roles {
+		label := role.Slug
+		if label == "" {
+			label = role.Identity
+		}
+		printBootstrapBindingLine(check, would, "Organisation role binding", label, dry, role.WouldCreateBinding, role.CreatedBinding)
+	}
+}
+
+func printBootstrapPolicyBindingOutcomes(check, would string, policies []BootstrapPolicyResult, dry bool) {
+	for _, policy := range policies {
+		label := policy.Slug
+		if label == "" {
+			label = policy.Identity
+		}
+		printBootstrapBindingLine(check, would, "IAM policy binding", label, dry, policy.WouldCreateBinding, policy.CreatedBinding)
+	}
 }
