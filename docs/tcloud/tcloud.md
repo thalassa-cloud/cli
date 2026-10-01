@@ -44,6 +44,7 @@ A CLI for working with the Thalassa Cloud Platform
 * [tcloud object-storage](/docs/tcloud/tcloud_object-storage/)	 - Manage object storage buckets
 * [tcloud oidc](/docs/tcloud/tcloud_oidc/)	 - OIDC token operations
 * [tcloud projects](/docs/tcloud/tcloud_projects/)	 - Manage projects (beta)
+* [tcloud quick-launch](/docs/tcloud/tcloud_quick-launch/)	 - Provision stacks from quick-launch templates
 * [tcloud quotas](/docs/tcloud/tcloud_quotas/)	 - View and request changes to organisation resource quotas
 * [tcloud regions](/docs/tcloud/tcloud_regions/)	 - Thalassa Cloud Platform Regions
 * [tcloud registry](/docs/tcloud/tcloud_registry/)	 - Manage the Thalassa container registry

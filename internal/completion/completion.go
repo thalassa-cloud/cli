@@ -15,6 +15,7 @@ import (
 	"github.com/thalassa-cloud/client-go/kms"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 	"github.com/thalassa-cloud/client-go/observability"
+	"github.com/thalassa-cloud/client-go/quicklaunch"
 	"github.com/thalassa-cloud/client-go/tfs"
 )
 
@@ -849,6 +850,30 @@ func CompleteObservabilityWorkspaceID(cmd *cobra.Command, args []string, toCompl
 	for _, workspace := range workspaces {
 		desc := fmt.Sprintf("%s (%s)", workspace.Name, workspace.Status)
 		completions = append(completions, workspace.Identity+"\t"+desc)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
+// CompleteQuickLaunchIdentity provides completion for quick-launch job identities.
+func CompleteQuickLaunchIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	jobs, err := client.QuickLaunch().ListQuickLaunches(cmd.Context(), &quicklaunch.ListQuickLaunchesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(jobs))
+	for _, ql := range jobs {
+		desc := fmt.Sprintf("%s (%s, %s)", ql.Name, ql.Template, ql.Status)
+		completions = append(completions, ql.Identity+"\t"+desc)
 	}
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
