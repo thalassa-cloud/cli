@@ -3,6 +3,7 @@ package iam
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/thalassa-cloud/cli/cmd/iam/accesselevations"
 	"github.com/thalassa-cloud/cli/cmd/iam/federatedidentities"
 	"github.com/thalassa-cloud/cli/cmd/iam/federatedidentityproviders"
 	"github.com/thalassa-cloud/cli/cmd/iam/invites"
@@ -18,9 +19,9 @@ import (
 var IamCmd = &cobra.Command{
 	Use:   "iam",
 	Short: "Identity and access management for your organisation",
-	Long: `Manage teams, organisation members, custom roles, IAM policies, federated OIDC identities,
-and related resources. Commands apply to the organisation selected in your context
-(or the --organisation / -O flag).`,
+	Long: `Manage teams, organisation members, custom roles, IAM policies, access elevations,
+federated OIDC identities, and related resources. Commands apply to the organisation
+selected in your context (or the --organisation / -O flag).`,
 }
 
 func init() {
@@ -28,6 +29,7 @@ func init() {
 	IamCmd.AddCommand(members.MembersCmd)
 	IamCmd.AddCommand(roles.RolesCmd)
 	IamCmd.AddCommand(policies.PoliciesCmd)
+	IamCmd.AddCommand(accesselevations.AccessElevationsCmd)
 	IamCmd.AddCommand(federatedidentities.FederatedIdentitiesCmd)
 	IamCmd.AddCommand(federatedidentityproviders.FederatedIdentityProvidersCmd)
 	IamCmd.AddCommand(invites.InvitesCmd)
