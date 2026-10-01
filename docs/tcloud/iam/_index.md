@@ -13,9 +13,9 @@ Identity and access management for your organisation
 
 ### Synopsis
 
-Manage teams, organisation members, custom roles, IAM policies, federated OIDC identities,
-and related resources. Commands apply to the organisation selected in your context
-(or the --organisation / -O flag).
+Manage teams, organisation members, custom roles, IAM policies, access elevations,
+federated OIDC identities, and related resources. Commands apply to the organisation
+selected in your context (or the --organisation / -O flag).
 
 ### Options
 
@@ -41,6 +41,7 @@ and related resources. Commands apply to the organisation selected in your conte
 ### SEE ALSO
 
 * [tcloud](/docs/tcloud/tcloud/)	 - A CLI for working with the Thalassa Cloud Platform
+* [tcloud iam access-elevations](/docs/tcloud/iam/access-elevations/)	 - Request and review temporary IAM access elevations
 * [tcloud iam federated-identities](/docs/tcloud/iam/federated-identities/)	 - Federated identities (OIDC subject bindings)
 * [tcloud iam federated-identity-providers](/docs/tcloud/iam/federated-identity-providers/)	 - Federated OIDC identity providers
 * [tcloud iam invites](/docs/tcloud/iam/invites/)	 - Organisation member invitations

@@ -229,6 +229,65 @@ func CompleteIAMPolicyIdentity(cmd *cobra.Command, args []string, toComplete str
 	return completeIAMPolicyIdentities(cmd)
 }
 
+// CompleteIAMAccessElevationIdentity completes access elevation identities (approver list, or --mine).
+func CompleteIAMAccessElevationIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+	if mine, _ := cmd.Flags().GetBool("mine"); mine {
+		return completeIAMMyAccessElevationIdentities(cmd)
+	}
+	return completeIAMAccessElevationIdentities(cmd)
+}
+
+// CompleteIAMMyAccessElevationIdentity completes the caller's own access elevation identities.
+func CompleteIAMMyAccessElevationIdentity(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+	return completeIAMMyAccessElevationIdentities(cmd)
+}
+
+func completeIAMAccessElevationIdentities(cmd *cobra.Command) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	requests, err := client.IAM().ListAccessElevations(cmd.Context())
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	out := make([]string, 0, len(requests))
+	for _, req := range requests {
+		desc := string(req.Status)
+		if req.Reason != "" {
+			desc += " - " + req.Reason
+		}
+		out = append(out, req.Identity+"\t"+desc)
+	}
+	return out, cobra.ShellCompDirectiveNoFileComp
+}
+
+func completeIAMMyAccessElevationIdentities(cmd *cobra.Command) ([]string, cobra.ShellCompDirective) {
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	requests, err := client.IAM().ListMyAccessElevations(cmd.Context())
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	out := make([]string, 0, len(requests))
+	for _, req := range requests {
+		desc := string(req.Status)
+		if req.Reason != "" {
+			desc += " - " + req.Reason
+		}
+		out = append(out, req.Identity+"\t"+desc)
+	}
+	return out, cobra.ShellCompDirectiveNoFileComp
+}
+
 // CompleteIAMPolicyResourceType completes resource types usable in IAM policy rules.
 func CompleteIAMPolicyResourceType(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	client, err := thalassaclient.GetThalassaClient()
