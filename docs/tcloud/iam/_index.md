@@ -3,7 +3,7 @@ linkTitle: "tcloud iam"
 title: "iam"
 slug: tcloud_iam
 url: /docs/tcloud/tcloud_iam/
-weight: 9870
+weight: 9853
 cascade:
   type: docs
 ---
@@ -13,7 +13,7 @@ Identity and access management for your organisation
 
 ### Synopsis
 
-Manage teams, organisation members, custom roles, federated OIDC identities,
+Manage teams, organisation members, custom roles, IAM policies, federated OIDC identities,
 and related resources. Commands apply to the organisation selected in your context
 (or the --organisation / -O flag).
 
@@ -32,6 +32,7 @@ and related resources. Commands apply to the organisation selected in your conte
       --client-secret string   OIDC client secret for OIDC authentication (overrides context)
   -c, --context string         Context name
       --debug                  Debug mode
+      --ignore-dir-config      Ignore directory-local .thalassa defaults
   -O, --organisation string    Organisation slug or identity (overrides context)
   -P, --project string         Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --token string           Personal access token (overrides context)
@@ -44,6 +45,7 @@ and related resources. Commands apply to the organisation selected in your conte
 * [tcloud iam federated-identity-providers](/docs/tcloud/iam/federated-identity-providers/)	 - Federated OIDC identity providers
 * [tcloud iam invites](/docs/tcloud/iam/invites/)	 - Organisation member invitations
 * [tcloud iam members](/docs/tcloud/iam/members/)	 - Organisation members (owners and members)
+* [tcloud iam policies](/docs/tcloud/iam/policies/)	 - IAM policies, permission rules, and bindings
 * [tcloud iam roles](/docs/tcloud/iam/roles/)	 - Organisation IAM roles, permission rules, and bindings
 * [tcloud iam service-accounts](/docs/tcloud/iam/service-accounts/)	 - Organisation service accounts
 * [tcloud iam teams](/docs/tcloud/iam/teams/)	 - Manage organisation teams
