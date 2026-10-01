@@ -23,6 +23,7 @@ import (
 	"github.com/thalassa-cloud/cli/cmd/objectstorage"
 	"github.com/thalassa-cloud/cli/cmd/oidc"
 	"github.com/thalassa-cloud/cli/cmd/projects"
+	"github.com/thalassa-cloud/cli/cmd/quicklaunch"
 	"github.com/thalassa-cloud/cli/cmd/quotas"
 	"github.com/thalassa-cloud/cli/cmd/registry"
 	"github.com/thalassa-cloud/cli/cmd/secrets"
@@ -91,6 +92,7 @@ func init() {
 	RootCmd.AddCommand(registry.RegistryCmd)
 	RootCmd.AddCommand(oidc.OidcCmd)
 	RootCmd.AddCommand(quotas.QuotasCmd)
+	RootCmd.AddCommand(quicklaunch.QuickLaunchCmd)
 
 	cobra.OnInitialize(contextstate.Init)
 }
