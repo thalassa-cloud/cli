@@ -60,3 +60,32 @@ func TestScopesEqual(t *testing.T) {
 	assert.True(t, scopesEqual(nil, []clientiam.AccessCredentialsScope{}))
 	assert.False(t, scopesEqual(a, c))
 }
+
+func TestNormalizeRoleRefs(t *testing.T) {
+	tests := []struct {
+		name string
+		in   []string
+		want []string
+	}{
+		{
+			name: "trims and drops empties",
+			in:   []string{" deployer ", "", "reader"},
+			want: []string{"deployer", "reader"},
+		},
+		{
+			name: "dedupes case-insensitively preserving first casing",
+			in:   []string{"Deployer", "deployer", "READER", "reader"},
+			want: []string{"Deployer", "READER"},
+		},
+		{
+			name: "nil input",
+			in:   nil,
+			want: []string{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, normalizeRoleRefs(tt.in))
+		})
+	}
+}

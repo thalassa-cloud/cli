@@ -3,7 +3,7 @@ linkTitle: "tcloud iam workload-identity-federation bootstrap gitlab"
 title: "iam workload-identity-federation bootstrap gitlab"
 slug: tcloud_iam_workload-identity-federation_bootstrap_gitlab
 url: /docs/tcloud/iam/workload-identity-federation_bootstrap_gitlab/
-weight: 9874
+weight: 9871
 cascade:
   type: docs
 ---
@@ -27,6 +27,9 @@ tcloud iam workload-identity-federation bootstrap gitlab [flags]
 ```
   # GitLab.com, branch main
   tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --role deployer
+
+  # Multiple organisation roles
+  tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref main --role deployer --role reader
 
   # Tag pipeline
   tcloud iam workload-identity-federation bootstrap gitlab --repository mygroup/myproject --ref v1.0.0 --ref-type tag --role deployer
@@ -55,13 +58,14 @@ tcloud iam workload-identity-federation bootstrap gitlab [flags]
   -c, --context string                Context name
       --debug                         Debug mode
       --dry-run                       Print planned changes without calling the API
+      --ignore-dir-config             Ignore directory-local .thalassa defaults
       --name string                   Base name for the Thalassa service account and federated identity (federated identity becomes <name>-fi; default: wif-<platform>-<key>)
       --no-hints                      Do not print platform hints after bootstrap
   -O, --organisation string           Organisation slug or identity (overrides context)
   -P, --project string                Project identity (overrides context; slug is resolved to identity; use "root" for organisation scope)
       --provider-description string   Optional description when creating the federated identity provider
       --provider-name string          Optional display name when creating the federated identity provider
-      --role string                   Organisation role identity, slug, or name (required)
+      --role strings                  Organisation role identity, slug, or name (required; repeatable)
       --scope strings                 Federated identity allowed scopes: api:read, api:write, kubernetes, objectStorage (default: api:read,api:write)
       --token string                  Personal access token (overrides context)
       --trusted-audience strings      JWT aud values to trust (repeatable; default: current context API URL, e.g. https://api.thalassa.cloud)

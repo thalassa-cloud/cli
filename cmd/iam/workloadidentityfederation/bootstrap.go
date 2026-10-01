@@ -14,7 +14,7 @@ import (
 
 // Persistent flags shared by all bootstrap <platform> subcommands.
 var (
-	flagRole             string
+	flagRoles            []string
 	flagTrustedAudiences []string
 	flagScopes           []string
 	flagProviderName     string
@@ -28,7 +28,7 @@ var bootstrapCmd = &cobra.Command{
 	Use:   "bootstrap",
 	Short: "Provision workload identity for GitHub, GitLab, or Kubernetes",
 	Long: fmt.Sprintf(`Creates (when missing) a federated OIDC identity provider, a Thalassa service account,
-a role binding to your organisation role, and a federated identity for the workload JWT subject.
+role binding(s) to your organisation role(s), and a federated identity for the workload JWT subject.
 
 Resources are labelled %s=%s and %s=<github|gitlab|kubernetes>.
 
@@ -41,7 +41,7 @@ Subcommands:
 }
 
 func executeBootstrap(cmd *cobra.Command, opts BootstrapOptions) error {
-	opts.RoleRef = strings.TrimSpace(flagRole)
+	opts.RoleRefs = normalizeRoleRefs(flagRoles)
 	opts.ProviderDisplayName = strings.TrimSpace(flagProviderName)
 	opts.ProviderDescription = strings.TrimSpace(flagProviderDesc)
 	opts.ResourceName = strings.TrimSpace(flagBootstrapName)
@@ -82,6 +82,25 @@ func executeBootstrap(cmd *cobra.Command, opts BootstrapOptions) error {
 	return nil
 }
 
+// normalizeRoleRefs trims and de-duplicates --role values (case-insensitive on the raw ref).
+func normalizeRoleRefs(refs []string) []string {
+	seen := make(map[string]struct{}, len(refs))
+	out := make([]string, 0, len(refs))
+	for _, ref := range refs {
+		ref = strings.TrimSpace(ref)
+		if ref == "" {
+			continue
+		}
+		key := strings.ToLower(ref)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		out = append(out, ref)
+	}
+	return out
+}
+
 // parseGitHubRefKind parses --ref-kind for the github bootstrap subcommand.
 func parseGitHubRefKind(s string) (RefKind, error) {
 	s = strings.ToLower(strings.TrimSpace(s))
@@ -98,7 +117,7 @@ func parseGitHubRefKind(s string) (RefKind, error) {
 
 func init() {
 	p := bootstrapCmd.PersistentFlags()
-	p.StringVar(&flagRole, "role", "", "Organisation role identity, slug, or name (required)")
+	p.StringSliceVar(&flagRoles, "role", nil, "Organisation role identity, slug, or name (required; repeatable)")
 	p.StringSliceVar(&flagTrustedAudiences, "trusted-audience", nil, "JWT aud values to trust (repeatable; default: current context API URL, e.g. https://api.thalassa.cloud)")
 	p.StringSliceVar(&flagScopes, "scope", nil, "Federated identity allowed scopes: api:read, api:write, kubernetes, objectStorage (default: api:read,api:write)")
 	p.StringVar(&flagProviderName, "provider-name", "", "Optional display name when creating the federated identity provider")

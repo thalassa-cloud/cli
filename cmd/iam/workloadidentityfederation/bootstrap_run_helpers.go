@@ -242,6 +242,27 @@ func ensureBootstrapFederatedIdentity(
 	return fi, nil
 }
 
+func ensureBootstrapRoleBindings(
+	ctx context.Context,
+	iamc *clientiam.Client,
+	opts BootstrapOptions,
+	roles []*clientiam.OrganisationRole,
+	sa *clientiam.ServiceAccount,
+	key string,
+	res *BootstrapResult,
+) error {
+	for i, role := range roles {
+		if i >= len(res.Roles) {
+			return fmt.Errorf("internal: role result missing for %s", role.Identity)
+		}
+		outcome := &res.Roles[i]
+		if err := ensureBootstrapRoleBinding(ctx, iamc, opts, role, sa, key, outcome, res.WouldCreateServiceAccount); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func ensureBootstrapRoleBinding(
 	ctx context.Context,
 	iamc *clientiam.Client,
@@ -249,19 +270,20 @@ func ensureBootstrapRoleBinding(
 	role *clientiam.OrganisationRole,
 	sa *clientiam.ServiceAccount,
 	key string,
-	res *BootstrapResult,
+	outcome *BootstrapRoleResult,
+	wouldCreateServiceAccount bool,
 ) error {
 	if opts.DryRun {
 		if sa != nil {
 			ok, err := hasRoleBindingForServiceAccount(ctx, iamc, role.Identity, sa.Identity)
 			if err != nil {
-				return fmt.Errorf("list role bindings: %w", err)
+				return fmt.Errorf("list role bindings for role %s: %w", role.Slug, err)
 			}
 			if !ok {
-				res.WouldCreateRoleBinding = true
+				outcome.WouldCreateBinding = true
 			}
-		} else if res.WouldCreateServiceAccount {
-			res.WouldCreateRoleBinding = true
+		} else if wouldCreateServiceAccount {
+			outcome.WouldCreateBinding = true
 		}
 		return nil
 	}
@@ -272,7 +294,7 @@ func ensureBootstrapRoleBinding(
 
 	ok, err := hasRoleBindingForServiceAccount(ctx, iamc, role.Identity, sa.Identity)
 	if err != nil {
-		return fmt.Errorf("list role bindings: %w", err)
+		return fmt.Errorf("list role bindings for role %s: %w", role.Slug, err)
 	}
 	if ok {
 		return nil
@@ -280,9 +302,9 @@ func ensureBootstrapRoleBinding(
 
 	_, err = createRoleBindingForSA(ctx, iamc, role, sa, opts.VCS, key)
 	if err != nil {
-		return fmt.Errorf("create role binding: %w", err)
+		return fmt.Errorf("create role binding for role %s: %w", role.Slug, err)
 	}
-	res.CreatedRoleBinding = true
+	outcome.CreatedBinding = true
 	return nil
 }
 

@@ -227,6 +227,27 @@ func resolveOrganisationRole(ctx context.Context, c *clientiam.Client, ref strin
 	return nil, fmt.Errorf("organisation role not found: %s", ref)
 }
 
+// resolveOrganisationRoles resolves each --role ref and de-duplicates by role identity.
+func resolveOrganisationRoles(ctx context.Context, c *clientiam.Client, refs []string) ([]*clientiam.OrganisationRole, error) {
+	if len(refs) == 0 {
+		return nil, fmt.Errorf("at least one --role is required")
+	}
+	out := make([]*clientiam.OrganisationRole, 0, len(refs))
+	seen := make(map[string]struct{}, len(refs))
+	for _, ref := range refs {
+		role, err := resolveOrganisationRole(ctx, c, ref)
+		if err != nil {
+			return nil, err
+		}
+		if _, ok := seen[role.Identity]; ok {
+			continue
+		}
+		seen[role.Identity] = struct{}{}
+		out = append(out, role)
+	}
+	return out, nil
+}
+
 func hasRoleBindingForServiceAccount(ctx context.Context, c *clientiam.Client, roleIdentity, saIdentity string) (bool, error) {
 	bindings, err := c.ListRoleBindings(ctx, roleIdentity, &clientiam.ListRoleBindingsRequest{})
 	if err != nil {
@@ -318,12 +339,17 @@ func RunBootstrap(ctx context.Context, client thalassa.Client, opts BootstrapOpt
 
 	scopes := defaultBootstrapScopes(opts)
 
-	role, err := resolveOrganisationRole(ctx, iamc, opts.RoleRef)
+	roles, err := resolveOrganisationRoles(ctx, iamc, opts.RoleRefs)
 	if err != nil {
 		return nil, err
 	}
-	res.RoleIdentity = role.Identity
-	res.RoleSlug = role.Slug
+	res.Roles = make([]BootstrapRoleResult, len(roles))
+	for i, role := range roles {
+		res.Roles[i] = BootstrapRoleResult{
+			Identity: role.Identity,
+			Slug:     role.Slug,
+		}
+	}
 
 	provider, err := ensureBootstrapProvider(ctx, iamc, opts, issuerSubject.issuer, issuerSubject.k8sClusterBoundProvider, res)
 	if err != nil {
@@ -341,7 +367,7 @@ func RunBootstrap(ctx context.Context, client thalassa.Client, opts BootstrapOpt
 		return nil, err
 	}
 
-	if err := ensureBootstrapRoleBinding(ctx, iamc, opts, role, sa, key, res); err != nil {
+	if err := ensureBootstrapRoleBindings(ctx, iamc, opts, roles, sa, key, res); err != nil {
 		return nil, err
 	}
 

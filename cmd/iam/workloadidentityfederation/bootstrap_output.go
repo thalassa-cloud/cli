@@ -48,7 +48,9 @@ func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
 
 	fmt.Printf("%s Bootstrap workload identity (%s)\n\n", termCyan("►"), termBold(vcs))
 
-	fmt.Printf("%s Organisation role - %s %s\n", check, res.RoleSlug, termDim("("+res.RoleIdentity+")"))
+	for _, role := range res.Roles {
+		fmt.Printf("%s Organisation role - %s %s\n", check, role.Slug, termDim("("+role.Identity+")"))
+	}
 
 	// Federated identity provider (OIDC issuer registration)
 	switch {
@@ -90,16 +92,22 @@ func printBootstrapOutcome(vcs string, res *BootstrapResult, dry bool) {
 		fmt.Printf("%s Federated identity - already present %s\n", check, res.FederatedIdentityIdentity)
 	}
 
-	// Organisation role binding
-	switch {
-	case dry && res.WouldCreateRoleBinding:
-		fmt.Printf("%s Organisation role binding - would create\n", would)
-	case dry:
-		fmt.Printf("%s Organisation role binding - already present\n", check)
-	case res.CreatedRoleBinding:
-		fmt.Printf("%s Organisation role binding - created\n", check)
-	default:
-		fmt.Printf("%s Organisation role binding - already present\n", check)
+	// Organisation role bindings (one line per role)
+	for _, role := range res.Roles {
+		label := role.Slug
+		if label == "" {
+			label = role.Identity
+		}
+		switch {
+		case dry && role.WouldCreateBinding:
+			fmt.Printf("%s Organisation role binding (%s) - would create\n", would, label)
+		case dry:
+			fmt.Printf("%s Organisation role binding (%s) - already present\n", check, label)
+		case role.CreatedBinding:
+			fmt.Printf("%s Organisation role binding (%s) - created\n", check, label)
+		default:
+			fmt.Printf("%s Organisation role binding (%s) - already present\n", check, label)
+		}
 	}
 
 	fmt.Println()
