@@ -16,7 +16,7 @@ var organisationCmd = &cobra.Command{
 	Aliases: []string{"set-organisation", "use-organisation", "organisation", "org"},
 	Args:    cobra.RangeArgs(0, 1),
 	Short:   "Set the organisation in the current-context",
-	Long:    "Set the organisation in the current-context",
+	Long:    "Set the organisation in the current-context. Changing the organisation clears the project.",
 	Example: "tcloud context use-organisation <organisation>",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		currentContext, err := contextstate.GetContextConfiguration()
@@ -27,7 +27,7 @@ var organisationCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		currentContext.Organisation = selectedOrganisation
+		applyOrganisationToContext(&currentContext, selectedOrganisation)
 		err = contextstate.CombineConfigContext(currentContext)
 		if err != nil {
 			return err
