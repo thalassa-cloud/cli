@@ -45,7 +45,7 @@ var dnssecGetCmd = &cobra.Command{
 			fmt.Sprintf("%v", status.Enabled),
 			fmt.Sprintf("%v", status.DsDelegated),
 			dsCount,
-			status.Region,
+			status.Region.Slug,
 			status.KmsKeyIdentity,
 		}}
 		if noHeader {
@@ -97,7 +97,7 @@ var dnssecEnableCmd = &cobra.Command{
 
 		body := [][]string{{
 			fmt.Sprintf("%v", status.Enabled),
-			status.Region,
+			status.Region.Slug,
 			status.KmsKeyIdentity,
 		}}
 		if noHeader {
