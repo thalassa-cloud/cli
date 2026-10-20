@@ -13,7 +13,7 @@ Set the organisation in the current-context
 
 ### Synopsis
 
-Set the organisation in the current-context
+Set the organisation in the current-context.
 
 ```
 tcloud context organisation <organisation> [flags]

@@ -98,7 +98,7 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		currentContext.Organisation = organisation
+		applyOrganisationToContext(&currentContext, organisation)
 		err = contextstate.CombineConfigContext(currentContext)
 		if err != nil {
 			return err
