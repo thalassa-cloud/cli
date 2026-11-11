@@ -16,12 +16,16 @@ var KubernetesNodePoolsCmd = &cobra.Command{
   tcloud kubernetes nodepools create --cluster my-cluster --name worker --machine-type pgp-medium --num-nodes 3 --availability-zone nl-01a
 
   # Delete a nodepool
-  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool`,
+  tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool
+
+  # Upgrade a node pool version
+  tcloud kubernetes nodepools upgrade --cluster my-cluster --name worker`,
 }
 
 func init() {
 	KubernetesNodePoolsCmd.AddCommand(listCmd)
 	KubernetesNodePoolsCmd.AddCommand(createCmd)
 	KubernetesNodePoolsCmd.AddCommand(updateCmd)
+	KubernetesNodePoolsCmd.AddCommand(upgradeCmd)
 	KubernetesNodePoolsCmd.AddCommand(deleteCmd)
 }

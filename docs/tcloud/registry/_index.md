@@ -20,7 +20,7 @@ Manage container registry namespaces, repositories, configuration, and retention
 ```
 tcloud registry namespaces list
 tcloud registry namespaces create --namespace my-app --region eu-west-1
-tcloud registry repositories list --namespace crns-123
+tcloud registry repositories list
 ```
 
 ### Options

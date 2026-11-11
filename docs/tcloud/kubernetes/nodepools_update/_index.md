@@ -27,11 +27,16 @@ Examples:
   # Update machine type
   tcloud kubernetes nodepools update --cluster my-cluster --name worker --machine-type pgp-large
 
+  # Update the Kubernetes version
+  tcloud kubernetes nodepools update --cluster my-cluster --name worker --kubernetes-version 1.32.2
+
   # Update multiple fields
   tcloud kubernetes nodepools update --cluster my-cluster --name worker --num-nodes 5 --enable-autohealing
 
+To choose the next version within the Kubernetes version policy, use 'tcloud kubernetes nodepools upgrade'.
+
 Note: Use 'tcloud kubernetes nodepools label' and 'tcloud kubernetes nodepools annotate' commands
-to manage labels and annotations separately.
+to manage labels and annotations separately. Those values are resent with the update so they are not cleared.
 
 ```
 tcloud kubernetes nodepools update [flags]
@@ -40,20 +45,21 @@ tcloud kubernetes nodepools update [flags]
 ### Options
 
 ```
-      --cluster string            Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
-      --enable-autohealing        Enable autohealing for the node pool
-      --enable-autoscaling        Enable autoscaling for the node pool
-  -h, --help                      help for update
-      --machine-type string       Machine type for the node pool
-      --max-nodes int             Maximum number of nodes (when autoscaling is enabled)
-      --min-nodes int             Minimum number of nodes (when autoscaling is enabled)
-      --name string               Node pool name, identity, or slug (required)
-      --node-taints strings       Node taints in key=value:effect or key:effect format (e.g., 'dedicated=gpu:NoSchedule'). Replaces existing taints.
-      --num-nodes int             Number of nodes in the node pool (only when autoscaling is disabled)
-      --security-groups strings   Security group identities to attach to node pool machines
-      --upgrade-strategy string   Upgrade strategy: manual, auto, always, on-delete, inplace, or never
-      --wait                      Wait for the node pool update to complete
-      --wait-timeout duration     Maximum time to wait for the node pool update to complete (default 20m0s)
+      --cluster string              Cluster identity, name, or slug (defaults to kubernetes.cluster in .thalassa)
+      --enable-autohealing          Enable autohealing for the node pool
+      --enable-autoscaling          Enable autoscaling for the node pool
+  -h, --help                        help for update
+      --kubernetes-version string   Kubernetes version for the node pool (identity, slug, name, or version)
+      --machine-type string         Machine type for the node pool
+      --max-nodes int               Maximum number of nodes (when autoscaling is enabled)
+      --min-nodes int               Minimum number of nodes (when autoscaling is enabled)
+      --name string                 Node pool name, identity, or slug (required)
+      --node-taints strings         Node taints in key=value:effect or key:effect format (e.g., 'dedicated=gpu:NoSchedule'). Replaces existing taints.
+      --num-nodes int               Number of nodes in the node pool (only when autoscaling is disabled)
+      --security-groups strings     Security group identities to attach to node pool machines
+      --upgrade-strategy string     Upgrade strategy: manual, auto, always, on-delete, inplace, or never
+      --wait                        Wait for the node pool update to complete
+      --wait-timeout duration       Maximum time to wait for the node pool update to complete (default 20m0s)
 ```
 
 ### Options inherited from parent commands

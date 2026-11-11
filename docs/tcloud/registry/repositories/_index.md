@@ -13,12 +13,14 @@ Manage container registry repositories
 
 ### Synopsis
 
-List and manage repositories within a container registry namespace. All commands require --namespace.
+List and manage repositories within a container registry namespace. Omit --namespace to list repositories in every namespace, or pass --id for a namespace identity. Other commands require --namespace.
 
 ### Examples
 
 ```
-tcloud registry repositories list --namespace crns-123
+tcloud registry repositories list
+tcloud registry repositories list --namespace my-app
+tcloud registry repositories list --id crns-123
 tcloud registry repositories delete --namespace crns-123 repo-456
 ```
 

@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/config/contextstate"
 	"github.com/thalassa-cloud/cli/internal/fzf"
+	"github.com/thalassa-cloud/cli/internal/kubernetes/version"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 
@@ -25,24 +25,6 @@ var (
 type VersionGroup struct {
 	MajorMinor string
 	Versions   []kubernetes.KubernetesVersion
-}
-
-// selectUpgradeVersion selects the appropriate upgrade version based on the current version
-// following Kubernetes versioning policy (max 1 minor version upgrade at a time)
-func selectUpgradeVersion(currentVersion semver.Version, versions []kubernetes.KubernetesVersion, requestedVersion string) (*kubernetes.KubernetesVersion, error) {
-	if requestedVersion != "" {
-		return findAndValidateRequestedVersion(currentVersion, versions, requestedVersion)
-	}
-
-	newerVersions, upgradeCandidates := collectUpgradeCandidates(currentVersion, versions)
-	if len(newerVersions) == 0 {
-		return nil, fmt.Errorf("already at the latest available version (%s)", currentVersion)
-	}
-	if len(upgradeCandidates) == 0 {
-		return nil, upgradePolicyBlockedError(currentVersion, newerVersions)
-	}
-
-	return selectBestUpgradeCandidate(currentVersion, upgradeCandidates)
 }
 
 var KubernetesUpgradeCmd = &cobra.Command{
@@ -101,10 +83,9 @@ var KubernetesUpgradeCmd = &cobra.Command{
 				continue
 			}
 
-			upgradeToVersion, err := selectUpgradeVersion(currentVersion, versions, upgradeClusterToVersion)
+			upgradeToVersion, err := version.SelectUpgradeVersion(currentVersion, versions, upgradeClusterToVersion)
 			if err != nil {
-				// Check if it's the "already at latest version" error
-				if upgradeClusterToVersion == "" && strings.Contains(err.Error(), "already at the latest available version") {
+				if upgradeClusterToVersion == "" && errors.Is(err, version.ErrAlreadyAtLatestVersion) {
 					fmt.Println("Cluster", cluster.Name, "is already at the latest available version:", cluster.ClusterVersion.KubernetesVersion)
 					continue
 				}

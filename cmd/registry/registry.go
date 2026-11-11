@@ -17,7 +17,7 @@ var RegistryCmd = &cobra.Command{
 	Aliases: []string{"container-registry", "containerregistry", "cr"},
 	Short:   "Manage the Thalassa container registry",
 	Long:    "Manage container registry namespaces, repositories, configuration, and retention policies.",
-	Example: "tcloud registry namespaces list\ntcloud registry namespaces create --namespace my-app --region eu-west-1\ntcloud registry repositories list --namespace crns-123",
+	Example: "tcloud registry namespaces list\ntcloud registry namespaces create --namespace my-app --region eu-west-1\ntcloud registry repositories list",
 }
 
 func init() {
