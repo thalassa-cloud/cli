@@ -1,12 +1,70 @@
-package kubernetes
+package version
 
 import (
+	"errors"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/blang/semver/v4"
 	"github.com/thalassa-cloud/client-go/kubernetes"
 )
+
+// ErrAlreadyAtLatestVersion is returned when no newer version is available.
+var ErrAlreadyAtLatestVersion = errors.New("already at the latest available version")
+
+// ErrAlreadyAtClusterVersion is returned when a node pool is not behind the cluster control plane.
+var ErrAlreadyAtClusterVersion = errors.New("already at the cluster version")
+
+// SelectUpgradeVersion selects the appropriate upgrade version based on the current version
+// following Kubernetes versioning policy (max 1 minor version upgrade at a time).
+func SelectUpgradeVersion(currentVersion semver.Version, versions []kubernetes.KubernetesVersion, requestedVersion string) (*kubernetes.KubernetesVersion, error) {
+	if requestedVersion != "" {
+		return findAndValidateRequestedVersion(currentVersion, versions, requestedVersion)
+	}
+
+	newerVersions, upgradeCandidates := collectUpgradeCandidates(currentVersion, versions)
+	if len(newerVersions) == 0 {
+		return nil, fmt.Errorf("%w (%s)", ErrAlreadyAtLatestVersion, currentVersion)
+	}
+	if len(upgradeCandidates) == 0 {
+		return nil, upgradePolicyBlockedError(currentVersion, newerVersions)
+	}
+
+	return selectBestUpgradeCandidate(currentVersion, upgradeCandidates)
+}
+
+// SelectNodePoolUpgradeVersion selects a node pool version.
+// Automatic selection follows the cluster upgrade policy and never moves past the cluster control plane.
+// An explicit version must be enabled, must satisfy the same policy, and must not be newer than the cluster.
+func SelectNodePoolUpgradeVersion(currentVersion, clusterVersion semver.Version, versions []kubernetes.KubernetesVersion, requestedVersion string) (*kubernetes.KubernetesVersion, error) {
+	if requestedVersion != "" {
+		if match, ok := findVersion(versions, requestedVersion); ok && !match.Enabled {
+			return nil, fmt.Errorf("kubernetes version not found or not enabled: %s", requestedVersion)
+		}
+		selected, err := findAndValidateRequestedVersion(currentVersion, filterEnabled(versions), requestedVersion)
+		if err != nil {
+			return nil, err
+		}
+		requestedSemver, err := semver.Parse(selected.KubernetesVersion)
+		if err != nil {
+			return nil, fmt.Errorf("invalid semver in requested version %s: %w", selected.KubernetesVersion, err)
+		}
+		if requestedSemver.GT(clusterVersion) {
+			return nil, fmt.Errorf("cannot upgrade node pool past the cluster version %s (requested %s)", clusterVersion, requestedSemver)
+		}
+		return selected, nil
+	}
+
+	selected, err := SelectUpgradeVersion(currentVersion, filterNotNewerThan(filterEnabled(versions), clusterVersion), "")
+	if err != nil {
+		if errors.Is(err, ErrAlreadyAtLatestVersion) && !currentVersion.LT(clusterVersion) {
+			return nil, fmt.Errorf("%w (%s)", ErrAlreadyAtClusterVersion, clusterVersion)
+		}
+		return nil, err
+	}
+	return selected, nil
+}
 
 func findAndValidateRequestedVersion(
 	currentVersion semver.Version,
@@ -14,7 +72,7 @@ func findAndValidateRequestedVersion(
 	requestedVersion string,
 ) (*kubernetes.KubernetesVersion, error) {
 	for _, version := range versions {
-		if version.Name != requestedVersion && version.KubernetesVersion != requestedVersion && version.Slug != requestedVersion {
+		if !matchesVersion(version, requestedVersion) {
 			continue
 		}
 		requestedSemver, err := semver.Parse(version.KubernetesVersion)
@@ -27,7 +85,8 @@ func findAndValidateRequestedVersion(
 		if requestedSemver.Major == currentVersion.Major && requestedSemver.Minor > currentVersion.Minor+1 {
 			return nil, fmt.Errorf("cannot skip minor versions from %s to %s", currentVersion, requestedSemver)
 		}
-		return &version, nil
+		matched := version
+		return &matched, nil
 	}
 	return nil, fmt.Errorf("requested version %s not found", requestedVersion)
 }
@@ -62,10 +121,14 @@ func upgradePolicyBlockedError(currentVersion semver.Version, newerVersions []ku
 	var highestVersion *kubernetes.KubernetesVersion
 
 	for _, version := range newerVersions {
-		versionSemver, _ := semver.Parse(version.KubernetesVersion)
+		versionSemver, err := semver.Parse(version.KubernetesVersion)
+		if err != nil {
+			continue
+		}
 		if highestVersion == nil || versionSemver.GT(latestAvailable) {
 			latestAvailable = versionSemver
-			highestVersion = &version
+			matched := version
+			highestVersion = &matched
 		}
 	}
 
@@ -98,13 +161,15 @@ func selectBestUpgradeCandidate(currentVersion semver.Version, upgradeCandidates
 	currentMajorMinor := fmt.Sprintf("%d.%d", currentVersion.Major, currentVersion.Minor)
 	if patchVersions, hasPatchUpgrades := versionGroups[currentMajorMinor]; hasPatchUpgrades {
 		sortVersionsDesc(patchVersions)
-		return &patchVersions[0], nil
+		selected := patchVersions[0]
+		return &selected, nil
 	}
 
 	nextMinorMajorMinor := fmt.Sprintf("%d.%d", currentVersion.Major, currentVersion.Minor+1)
 	if minorVersions, hasMinorUpgrade := versionGroups[nextMinorMajorMinor]; hasMinorUpgrade {
 		sortVersionsDesc(minorVersions)
-		return &minorVersions[0], nil
+		selected := minorVersions[0]
+		return &selected, nil
 	}
 
 	return nil, fmt.Errorf("no suitable upgrade version found")
@@ -122,4 +187,45 @@ func sortVersionsDesc(versions []kubernetes.KubernetesVersion) {
 		}
 		return iSemver.GT(jSemver)
 	})
+}
+
+func matchesVersion(version kubernetes.KubernetesVersion, requested string) bool {
+	return strings.EqualFold(version.Identity, requested) ||
+		strings.EqualFold(version.Name, requested) ||
+		strings.EqualFold(version.Slug, requested) ||
+		strings.EqualFold(version.KubernetesVersion, requested)
+}
+
+func findVersion(versions []kubernetes.KubernetesVersion, requested string) (kubernetes.KubernetesVersion, bool) {
+	for _, version := range versions {
+		if matchesVersion(version, requested) {
+			return version, true
+		}
+	}
+	return kubernetes.KubernetesVersion{}, false
+}
+
+func filterEnabled(versions []kubernetes.KubernetesVersion) []kubernetes.KubernetesVersion {
+	enabled := make([]kubernetes.KubernetesVersion, 0, len(versions))
+	for _, version := range versions {
+		if version.Enabled {
+			enabled = append(enabled, version)
+		}
+	}
+	return enabled
+}
+
+func filterNotNewerThan(versions []kubernetes.KubernetesVersion, ceiling semver.Version) []kubernetes.KubernetesVersion {
+	capped := make([]kubernetes.KubernetesVersion, 0, len(versions))
+	for _, version := range versions {
+		parsed, err := semver.Parse(version.KubernetesVersion)
+		if err != nil {
+			continue
+		}
+		if parsed.GT(ceiling) {
+			continue
+		}
+		capped = append(capped, version)
+	}
+	return capped
 }

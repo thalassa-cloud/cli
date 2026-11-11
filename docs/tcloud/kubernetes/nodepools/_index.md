@@ -22,6 +22,9 @@ Manage Kubernetes NodePools
 
   # Delete a nodepool
   tcloud kubernetes nodepools delete --cluster my-cluster --name worker-pool
+
+  # Upgrade a node pool version
+  tcloud kubernetes nodepools upgrade --cluster my-cluster --name worker
 ```
 
 ### Options
@@ -52,4 +55,5 @@ Manage Kubernetes NodePools
 * [tcloud kubernetes nodepools delete](/docs/tcloud/kubernetes/nodepools_delete/)	 - Delete a Kubernetes node pool
 * [tcloud kubernetes nodepools list](/docs/tcloud/kubernetes/nodepools_list/)	 - Kubernetes Cluster NodePool list
 * [tcloud kubernetes nodepools update](/docs/tcloud/kubernetes/nodepools_update/)	 - Update a Kubernetes node pool
+* [tcloud kubernetes nodepools upgrade](/docs/tcloud/kubernetes/nodepools_upgrade/)	 - Upgrade a Kubernetes node pool version
 

@@ -215,6 +215,206 @@ func ParseUpgradeStrategy(strategy string) kubernetes.KubernetesNodePoolUpgradeS
 	return kubernetes.KubernetesNodePoolUpgradeStrategy(strategy)
 }
 
+// NodePoolUpdateOverrides holds fields that replace the current node pool values.
+// Nil pointers and false replace flags keep the current value.
+type NodePoolUpdateOverrides struct {
+	MachineType               *string
+	Replicas                  *int
+	MinReplicas               *int
+	MaxReplicas               *int
+	EnableAutoscaling         *bool
+	EnableAutoHealing         *bool
+	UpgradeStrategy           *kubernetes.KubernetesNodePoolUpgradeStrategy
+	KubernetesVersionIdentity *string
+	Taints                    []kubernetes.NodeTaint
+	ReplaceTaints             bool
+	SecurityGroupAttachments  []string
+	ReplaceSecurityGroups     bool
+}
+
+// FindCluster returns the cluster matching an identity, name, or slug.
+func FindCluster(clusters []kubernetes.KubernetesCluster, ref string) (*kubernetes.KubernetesCluster, error) {
+	for _, cluster := range clusters {
+		if strings.EqualFold(cluster.Identity, ref) ||
+			strings.EqualFold(cluster.Name, ref) ||
+			strings.EqualFold(cluster.Slug, ref) {
+			match := cluster
+			return &match, nil
+		}
+	}
+	return nil, fmt.Errorf("cluster not found: %s", ref)
+}
+
+// FindNodePool returns the node pool matching an identity, name, or slug.
+func FindNodePool(nodePools []kubernetes.KubernetesNodePool, ref string) (*kubernetes.KubernetesNodePool, error) {
+	for _, nodePool := range nodePools {
+		if strings.EqualFold(nodePool.Identity, ref) ||
+			strings.EqualFold(nodePool.Name, ref) ||
+			strings.EqualFold(nodePool.Slug, ref) {
+			match := nodePool
+			return &match, nil
+		}
+	}
+	return nil, fmt.Errorf("node pool not found: %s", ref)
+}
+
+// ResolveKubernetesVersion resolves an enabled Kubernetes version identity, slug, name, or version string.
+func ResolveKubernetesVersion(ctx context.Context, client thalassa.Client, versionIdentifier string) (string, error) {
+	versions, err := client.Kubernetes().ListKubernetesVersions(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to list kubernetes versions: %w", err)
+	}
+
+	for _, version := range versions {
+		if !version.Enabled {
+			continue
+		}
+		if strings.EqualFold(version.Identity, versionIdentifier) ||
+			strings.EqualFold(version.Slug, versionIdentifier) ||
+			strings.EqualFold(version.Name, versionIdentifier) ||
+			strings.EqualFold(version.KubernetesVersion, versionIdentifier) {
+			if version.Identity == "" {
+				return "", fmt.Errorf("kubernetes version %s has no identity", versionIdentifier)
+			}
+			return version.Identity, nil
+		}
+	}
+
+	return "", fmt.Errorf("kubernetes version not found or not enabled: %s", versionIdentifier)
+}
+
+// BuildNodePoolUpdateRequest builds a full node pool update from the current node pool.
+// The API replaces the node pool, so every field is populated. Overrides replace only the fields that are set.
+func BuildNodePoolUpdateRequest(current *kubernetes.KubernetesNodePool, overrides NodePoolUpdateOverrides) (kubernetes.UpdateKubernetesNodePool, error) {
+	if current == nil {
+		return kubernetes.UpdateKubernetesNodePool{}, fmt.Errorf("node pool is required")
+	}
+
+	machineType := current.MachineType.Name
+	if overrides.MachineType != nil {
+		machineType = *overrides.MachineType
+	}
+	if machineType == "" {
+		return kubernetes.UpdateKubernetesNodePool{}, fmt.Errorf("node pool machine type is required")
+	}
+
+	versionIdentity := ""
+	if current.KubernetesVersion != nil {
+		versionIdentity = current.KubernetesVersion.Identity
+	}
+	if overrides.KubernetesVersionIdentity != nil {
+		versionIdentity = *overrides.KubernetesVersionIdentity
+	}
+	if versionIdentity == "" {
+		return kubernetes.UpdateKubernetesNodePool{}, fmt.Errorf("node pool kubernetes version is required")
+	}
+
+	replicas := current.Replicas
+	if overrides.Replicas != nil {
+		replicas = *overrides.Replicas
+	}
+	minReplicas := current.MinReplicas
+	if overrides.MinReplicas != nil {
+		minReplicas = *overrides.MinReplicas
+	}
+	maxReplicas := current.MaxReplicas
+	if overrides.MaxReplicas != nil {
+		maxReplicas = *overrides.MaxReplicas
+	}
+
+	enableAutoscaling := current.EnableAutoscaling
+	if overrides.EnableAutoscaling != nil {
+		enableAutoscaling = *overrides.EnableAutoscaling
+	}
+	enableAutoHealing := current.EnableAutoHealing
+	if overrides.EnableAutoHealing != nil {
+		enableAutoHealing = *overrides.EnableAutoHealing
+	}
+
+	upgradeStrategy := current.UpgradeStrategy
+	if overrides.UpgradeStrategy != nil {
+		upgradeStrategy = *overrides.UpgradeStrategy
+	}
+
+	nodeSettings := kubernetes.KubernetesNodeSettings{
+		Labels:      cloneStringMap(current.NodeSettings.Labels),
+		Annotations: cloneStringMap(current.NodeSettings.Annotations),
+		Taints:      cloneTaints(current.NodeSettings.Taints),
+	}
+	if overrides.ReplaceTaints {
+		nodeSettings.Taints = cloneTaints(overrides.Taints)
+	}
+
+	securityGroups, err := nodePoolSecurityGroupIdentities(current.SecurityGroups)
+	if err != nil {
+		return kubernetes.UpdateKubernetesNodePool{}, err
+	}
+	if overrides.ReplaceSecurityGroups {
+		securityGroups = cloneStrings(overrides.SecurityGroupAttachments)
+	}
+
+	return kubernetes.UpdateKubernetesNodePool{
+		Description:               current.Description,
+		Labels:                    cloneStringMap(current.Labels),
+		Annotations:               cloneStringMap(current.Annotations),
+		MachineType:               machineType,
+		Replicas:                  &replicas,
+		MinReplicas:               &minReplicas,
+		MaxReplicas:               &maxReplicas,
+		KubernetesVersionIdentity: &versionIdentity,
+		AvailabilityZone:          current.AvailabilityZone,
+		UpgradeStrategy:           &upgradeStrategy,
+		EnableAutoHealing:         &enableAutoHealing,
+		EnableAutoscaling:         &enableAutoscaling,
+		ManageNodeAllocatable:     current.ManageNodeAllocatable,
+		NodeSettings:              &nodeSettings,
+		SecurityGroupAttachments:  securityGroups,
+	}, nil
+}
+
+func nodePoolSecurityGroupIdentities(groups []iaas.SecurityGroup) ([]string, error) {
+	if len(groups) == 0 {
+		return nil, nil
+	}
+	identities := make([]string, 0, len(groups))
+	for _, group := range groups {
+		if group.Identity == "" {
+			return nil, fmt.Errorf("node pool security group %q has no identity", group.Name)
+		}
+		identities = append(identities, group.Identity)
+	}
+	return identities, nil
+}
+
+func cloneStringMap(values map[string]string) map[string]string {
+	if values == nil {
+		return nil
+	}
+	cloned := make(map[string]string, len(values))
+	for key, value := range values {
+		cloned[key] = value
+	}
+	return cloned
+}
+
+func cloneStrings(values []string) []string {
+	if values == nil {
+		return nil
+	}
+	cloned := make([]string, len(values))
+	copy(cloned, values)
+	return cloned
+}
+
+func cloneTaints(taints []kubernetes.NodeTaint) []kubernetes.NodeTaint {
+	if taints == nil {
+		return nil
+	}
+	cloned := make([]kubernetes.NodeTaint, len(taints))
+	copy(cloned, taints)
+	return cloned
+}
+
 // BuildNodePoolName builds the node pool name, optionally appending AZ suffix
 func BuildNodePoolName(baseName string, az string, multipleAZs bool) string {
 	if multipleAZs {
