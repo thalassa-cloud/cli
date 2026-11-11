@@ -2,14 +2,31 @@ package contextstate
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
+	"os"
 	"time"
 
 	"github.com/thalassa-cloud/cli/internal/auth/browseroidc"
+	"github.com/thalassa-cloud/cli/internal/shared"
 )
 
 const accessTokenRefreshSkew = 30 * time.Second
+
+// ErrSessionExpired indicates the browser OIDC session can no longer be refreshed.
+var ErrSessionExpired = errors.New("browser login session expired")
+
+var (
+	refreshAccessTokenFn = browseroidc.RefreshAccessToken
+	browserLoginFn       = LoginWithBrowserOIDC
+	isInteractiveAuthFn  = shared.IsInteractiveAuth
+	promptYesNoFn        = shared.PromptYesNoUnlessForce
+
+	// sessionReloginAttempted prevents repeated prompts in the same process
+	// after a refresh failure (for example from request middleware).
+	sessionReloginAttempted bool
+)
 
 func LoginWithBrowserOIDC(ctx context.Context, apiEndpoint, contextName string) error {
 	if err := EnsureLoginContext(contextName, apiEndpoint); err != nil {
@@ -77,6 +94,7 @@ func loginWithBrowserTokens(tokens browseroidc.TokenPair, apiEndpoint string) er
 }
 
 // EnsureFreshAccessToken refreshes browser OIDC access tokens when they are close to expiring.
+// When refresh fails for a browser session, it prompts for interactive re-login when possible.
 func EnsureFreshAccessToken(ctx context.Context) error {
 	currentContext, err := GetContextConfiguration()
 	if err != nil {
@@ -91,9 +109,9 @@ func EnsureFreshAccessToken(ctx context.Context) error {
 		return nil
 	}
 
-	tokens, err := browseroidc.RefreshAccessToken(ctx, user.RefreshToken())
+	tokens, err := refreshAccessTokenFn(ctx, user.RefreshToken())
 	if err != nil {
-		return fmt.Errorf("refresh browser login token: %w", err)
+		return handleExpiredBrowserSession(ctx)
 	}
 
 	currentContext.Users.User.SetBrowserTokens(tokens.AccessToken, tokens.RefreshToken, tokens.Expiry)
@@ -101,4 +119,53 @@ func EnsureFreshAccessToken(ctx context.Context) error {
 		return err
 	}
 	return Save()
+}
+
+func handleExpiredBrowserSession(ctx context.Context) error {
+	if sessionReloginAttempted {
+		return sessionExpiredError()
+	}
+	sessionReloginAttempted = true
+
+	if authOverriddenByFlagOrEnv() {
+		return sessionExpiredError()
+	}
+
+	if !isInteractiveAuthFn() {
+		return sessionExpiredError()
+	}
+
+	fmt.Println("Your browser login session expired.")
+	proceed, err := promptYesNoFn(false, "Open browser to log in again? [y/N]: ")
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrSessionExpired, err)
+	}
+	if !proceed {
+		return sessionExpiredError()
+	}
+
+	if err := browserLoginFn(ctx, Server(), Name()); err != nil {
+		return err
+	}
+	return nil
+}
+
+func sessionExpiredError() error {
+	return fmt.Errorf("%w; run: tcloud context login --browser", ErrSessionExpired)
+}
+
+func authOverriddenByFlagOrEnv() bool {
+	if AccessTokenFlag != "" || os.Getenv(ThalassaAccessTokenEnvVar) != "" {
+		return true
+	}
+	if PersonalAccessTokenFlag != "" || os.Getenv(ThalassaPersonalAccessTokenEnvVar) != "" {
+		return true
+	}
+	if OidcClientIDFlag != "" || os.Getenv(ThalassaOIDCClientIDEnvVar) != "" {
+		return true
+	}
+	if OidcClientSecretFlag != "" || os.Getenv(ThalassaOIDCClientSecretEnvVar) != "" {
+		return true
+	}
+	return false
 }

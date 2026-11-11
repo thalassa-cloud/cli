@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -47,10 +48,11 @@ func Execute() {
 }
 
 func handleExecutionError(err error) {
-	switch err {
-	default:
-		_, _ = fmt.Fprintf(os.Stderr, "failed: %v\n", err)
+	if errors.Is(err, contextstate.ErrSessionExpired) {
+		_, _ = fmt.Fprintf(os.Stderr, "%v\n", err)
+		return
 	}
+	_, _ = fmt.Fprintf(os.Stderr, "failed: %v\n", err)
 }
 
 func init() {
