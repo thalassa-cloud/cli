@@ -9,6 +9,16 @@ import (
 	clientiam "github.com/thalassa-cloud/client-go/iam"
 )
 
+func TestIsInteractiveAuthDisabledInCI(t *testing.T) {
+	t.Setenv("CI", "true")
+	t.Setenv("GITHUB_ACTIONS", "")
+	assert.False(t, IsInteractiveAuth())
+
+	t.Setenv("CI", "")
+	t.Setenv("GITHUB_ACTIONS", "true")
+	assert.False(t, IsInteractiveAuth())
+}
+
 func TestKeyValuePairsToMap(t *testing.T) {
 	tests := []struct {
 		name  string

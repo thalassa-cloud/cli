@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mattn/go-isatty"
 	"github.com/thalassa-cloud/client-go/pkg/base"
 )
 
@@ -15,6 +16,16 @@ const (
 	// ForceKey is the flag name for skipping destructive confirmation prompts.
 	ForceKey = "force"
 )
+
+// IsInteractiveAuth reports whether the CLI can safely prompt for authentication
+// actions such as browser re-login. It requires stdin and stdout TTYs and is
+// disabled in common CI environments.
+func IsInteractiveAuth() bool {
+	if os.Getenv("CI") != "" || os.Getenv("GITHUB_ACTIONS") != "" {
+		return false
+	}
+	return isatty.IsTerminal(os.Stdin.Fd()) && isatty.IsTerminal(os.Stdout.Fd())
+}
 
 // PromptDestructiveUnlessForce prompts for typing "yes" unless force is true.
 // On abort (anything other than "yes"), returns proceed=false and err=nil.
