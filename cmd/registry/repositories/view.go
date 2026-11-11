@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/thalassa-cloud/cli/internal/formattime"
+	"github.com/thalassa-cloud/cli/internal/registry"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"gopkg.in/yaml.v3"
 )
@@ -27,7 +28,7 @@ var viewCmd = &cobra.Command{
 			return fmt.Errorf("failed to create client: %w", err)
 		}
 
-		repo, err := client.ContainerRegistry().GetContainerRegistryRepository(cmd.Context(), namespace, args[0])
+		repo, err := registry.GetRepository(cmd.Context(), client.ContainerRegistry(), namespace, args[0])
 		if err != nil {
 			return fmt.Errorf("failed to get repository: %w", err)
 		}
@@ -48,7 +49,7 @@ var viewCmd = &cobra.Command{
 		fmt.Printf("  Description: %s\n", repo.Description)
 		fmt.Printf("  Tags: %d\n", repo.TagCount)
 		fmt.Printf("  Artifacts: %d\n", repo.ArtifactCount)
-		fmt.Printf("  Size: %s\n", formatSizeMB(repo.TotalSizeBytes))
+		fmt.Printf("  Size: %s\n", formatRepositorySize(repo.TotalSizeBytes))
 		if repo.LastPushedAt != nil {
 			fmt.Printf("  Last Pushed: %s\n", formattime.FormatTime(repo.LastPushedAt.Local(), false))
 		}

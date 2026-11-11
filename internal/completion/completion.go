@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thalassa-cloud/cli/internal/projectresolve"
+	"github.com/thalassa-cloud/cli/internal/registry"
 	"github.com/thalassa-cloud/cli/internal/thalassaclient"
 	"github.com/thalassa-cloud/client-go/containerregistry"
 	"github.com/thalassa-cloud/client-go/dbaas"
@@ -795,6 +796,32 @@ func CompleteContainerRegistryNamespaceID(cmd *cobra.Command, args []string, toC
 	return completions, cobra.ShellCompDirectiveNoFileComp
 }
 
+// CompleteContainerRegistryNamespaceName provides completion for container registry namespace names.
+func CompleteContainerRegistryNamespaceName(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	client, err := thalassaclient.GetThalassaClient()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	namespaces, err := client.ContainerRegistry().ListContainerRegistryNamespaces(cmd.Context(), &containerregistry.ListContainerRegistryNamespacesRequest{})
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	completions := make([]string, 0, len(namespaces))
+	for _, ns := range namespaces {
+		if ns.Namespace == "" {
+			continue
+		}
+		completions = append(completions, ns.Namespace+"\t"+ns.Identity)
+	}
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
 // CompleteContainerRegistryRepositoryID provides completion for container registry repository IDs.
 // Requires the --namespace flag to be set.
 func CompleteContainerRegistryRepositoryID(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -808,7 +835,7 @@ func CompleteContainerRegistryRepositoryID(cmd *cobra.Command, args []string, to
 		return nil, cobra.ShellCompDirectiveError
 	}
 
-	repos, err := client.ContainerRegistry().ListContainerRegistryRepositories(cmd.Context(), namespaceFlag, &containerregistry.ListContainerRegistryRepositoriesRequest{})
+	repos, err := registry.ListRepositories(cmd.Context(), client.ContainerRegistry(), namespaceFlag, nil)
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}

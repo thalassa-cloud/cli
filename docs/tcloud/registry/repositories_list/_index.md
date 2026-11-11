@@ -9,7 +9,7 @@ cascade:
 ---
 ## tcloud registry repositories list
 
-List repositories in a namespace
+List container registry repositories
 
 ```
 tcloud registry repositories list [flags]
@@ -20,7 +20,8 @@ tcloud registry repositories list [flags]
 ```
       --exact-time         Show exact time instead of relative time
   -h, --help               help for list
-      --namespace string   Namespace identity
+      --id string          Namespace identity
+      --namespace string   Namespace name. Omit to list repositories in every namespace
       --no-header          Do not print the header
   -l, --selector string    Label selector (format: key1=value1,key2=value2)
 ```
