@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 )
 
 // TableOptions provides configuration for table rendering
@@ -16,9 +17,9 @@ type TableOptions struct {
 	// AutoFormatHeaders controls header formatting
 	AutoFormatHeaders bool
 	// HeaderAlignment sets the alignment for header cells
-	HeaderAlignment int
+	HeaderAlignment tw.Align
 	// CellAlignment sets the alignment for non-header cells
-	CellAlignment int
+	CellAlignment tw.Align
 	// UseBorders enables table borders
 	UseBorders bool
 	// Padding sets the padding between columns
@@ -34,8 +35,8 @@ func DefaultOptions() TableOptions {
 	return TableOptions{
 		AutoWrapText:      false,
 		AutoFormatHeaders: true,
-		HeaderAlignment:   tablewriter.ALIGN_LEFT,
-		CellAlignment:     tablewriter.ALIGN_LEFT,
+		HeaderAlignment:   tw.AlignLeft,
+		CellAlignment:     tw.AlignLeft,
 		UseBorders:        false,
 		Padding:           "\t",
 	}
@@ -53,42 +54,93 @@ func PrintWithWriter(writer io.Writer, header []string, body [][]string) {
 
 // PrintWithOptions outputs a table with the provided configuration options
 func PrintWithOptions(writer io.Writer, header []string, body [][]string, options TableOptions) {
-	table := tablewriter.NewWriter(writer)
-
-	if len(header) > 0 {
-		table.SetHeader(header)
+	wrap := tw.WrapNone
+	if options.AutoWrapText {
+		wrap = tw.WrapNormal
+	}
+	headerFormat := tw.Off
+	if options.AutoFormatHeaders {
+		headerFormat = tw.On
 	}
 
-	// Configure the table based on options
-	table.SetAutoWrapText(options.AutoWrapText)
-	table.SetAutoFormatHeaders(options.AutoFormatHeaders)
-	table.SetHeaderAlignment(options.HeaderAlignment)
-	table.SetAlignment(options.CellAlignment)
-
+	tableOptions := []tablewriter.Option{
+		tablewriter.WithHeaderAlignment(alignOrLeft(options.HeaderAlignment)),
+		tablewriter.WithRowAlignment(alignOrLeft(options.CellAlignment)),
+		tablewriter.WithHeaderAutoWrap(wrap),
+		tablewriter.WithRowAutoWrap(wrap),
+		tablewriter.WithHeaderAutoFormat(headerFormat),
+		tablewriter.WithTrimSpace(tw.On),
+		tablewriter.WithPadding(tw.PaddingDefault),
+	}
 	if !options.UseBorders {
-		table.SetCenterSeparator("")
-		table.SetColumnSeparator("")
-		table.SetRowSeparator("")
-		table.SetHeaderLine(false)
-		table.SetBorder(false)
+		tableOptions = append(tableOptions, tablewriter.WithRendition(borderlessRendition(options.Padding)))
 	}
 
-	table.SetTablePadding(options.Padding)
-	table.SetNoWhiteSpace(true)
-
+	tbl := tablewriter.NewTable(writer, tableOptions...)
+	if len(header) > 0 {
+		tbl.Header(header)
+	}
 	if options.Caption != "" {
-		table.SetCaption(true, options.Caption)
+		tbl.Caption(tw.Caption{Text: options.Caption, Spot: tw.SpotBottomLeft, Align: tw.AlignLeft})
 	}
-
 	if len(options.FooterData) > 0 {
-		table.SetFooter(options.FooterData)
+		tbl.Footer(options.FooterData)
 	}
-
 	if len(body) > 0 {
-		table.AppendBulk(body)
+		if err := tbl.Bulk(body); err != nil {
+			_, _ = fmt.Fprintf(writer, "failed to render table: %v\n", err)
+			return
+		}
 	}
+	if err := tbl.Render(); err != nil {
+		_, _ = fmt.Fprintf(writer, "failed to render table: %v\n", err)
+	}
+}
 
-	table.Render()
+func alignOrLeft(align tw.Align) tw.Align {
+	if align == "" {
+		return tw.AlignLeft
+	}
+	return align
+}
+
+func borderlessRendition(columnPadding string) tw.Rendition {
+	if columnPadding == "" {
+		columnPadding = " "
+	}
+	return tw.Rendition{
+		Borders: tw.Border{
+			Left:   tw.Off,
+			Right:  tw.Off,
+			Top:    tw.Off,
+			Bottom: tw.Off,
+		},
+		Symbols: tw.NewSymbolCustom("cli").WithColumn(columnPadding).
+			WithCenter("").
+			WithRow("").
+			WithTopLeft("").
+			WithTopMid("").
+			WithTopRight("").
+			WithMidLeft("").
+			WithMidRight("").
+			WithBottomLeft("").
+			WithBottomMid("").
+			WithBottomRight(""),
+		Settings: tw.Settings{
+			Separators: tw.Separators{
+				ShowHeader:     tw.Off,
+				ShowFooter:     tw.Off,
+				BetweenRows:    tw.Off,
+				BetweenColumns: tw.On,
+			},
+			Lines: tw.Lines{
+				ShowTop:        tw.Off,
+				ShowBottom:     tw.Off,
+				ShowHeaderLine: tw.Off,
+				ShowFooterLine: tw.Off,
+			},
+		},
+	}
 }
 
 // RenderToString renders a table and returns it as a string
